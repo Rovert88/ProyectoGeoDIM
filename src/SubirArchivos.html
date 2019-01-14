@@ -43,7 +43,7 @@
 			  <li class="active"><a href="index.html"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
 			  <li class="submenu"> <a href="#"><i class="icon-file"></i> <span>Archivos</span> </a>
 				<ul>
-				  <li><a href="index.html">Cargar archivo</a></li>
+				  <li><a href="SubirArchivos.html">Cargar archivo</a></li>
 				  <li><a href="index.html">Historial de cargas</a></li>
 				</ul>
 			  </li>
@@ -73,37 +73,39 @@
                 <div id="content">
                     <div class="container-fluid">
                         <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Cargar archivo CSV</h5>
-                                <div class="form-group row">
-                                    <label class="col-md-3 m-t-15">Seleccionar Sitio Geográfico</label>
-                                    <div class="col-md-9">                                        
-                                        <select class="select2 form-control custom-select" style="width: 100%; height: 36px;">
-                                            <option>Sitio Geográfico</option>
-                                            <option>Sitio 1</option>
-                                            <option>Sitio 2</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label class="col-md-3">Cargar archivo</label>
-                                    <div class="col-md-9">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                                            <label class="custom-file-label" for="validatedCustomFile">Elegir archivo CSV..</label>
-                                            <div class="invalid-feedback">Archivo seleccionado no válido, solo cargue archivos con extensión CSV</div>
+                            <form class="form-horizontal" enctype="multipart/form-data" action="../methods/CargarCSV.php" method="post">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cargar archivo CSV</h5>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 m-t-15">Seleccionar Sitio Geográfico</label>
+                                        <div class="col-md-9">                                        
+                                            <select class="select2 form-control custom-select" style="width: 100%; height: 36px;">
+                                                <option>Sitio Geográfico</option>
+                                                <option>Sitio 1</option>
+                                                <option>Sitio 2</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="border-top">
-                                    <div class="card-body">
-                                        <button type="button" class="btn btn-primary">Cargar</button>
+
+                                    <div class="form-group row">
+                                        <label class="col-md-3">Cargar archivo</label>
+                                        <div class="col-md-9">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="validatedCustomFile" name="archivo" required>
+                                                <label class="custom-file-label" for="validatedCustomFile">Elegir archivo CSV...</label>
+                                                <div class="invalid-feedback">Archivo seleccionado no válido, solo cargue archivos con extensión CSV</div>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="border-top">
+                                        <div class="card-body">
+                                            <button type="submit" class="btn btn-primary" name="cargar">Cargar</button>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

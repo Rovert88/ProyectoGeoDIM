@@ -1,9 +1,9 @@
 <?php
 
-require '../vendor/autoload.php';
+require_once '../classes/ConexionDB.php';
 
-$client = new MongoDB\Client("mongodb://localhost:27017");
-$collection = $client->GeoDIMTests->SitiosGeograficos;
+$connect = new DBConnection();
+$collection = $connect->SGConn();
 
 if($_POST){
     $data = array(

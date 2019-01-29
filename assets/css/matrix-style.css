@@ -950,7 +950,7 @@ hr{ border-top-color:#dadada;}
 tr:hover{ background:#f6f6f6;}
 span.icon .checker {
 	margin-top: -5px;
-	margin-right: 0;
+	margin-right: 0;        
 }
 .dataTables_length {
 	color: #878787;

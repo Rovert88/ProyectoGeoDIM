@@ -19,4 +19,13 @@ class DBConnection {
     
         return $collection;
     }
+    
+    //Graficas Sondas Connection
+    public function GSConn(){
+        $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
+        //$collection = $client->GeoDIMTests->ArchivosCSV;
+        $collection = $client->CompañiaDB->ChartSitios;
+        
+        return $collection;
+    }
 }

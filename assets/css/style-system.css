@@ -1,0 +1,43 @@
+/*icons-style*/
+.style-icons-bar{
+    font-size: 15px;
+    color: #ffffff;
+}
+
+/*font-style*/
+#sidebar > ul > li{
+    color: #000 !important;
+}
+
+#sidebar > ul > li {
+	border-top: 1px 
+            solid #fff; 
+        border-bottom: 1px 
+            solid #fff;
+}
+
+
+.style-sidebar > ul li{
+    border-bottom: 1px
+        solid #fff !important;
+}
+
+/*subelements-font-colors*/
+.style-sidebar > ul li ul li a{ 
+    color:#000 !important;
+} 
+
+/*subelements-box-colors*/
+#sidebar > ul li ul {
+	background-color: #CAEBF2;
+} 
+
+/*subelements-font-box-hover-colors*/
+.style-sidebar > ul li ul li a:hover, .style-sidebar > ul li ul li.active a {
+	color: #fff !important;
+	background-color: #000 !important;
+}
+
+body{
+    background-color: #2E363F;
+}

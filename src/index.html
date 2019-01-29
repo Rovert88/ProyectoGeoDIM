@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="../assets/fonts/css/font-awesome.css" />
         <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="../assets/css/style-system.css" />
     </head>
     
     <body>
@@ -28,38 +29,38 @@
 		  <!--top-Header-menu-->
 		  <div id="user-nav" class="navbar navbar-inverse">
 			<ul class="nav">
-			  <li ><a><i class="icon icon-upload-alt"></i>  <span class="text">Cargar Archivo</span></a></li>
-			  <li ><a><i class="icon icon-screenshot"></i> <span class="text">Registrar Sonda</span></a></li>
-			  <li ><a><i class="icon icon-cogs"></i> <span class="text">Registrar Bomba</span></a></li>
-			  <li ><a><i class="icon icon-info-sign"></i> <span class="text">Ayuda</span></a></li>
-			  <li ><a href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Salir</span></a></li>
+			  <li ><a><i class="icon icon-upload-alt style-icons-bar" id="style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
+			  <li ><a><i class="icon icon-screenshot style-icons-bar"></i> <span class="text">Registrar Sonda</span></a></li>
+			  <li ><a><i class="icon icon-cogs style-icons-bar"></i> <span class="text">Registrar Bomba</span></a></li>
+			  <li ><a><i class="icon icon-info-sign style-icons-bar"></i> <span class="text">Ayuda</span></a></li>
+			  <li ><a href="login.html"><i class="icon icon-share-alt style-icons-bar"></i> <span class="text">Salir</span></a></li>
 			</ul>
 		  </div>
 		  <!--close-top-Header-menu-->
 
 		  <!--sidebar-menu-->
-		  <div id="sidebar">
+                  <div class="style-sidebar" id="sidebar">
 			<ul>
-			  <li class="active"><a href="#"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
+			  <li class="active"><a href="#"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
 			  <li class="submenu"> <a href="#"><i class="icon-file"></i> <span>Archivos</span> </a>
 				<ul>
 				  <li><a href="SubirArchivos.html">Cargar archivo</a></li>
 				  <li><a href="index.html">Historial de cargas</a></li>
 				</ul>
 			  </li>
-			  <li class="submenu"> <a href="#"><i class="icon-table"></i> <span>Tablas de datos</span> </a>
+			  <li class="submenu"> <a href="#"><i class="icon-table style-icons-bar"></i> <span>Tablas de datos</span> </a>
 				<ul>
-				  <li><a href="#">Tablas de Sondas</a></li>
+                                    <li><a href="#">Tablas de Sondas</a></li>
 				  <li><a href="#">Tablas de Bombas</a></li>
 				</ul>
 			  </li>
-                          <li class="submenu"><a href="#"><i class="icon-signal"><span>Gráficas de datos</span></i></a>
+                          <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                               <ul>
                                   <li><a href="GraficasSondas.html">Gráficas de Sondas</a></li>
                                   <li><a href="#">Gráficas de Bombas</a></li>
                               </ul>
                           </li>
-			  <li class="submenu"> <a href="#"><i class="icon-globe"></i> <span>Sitios</span> </a>
+			  <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
 				<ul>
                                     <li><a href="RegistrarSitios.html">Registrar Sitios</a></li>
 				  <li><a href="#">Editar Sitios</a></li>
@@ -77,12 +78,14 @@
                         <div class="row-fluid">
                         <div class="span12">
                           <div class="widget-box">
-                            <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                              <h5>¿Qué es esto?</h5>
+                            <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>                              
                             </div>
-                              <div class="widget-content">
-                                  Este es un sistema que te permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico
-                                  de diferentes sitios.
+                              <div class="widget-content" align="justify">
+                                  GeoDIM es un sistema que te permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico
+                                  de diferentes Sitios Geográficos así como consultar los datos de los propios sitios y las sondas de inspección y bombas de calor geotérmico
+                                  con las que cuente cada uno de ellos.<br /> <br />
+                                  Para consultar las gráficas de una sonda o bomba dirigete al menú de la izquierda y has clic sobre el botón Gráficas de datos.
+                                  Esto desplegará un submenú para elegir el tipo de gráfica a mostrar
                               </div>
                           </div>
                         </div>

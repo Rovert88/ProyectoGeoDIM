@@ -2,7 +2,7 @@
 
 <html lang="es">
     <head>
-        <title>Registrar Sitios Geográficos</title>
+        <title>GeoDIM</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="../assets/fonts/css/font-awesome.css" />
         <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="../assets/css/style-system.css" />
     </head>
     
     <body>
@@ -22,44 +23,38 @@
 		  <div>
 			<h1>GeoDIM</h1>
 		  </div>
-		  <!--close-Header-part-->
+        <!--close-Header-part-->
 
 
 		  <!--top-Header-menu-->
 		  <div id="user-nav" class="navbar navbar-inverse">
 			<ul class="nav">
-			  <li ><a><i class="icon icon-upload-alt"></i>  <span class="text">Cargar Archivo</span></a></li>
-			  <li ><a><i class="icon icon-screenshot"></i> <span class="text">Registrar Sonda</span></a></li>
-			  <li ><a><i class="icon icon-cogs"></i> <span class="text">Registrar Bomba</span></a></li>
-			  <li ><a><i class="icon icon-info-sign"></i> <span class="text">Ayuda</span></a></li>
-			  <li ><a href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Salir</span></a></li>
+			  <li ><a><i class="icon icon-upload-alt style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
+			  <li ><a><i class="icon icon-screenshot style-icons-bar"></i> <span class="text">Registrar Sonda</span></a></li>
+			  <li ><a><i class="icon icon-cogs style-icons-bar"></i> <span class="text">Registrar Bomba</span></a></li>
+			  <li ><a><i class="icon icon-info-sign style-icons-bar"></i> <span class="text">Ayuda</span></a></li>
+			  <li ><a href="login.html"><i class="icon icon-share-alt style-icons-bar"></i> <span class="text">Salir</span></a></li>
 			</ul>
 		  </div>
 		  <!--close-top-Header-menu-->
 
 		  <!--sidebar-menu-->
-		  <div id="sidebar">
+		  <div class="style-sidebar" id="sidebar">
 			<ul>
-			  <li class="active"><a href="#"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
-			  <li class="submenu"> <a href="#"><i class="icon-file"></i> <span>Archivos</span> </a>
+                            <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
+			  <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos</span> </a>
 				<ul>
-				  <li><a href="SubirArchivos.php">Cargar archivo</a></li>
-				  <li><a href="index.html">Historial de cargas</a></li>
+				  <li><a href="SubirArchivos.php">Cargar archivo</a></li>				  
 				</ul>
 			  </li>
-			  <li class="submenu"> <a href="#"><i class="icon-table"></i> <span>Tablas de datos</span> </a>
-				<ul>
-				  <li><a href="#">Tablas de Sondas</a></li>
-				  <li><a href="#">Tablas de Bombas</a></li>
-				</ul>
-			  </li>
-                          <li class="submenu"><a href="#"><i class="icon-signal"></i><span>Gráficas de datos</span></a>
+			  
+                          <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                               <ul>
                                   <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
-                                  <li><a href="#">Gráficas de Bombas</a></li>
+                                  <li><a href="GraficasBombas.php">Gráficas de Bombas</a></li>
                               </ul>
                           </li>
-			  <li class="submenu"> <a href="#"><i class="icon-globe"></i> <span>Sitios</span> </a>
+			  <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
 				<ul>
                                     <li><a href="RegistrarSitios.php">Registrar Sitios</a></li>
 				  <li><a href="#">Editar Sitios</a></li>
@@ -71,18 +66,35 @@
 
 		<!--main-container-part-->
 		<div id="content">
-                    <h1 align="center">Bienvenido a GeoDIM</h1>
+                    <h1 class="title-style">Bienvenido a GeoDIM</h1>
                     <div class="container-fluid">                        
                         <hr>
                         <div class="row-fluid">
                         <div class="span12">
                           <div class="widget-box">
                             <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                              <h5>¿Qué es esto?</h5>
+                              <h5></h5>
                             </div>
-                              <div class="widget-content">
-                                  Este es un sistema que te permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico
-                                  de diferentes sitios.
+                              <div class="widget-content" align="justify">
+                                  GeoDIM es un sistema que le permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico de diferentes 
+                                  Sitios Geográficos así como consultar los datos de los propios sitios y las sondas de inspección y bombas de calor geotérmico con las que 
+                                  cuente cada uno de ellos.<br /> <br />
+                                  
+                                  Para comenzar a subir archivos y generar gráficas debe registrar un Sitio Geográfico, así como su Sonda de Inspección y opcionalmente podrá 
+                                  registrar una Bomba de Calor Geotérmico en el sistema, para ello diríjase al menú de la izquierda y haga clic sobre el botón "Sitios", esto 
+                                  abrirá  un submenú, haga clic sobre el botón “Registrar Sitios” a continuación se abrirá una interfaz con un formulario donde podrá llenar 
+                                  los datos del SG, y la SI y opcionalmente los datos de la BCG del sitio. Al concluir de clic sobre el botón “Registrar” para concluir 
+                                  con el registro.<br /> <br />
+                                                                   
+                                  Puede cargar archivos CSV de registros de temperaturas de Sondas de Inspección, Bombas de Calor Geotérmico o voltajes de batería de CR800
+                                  diríjase al menú de la izquierda y haga clic sobre el botón "Archivo"s, esto desplegará un submenú y podrá dar clic en la opción "Cargar archivo".
+                                  En esta encontrará un formulario donde podrá elegir el tipo de archivo que desea subir (Sonda de Inspección, Bomba de Calor Geotérmico o Batería
+                                  de CR800) y acontinuación mediante un botón podrá seleccionar un archivo de su sistema para que este sea almacenado en la base de datos de GeoDIM.<br /> <br />
+                                  
+                                  Para consultar las gráficas de una sonda o bomba diríjase al menú de la izquierda y haga clic sobre el botón Gráficas de datos. Esto desplegará un 
+                                  submenú para elegir el tipo de gráfica a mostrar (Gráficas de Sondas de Inspección o Graficas de Bombas de Calor Geotérmico). Al entrar en cualquiera 
+                                  de las dos encontrará un pequeño formulario con las opciones para mostrar la gráfica, elija las opciones de como desea ver la gráfica y de haga clic 
+                                  sobre el botón “Mostrar gráfica”, esto generará la gráfica que desea.
                               </div>
                           </div>
                         </div>

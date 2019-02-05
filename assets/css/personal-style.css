@@ -1,0 +1,29 @@
+.btn-theme {  
+  color: #2e2e2c;
+  background-color: #4ECDC4;
+  border-color: #48bcb4;
+}
+.btn-theme:hover,
+.btn-theme:focus,
+.btn-theme:active,
+.btn-theme.active,
+.open .dropdown-toggle.btn-theme {
+  color: #2e2e2c;
+  background-color: #48bcb4;
+  border-color: #48bcb4;
+}
+
+.btn-theme04 {
+  color: #2e2e2c;
+  background-color: #ed5565;
+  border-color: #da4453;
+}
+.btn-theme04:hover,
+.btn-theme04:focus,
+.btn-theme04:active,
+.btn-theme04.active,
+.open .dropdown-toggle.btn-theme04 {
+  color: #2e2e2c;
+  background-color: #da4453;
+  border-color: #da4453;
+}

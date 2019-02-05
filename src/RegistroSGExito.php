@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="../assets/fonts/css/font-awesome.css" />
         <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="../assets/css/style-system.css" />
     </head>
     
     <body>
@@ -22,46 +23,46 @@
 		  <div>
 			<h1>GeoDIM</h1>
 		  </div>
-		  <!--close-Header-part-->
+        <!--close-Header-part-->
 
 
 		  <!--top-Header-menu-->
 		  <div id="user-nav" class="navbar navbar-inverse">
 			<ul class="nav">
-			  <li ><a><i class="icon icon-upload-alt"></i>  <span class="text">Cargar Archivo</span></a></li>
-			  <li ><a><i class="icon icon-screenshot"></i> <span class="text">Registrar Sonda</span></a></li>
-			  <li ><a><i class="icon icon-cogs"></i> <span class="text">Registrar Bomba</span></a></li>
-			  <li ><a><i class="icon icon-info-sign"></i> <span class="text">Ayuda</span></a></li>
+			  <li ><a><i class="icon icon-upload-alt style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
+			  <li ><a><i class="icon icon-screenshot style-icons-bar"></i> <span class="text">Registrar Sonda</span></a></li>
+			  <li ><a><i class="icon icon-cogs style-icons-bar"></i> <span class="text">Registrar Bomba</span></a></li>
+			  <li ><a><i class="icon icon-info-sign style-icons-bar"></i> <span class="text">Ayuda</span></a></li>
 			  <li ><a href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Salir</span></a></li>
 			</ul>
 		  </div>
 		  <!--close-top-Header-menu-->
 
 		  <!--sidebar-menu-->
-		  <div id="sidebar">
+		  <div class="style-sidebar" id="sidebar">
 			<ul>
-			  <li class="active"><a href="index.html"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
-			  <li class="submenu"> <a href="#"><i class="icon-file"></i> <span>Archivos</span> </a>
+                            <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
+			  <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos</span> </a>
 				<ul>
-				  <li><a href="SubirArchivos.html">Cargar archivo</a></li>
+				  <li><a href="SubirArchivos.php">Cargar archivo</a></li>
 				  <li><a href="index.html">Historial de cargas</a></li>
 				</ul>
 			  </li>
-			  <li class="submenu"> <a href="#"><i class="icon-table"></i> <span>Tablas de datos</span> </a>
+			  <li class="submenu"> <a href="#"><i class="icon-table style-icons-bar"></i> <span>Tablas de datos</span> </a>
 				<ul>
 				  <li><a href="#">Tablas de Sondas</a></li>
 				  <li><a href="#">Tablas de Bombas</a></li>
 				</ul>
 			  </li>
-			  <li class="submenu"><a href="#"><i class="icon-signal"></i><span>Gráficas de datos</span></a>
+                          <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                               <ul>
-                                  <li><a href="GraficasSondas.html">Gráficas de Sondas</a></li>
+                                  <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
                                   <li><a href="#">Gráficas de Bombas</a></li>
                               </ul>
                           </li>
-			  <li class="submenu"> <a href="#"><i class="icon-globe"></i> <span>Sitios</span> </a>
+			  <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
 				<ul>
-                                    <li><a href="RegistrarSitios.html">Registrar Sitios</a></li>
+                                    <li><a href="RegistrarSitios.php">Registrar Sitios</a></li>
 				  <li><a href="#">Editar Sitios</a></li>
 				</ul>
 			  </li>
@@ -70,40 +71,24 @@
 		  <!--sidebar-menu-close-->
 
 		<!--main-container-part-->
-		<div id="content">
-                    <h1 align="center">Graficas Sondas</h1>
+		<div id="content">                    
                     <div class="container-fluid">                        
                         <hr>
                         <div class="row-fluid">
                         <div class="span12">
                           <div class="widget-box">
-                            <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                              <h5>Generar gráfica</h5>
+                            <div class="widget-title"> <span class="icon"> <i class="icon-info-sign"></i> </span>
+                              <h5>Registro exitoso</h5>
                             </div>
                               <div class="widget-content">
-                                  <form class="form-horizontal" action="" method="post">
-                                      <div class="form-actions">
-                                          <button type="submit" class="btn btn-success">Mostrar gráfica</button>
-                                      </div>
-                                  </form>
+                                  <div class="success">
+                                  <h1>Registro exitoso</h1>
+                                  <h3>El registro del Sitio Geográfico se ha completado exitosamente</h3>
+                                  <p>Si desea regresar para hacer un nuevo registro haga clic en el botón</p>
+                                  <a class="btn btn-big" href="RegistrarSitios.php">Nuevo Registro</a>
+                                  </div>
                               </div>
-                          </div>                                                                                    
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="container-fluid">                        
-                        <hr>
-                        <div class="row-fluid">
-                        <div class="span12">
-                          <div class="widget-box">
-                            <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                                <h5></h5>
-                            </div>
-                              <div class="widget-content">
-                                  
-                              </div>
-                          </div>                                                                                    
+                          </div>
                         </div>
                       </div>
                     </div>

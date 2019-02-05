@@ -41,3 +41,32 @@
 body{
     background-color: #2E363F;
 }
+
+/*success style*/
+.success{
+    text-align: center;    
+}
+
+.success h1{
+    font-size: 70px;
+    font-weight: bold;
+    padding: 50px 0;
+    color: #FF3B3F;
+}
+
+.success h3{
+    font-size: 20px;
+    font-weight: bold;    
+    color: #000;
+}
+
+.success p{
+    font-size: 15px;
+    color: #000;
+}
+
+
+.title-style{
+    text-align: center;
+    padding-top: 15px;
+}

@@ -1,9 +1,11 @@
 <?php
 
 require_once '../classes/ConexionDB.php';
+require '../classes/GeneralOp.php';
 
 $connect = new DBConnection();
-$collection = $connect->UpCSVConn();
+$collection = $connect->UpCSVSIConn();
+$op = new GeneralOP();
 
 if(isset($_POST['cargar'])){
     $ficherocarga = '/';
@@ -22,7 +24,7 @@ if(isset($_POST['cargar'])){
                     $datos = fgetcsv($gestor, 1000, ",");
                     if($cont > 0){
                         $array = [
-                            "Fecha_HoraRegistro"=>$datos[0],
+                            "Fecha_HoraRegistro"=> new MongoDB\BSON\UTCDateTime(strtotime($op->insFormatoFecha($datos[0]))*1000),
                             "Record"=>$datos[1],
                             "Temp_Amb"=>$datos[2],
                             "T0_avg"=>$datos[3],

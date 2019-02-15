@@ -5,33 +5,60 @@ require_once '../classes/ConexionDB.php';
 $connect = new DBConnection();
 $collection = $connect->SGConn();
 
-if($_POST){
-    $data = array(
-      //Datos de sitio
-      'NombreSitio'=>$_POST['nombre_sitio'],
-      'UbicacionSitio'=>$_POST['ubicacion_sitio'],
-      'CoordSitio'=>$_POST['coord_sitio'],
-      'RegPor'=>$_POST['reg_por'],
-      'ClimaSitio'=>$_POST['clima_sitio'],
-      //Datos de sonda
-      'DatosSonda'=>[
-      'NombreSonda'=>$_POST['nombre_sonda'],
-      'TipoDispSonda'=>$_POST['disp_sonda'],
-      'NoSerieDisp'=>$_POST['no_serie_disp_sonda'],
-      'VerSODisp'=>$_POST['v_so_disp_sonda'],
-      'FechaIniTrab'=>$_POST['f_ini_trab_sonda'],
-      'HoraIniTrab'=>$_POST['h_ini_trab_sonda'],
-      'TipoAlimentacion'=>$_POST['alimentacion_disp_sonda'],
-      'ProfSonda'=>$_POST['profundida_sonda'],
-      'NoSenSonda'=>$_POST['no_sensores_sonda'],
-      ]
-    );
 
-    if($collection->insertOne($data)){
-        echo "Datos almacenados correctamente";
+if($_POST){
+    if($_POST["ok"] == ""){
+        $data = array(
+            'NombreSitio'=>$_POST['p1'],
+            'UbicacionSitio'=>$_POST['p2'],
+            'CoordSitio'=>$_POST['p3'],
+            'RegPor'=>$_POST['p4'],
+            'ClimaSitio'=>$_POST['p5'],
+            'DatosSonda'=>[
+                'NombreSonda'=>$_POST['p6'],
+                'TipoDispSonda'=>$_POST['p7'],
+                'NoSerieDispSonda'=>$_POST['p8'],
+                'VerSODispSonda'=>$_POST['p9'],
+                'FechaIniTrabSonda'=>$_POST['p10'],
+                'HoraIniTrabSonda'=>$_POST['p11'],
+                'TipoAlimentacionDispSonda'=>$_POST['p12'],
+                'ProfSonda'=>$_POST['p13'],
+                'NoSenSonda'=>$_POST['p14'],
+            ]           
+        );
     }else{
-        echo "No se pudieron almacenar los datos";
+        $data = array(
+            '_id'=>$_POST['p1'],
+            'NombreSitio'=>$_POST['p1'],
+            'UbicacionSitio'=>$_POST['p2'],
+            'CoordSitio'=>$_POST['p3'],
+            'RegPor'=>$_POST['p4'],
+            'ClimaSitio'=>$_POST['p5'],
+            'DatosSonda'=>[
+                'NombreSonda'=>$_POST['p6'],
+                'TipoDispSonda'=>$_POST['p7'],
+                'NoSerieDispSonda'=>$_POST['p8'],
+                'VerSODispSonda'=>$_POST['p9'],
+                'FechaIniTrabSonda'=>$_POST['p10'],
+                'HoraIniTrabSonda'=>$_POST['p11'],
+                'TipoAlimentacionDispSonda'=>$_POST['p12'],
+                'ProfSonda'=>$_POST['p13'],
+                'NoSenSonda'=>$_POST['p14'],
+            ],
+            'DatosBomba'=>[
+                'NombreBomba'=>$_POST['p15'],
+                'TipoDispBomba'=>$_POST['p16'],
+                'NoSerieDispBomba'=>$_POST['p17'],
+                'VerSODispBomba'=>$_POST['p18'],
+                'FechaIniTrabBomba'=>$_POST['p19'],
+                'HoraIniTrabBomba'=>$_POST['p20'],
+                'TipoAlimentacionDispBomba'=>$_POST['p21'],
+                'UbicacionEnSitio'=>$_POST['p22'],
+                'NoVariables'=>$_POST['p23']
+            ]
+        );
     }
-} else {
-    echo "No se pudieron almacenar los datos";
+
+   $collection->insertOne($data);
+   
 }

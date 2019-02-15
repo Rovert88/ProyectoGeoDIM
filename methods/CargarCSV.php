@@ -4,17 +4,28 @@ require_once '../classes/ConexionDB.php';
 require '../classes/GeneralOp.php';
 
 $connect = new DBConnection();
-$collection = $connect->UpCSVSIConn();
+$collection = $connect->UpCSVSIConn(); //Cambiar a conexion real
 $op = new GeneralOP();
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
 
 if(isset($_POST['cargar'])){
     $ficherocarga = '/';
     $archivocargado = $ficherocarga . basename($_FILES["archivo"]["name"]);
-    $mime_types = array('application/vnd.ms-excel','text/plain','text/csv',);
+    $mime_types = array('text/plain', 
+        'application/vnd.ms-excel',
+        'application/vnd.msexcel',
+        'text/csv',
+        'application/csv', 
+        'text/comma-separated-values',          
+        'application/octet-stream', 
+        'text/tab-separated-values',
+        'text/tsv',
+        'application/x-csv');
         
         if(in_array($_FILES["archivo"]["type"], $mime_types)){
             if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivocargado)){
-                echo "Archivo cargado correctamente";
+                echo "Archivo cargado correctamente<br>";
+                echo mime_content_type($archivocargado)."<br>";
             }
             
             if(($gestor = fopen($archivocargado, "r")) !== FALSE){
@@ -64,6 +75,9 @@ if(isset($_POST['cargar'])){
                 echo "Iserción de datos correcta";
             }
         }else{
+            var_dump($_FILES);
+            echo "<br>";
+            echo mime_content_type($archivocargado)."<br>";
             echo "Archivo no válido, cargue un archivo CSV";
         }
 }

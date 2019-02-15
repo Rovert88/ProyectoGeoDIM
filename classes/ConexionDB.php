@@ -43,4 +43,12 @@ class DBConnection {
         
         return $collection;
     }
+    
+    //Tests cargas de archivos
+    public function UpCSVSIConnTest() {
+        $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
+        $collection = $client->GeoDIMTests->RegistrosSITest;
+    
+        return $collection;
+    }
 }

@@ -200,6 +200,6 @@ class GeneralOp {
       
         //array_push($this->datos,$resultado);
         return $resultado;
-    }
+    }        
 
 }

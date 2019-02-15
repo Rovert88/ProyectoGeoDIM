@@ -78,9 +78,9 @@
                                   <h5>Cargar archivo CSV</h5>                                  
                                 </div>
                                 <div class="widget-content nopadding">
-                                    <form class="form-horizontal" enctype="multipart/form-data" action="../methods/CargarCSV.php" method="post" >
+                                    <div>
                                         
-<!--                                        <div class="control-group">
+                                        <div class="control-group">
                                             <label class="control-label">Seleccionar Sitio Geográfico</label>
                                             <div class="controls" id="sitios_cbx" name="sitios_cbx">
                                               <select >
@@ -90,20 +90,20 @@
                                                 <option>Sitio 3</option>                                            
                                               </select>
                                             </div>
-                                        </div>-->
+                                        </div>
                                         
                                         <div class="control-group">
                                             <label class="control-label">Seleccionar tipo de archivo</label>
                                             <div class="controls">
                                               <label>
-                                                  <input type="radio" name="radios" value="f_si" />
+                                                  <input type="radio" name="archivos" value="f_si" />
                                                 Sonda de Inspección</label>
                                               <label>
-                                                  <input type="radio" name="radios" value="f_bcg" />
+                                                  <input type="radio" name="archivos" value="f_bcg" />
                                                 Bomba de Calor Geotérmico</label>
-                                              <label>
-                                                  <input type="radio" name="radios" value="f_bcr800" />
-                                                Batería CR800</label>
+<!--                                              <label>
+                                                  <input type="radio" name="archivos" value="f_bcr800" />
+                                                Batería CR800</label>-->
                                             </div>
                                         </div>   
                                         
@@ -111,7 +111,7 @@
                                         <div class="control-group">
                                             <label class="control-label">Seleccionar archivo</label>
                                             <div class="controls">                                                
-                                                    <input type="file" name="archivo" />                                                                                                                                                    
+                                                    <input type="file" name="archivo" id="archivo_csv" />                                                                                                                                                    
                                             </div>
                                         </div>                                                                                       
                                         <!---->                                        
@@ -120,7 +120,8 @@
                                             <button type="submit" name="cargar" class="btn btn-success">Cargar</button>
                                         </div>
                                         
-                                    </form>
+                                </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -191,5 +192,31 @@
 	   document.gomenu.selector.selectedIndex = 2;
 	}
 	</script>
+        <script>
+            function obtenerSitios(){
+                var sitio_select, tipo_archivo, valor_tipoarchivo, archivo;
+                
+                sitio_select = document.getElementById('sitios_cbx').value;
+                tipo_archivo = document.getElementsByName('archivos');
+                archivo = document.getElementById('archivo_csv').value;
+                
+                for(x=0;x<tipo_archivo.length;x++){
+                    if($(tipo_archivo[x]).is(':checked')){
+                        valor_tipoarchivo = tipo_archivo[x].value;
+                    }
+                }
+                
+                $.ajax({
+                    async: true,
+                    cache: false,
+                    dataType: "html",
+                    type: 'POST',
+                    url: "../methods/CargarCSV.php",
+                    data: "sitio=" + sitio_select + "&tipo_archivo=" + tipo_archivo + "&archivo=" + archivo,
+                    success: function (response){
+                        $()
+                })
+            }
+        </script>
     </body>
 </html>

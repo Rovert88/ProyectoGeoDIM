@@ -15,7 +15,7 @@ class DBConnection {
     //Upload CSV SI Connection
     public function UpCSVSIConn() {
         $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
-        $collection = $client->GeoDIMTests->RegistrosSI;
+        $collection = $client->GeoDIM->RegistrosSI;
     
         return $collection;
     }

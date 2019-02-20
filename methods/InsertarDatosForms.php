@@ -27,8 +27,7 @@ if($_POST){
             ]           
         );
     }else{
-        $data = array(
-            '_id'=>$_POST['p1'],
+        $data = array(            
             'NombreSitio'=>$_POST['p1'],
             'UbicacionSitio'=>$_POST['p2'],
             'CoordSitio'=>$_POST['p3'],

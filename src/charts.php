@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <?php
-require '../classes/ConexionDB.php';
+//require '../classes/ConexionDB.php';
 require '../classes/CRUD.php';
 require ("../assets/fusioncharts/fusioncharts.php");
 require '../vendor/autoload.php';

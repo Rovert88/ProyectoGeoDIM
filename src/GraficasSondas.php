@@ -12,10 +12,10 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.js"></script>
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.min.js"></script>
-      
+
 
 
         <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
@@ -38,6 +38,9 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <!--graphics js-->
         <script src="../assets/fusioncharts/fusioncharts.js"></script>
         <script src="../assets/fusioncharts/fusioncharts.theme.fint.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
+        <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
 
     <body>
@@ -109,6 +112,43 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                             <select id="tipoGrafica" onchange="myFunction()">
                                                 <option value="TT">Temperatura-Tiempo</option>
                                                 <option value="TP">Temperatura-Profundidad</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--Select para Nombre de las sondas-->
+                                    <div class="control-group">
+                                        <label class="control-label">Seleccionar Sitio Geográfico</label>
+                                        <div class="controls">
+                                            <?php
+                                            /*
+                                             * puedes incluir tu conexion aqui y la coleccion porfa
+                                             * Listo, sabes como realizar una conuslta peri que solo selccione una columna y no los documntos ?
+                                             * No, osea como traer eso que esta seleccionado?
+                                             * hacer un "select name from tabla" para no sleccionar todos los datos y sea mas eficiiente ja
+                                             * he visto que hacen algo como esto: $consulta = array(["NombreSitio"]=>"Humeros"), pero eso solo 
+                                             * va a traer ese dato. Para que traiga toda esa columna no se como podria ser, estuve buscando pero
+                                             * no encontre algo, debaje buscar algo a ver si encuentro rapodo, sale, vas a ocupar la compu? si no
+                                             * para que tambien busue aca
+                                             * probare algo como lo tenia david
+                                             *          despues lo checamos mientras asi
+                                             * cada uno tiene su ID unico verdad?
+                                             * Si seria este de aca 
+                                             * los otros dos de abajo, estan asi porque le puse que el id fuera el 
+                                             */
+
+                                            $conn = new DBConnection();
+                                            $coll = $conn->SGConn();
+                                            $result = $coll->find();
+
+                                            // como se llama el atributo ?
+                                            ?>                 
+                                            <select id="sitio" onchange="myFunction2()">
+                                                <option value=0>Selecciona el Sitio</option>
+                                                <?php
+                                                foreach ($result as $r) {
+                                                    echo "<option value=" . $r['_id'] . ">" . $r['NombreSitio'] . "</option>";
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -248,66 +288,74 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
                                             function myFunction() {
                                                 tip_graf = document.getElementById("tipoGrafica").value;
-                                                if(tip_graf === "TP"){
-                                                   
-                                                    document.getElementById("rd1").disabled=true;
-                                                    document.getElementById("rd2").disabled=true;
-                                                    document.getElementById("rd3").checked =true;
-                                                }
-                                                else{
-                                                   
-                                                    document.getElementById("rd1").disabled=false;
-                                                    document.getElementById("rd2").disabled=false;
+                                                if (tip_graf === "TP") {
+
+                                                    document.getElementById("rd1").disabled = true;
+                                                    document.getElementById("rd2").disabled = true;
+                                                    document.getElementById("rd3").checked = true;
+                                                } else {
+
+                                                    document.getElementById("rd1").disabled = false;
+                                                    document.getElementById("rd2").disabled = false;
                                                 }
 
-                                            
-                                        }
+
+                                            }
+                                            var idSitio = 0;
+                                           function myFunction2(){
+                                            idSitio = document.getElementById("sitio").value;
+                                           } 
                                             //AJAX grafica
                                             function graficaAJAX() {
-                                                var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
-                                                //Obtener Datos del Formulario
-                                                f_ini = document.getElementById('inicio').value;
-                                                f_fin = document.getElementById('fin').value;
-                                                tip_graf = document.getElementById("tipoGrafica").value;
-                                                intervalo = document.getElementsByName("intervalo");
+                                                if (idSitio === 0) {
+                                                     alert("Selecciona el Sitio !");
+                                                     // Recuerdas como se usa?
+                                                } else {
+                                                    var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
+                                                    //Obtener Datos del Formulario
+                                                    f_ini = document.getElementById('inicio').value;
+                                                    f_fin = document.getElementById('fin').value;
+                                                    tip_graf = document.getElementById("tipoGrafica").value;
+                                                    intervalo = document.getElementsByName("intervalo");
 
 
-                                                for (x = 0; x < intervalo.length; x++) {
-                                                    if ($(intervalo[x]).is(':checked')) {
-                                                        valor_intervalo = intervalo[x].value;
+                                                    for (x = 0; x < intervalo.length; x++) {
+                                                        if ($(intervalo[x]).is(':checked')) {
+                                                            valor_intervalo = intervalo[x].value;
+                                                        }
                                                     }
+
+
+                                                    if (tip_graf === "TT") {
+                                                        url = "charts.php"; //en cual ?
+                                                    } else {
+                                                        url = "TempProf.php";//Esa, bueno seria para las dos, porque los datos los toma de la misma coleccion
+                                                    }
+
+
+
+                                                    if (f_ini === "" && f_fin === "") {
+
+                                                    } else {
+
+                                                    }
+
+                                                    $.ajax({
+                                                        async: true,
+                                                        cache: false,
+                                                        dataType: "html",
+                                                        type: 'POST',
+                                                        url: url,
+                                                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin+"&sitio="+idSitio,
+                                                        success: function (response) {
+                                                            $("#chart-container").html(response);
+                                                        },
+                                                        beforeSend: function () {
+                                                            $("#chart-container").html("Procesando...");
+                                                        },
+                                                        error: function (objXMLHttpRequest) {}
+                                                    });
                                                 }
-
-
-                                                if (tip_graf === "TT") {
-                                                    url = "charts.php";
-                                                } else {
-                                                    url = "TempProf.php";
-                                                }
-
-
-
-                                                if (f_ini === "" && f_fin === "") {
-
-                                                } else {
-
-                                                }
-
-                                                $.ajax({
-                                                    async: true,
-                                                    cache: false,
-                                                    dataType: "html",
-                                                    type: 'POST',
-                                                    url: url,
-                                                    data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin,
-                                                    success: function (response) {
-                                                        $("#chart-container").html(response);
-                                                    },
-                                                    beforeSend: function () {
-                                                        $("#chart-container").html("Procesando...");
-                                                    },
-                                                    error: function (objXMLHttpRequest) {}
-                                                });
                                             }
 
         </script>

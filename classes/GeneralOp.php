@@ -1,10 +1,14 @@
 <?php
 
+
+require "../classes/Modelos/ModeloSitiosGeograficos.php";
+require "../classes/Modelos/ModeloSondasInspeccion.php";
+require "../classes/Modelos/ModeloBombasCalorG.php";
+
 class GeneralOp {
 
-    private $datos = array();
+    private $datos = array();       
     
-
     public function ordenaFechai($fecha) {
 
         $fecha = explode('/', $fecha);
@@ -75,8 +79,11 @@ class GeneralOp {
         return $fecha;
     }
     
-    public function consulta1dia($f_ini, $f_fin, $operaciones) {
-        $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
+    public function consulta1dia($idsitio = null,$f_ini, $f_fin, $operaciones) {
+        // seleccina Fecha_HoraRegistro donde sea mayor a $f_ini y menor que $f_fin y donde id sea iguala $sitio
+        //
+        //AND { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] }
+        $rango = array("\$and"=>array(array( "Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NombreSitio' => $idsitio)));
         $result = $operaciones->findAll($rango); 
         $resultado= array();
         $prom = 0;
@@ -201,5 +208,49 @@ class GeneralOp {
         //array_push($this->datos,$resultado);
         return $resultado;
     }        
+    
+    public function insertarSitios ($SG, $SI, $BCG){
+        $connection = new DBConnection();
+        $coll = $connection->regSGConn();
+        
+        //Llamada a objetos de clases SG, SI, BCG
+//        $sg = new ModeloSitiosGeograficos();
+//        $si = new ModeloSondasInspeccion();
+//        $bcg = new ModeloBombasCalorG();
+        
+        $collection = $coll->SitiosGeograficos;
+        $result = $collection->insertOne([
+            'NombreSitio'=>$SG->getNombreSG(),
+            'UbicacionSitio'=>$SG->getUbicacionSG(),
+            'CoordSitio'=>$SG->getLocalizacionSG(),
+            'RegPor'=>$SG->getRegistradoPor(),
+            'ClimaSitio'=>$SG->getTipoClimaSG(),
+            'DatosSondaInspeccion'=>[
+                'NombreSonda'=>$SI->getNombreSI(),
+                'TipoDispSonda'=>$SI->getDispsitivoSI(),
+                'NoSerieDispSonda'=>$SI->getNoSerieDispSI(),
+                'VerSODispSonda'=>$SI->getVSODispSI(),
+                'FechaIniTrabSonda'=>$SI->getFechaIniTrabSI(),
+                'HoraIniTrabSonda'=>$SI->getHoraIniTrabSI(),
+                'TipoAlimentacionDispSonda'=>$SI->getAlimentDispSI(),
+                'ProfSonda'=>$SI->getProfundidadSI(),
+                'NoSenSonda'=>$SI->getNoSensoresSI()
+            ],
+            'DatosBombaCalorGeotermico'=>[
+                'NombreBomba'=>$BCG->getNombreBCG(),
+                'TipoDispBomba'=>$BCG->getDispositivoBCG(),
+                'NoSerieDispBomba'=>$BCG->getNoSerieDispBCG(),
+                'VerSODispBomba'=>$BCG->getVSODispBCG(),
+                'FechaIniTrabBomba'=>$BCG->getFechaIniTrabBCG(),
+                'HoraIniTrabBomba'=>$BCG->geHoraIniTrabBCG(),
+                'TipoAlimentacionDispBomba'=>$BCG->getAlimentDispBCG(),
+                'UbicacionEnSitio'=>$BCG->getUbicacionSitioBCG(),
+                'NoVariables'=>$BCG->getNoVariablesBCG()
+            ]
+        ]);
+        
+    }
+    
+    
 
 }

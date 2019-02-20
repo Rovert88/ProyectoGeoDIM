@@ -151,7 +151,7 @@
                                     <div class="control-group">
                                         <label class="control-label">Dispositivo: </label>
                                         <div class="controls">
-                                            <input id="p7" type="text" name="disp_sonda" placeholder="Tipo de dispositivo usado para la SI" />
+                                            <input id="p7" type="text" name="nombre_sonda" placeholder="Tipo de dispositivo usado para la SI" />
                                         </div>
                                     </div>
 
@@ -266,7 +266,7 @@
                                             <label class="control-label">Fecha de inicio de trabajo:</label>
                                             <div class="controls">
                                                 <div data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="01-01-2014" class="input-append date dpYears">
-                                                    <input id="p19" type="text" readonly="" value="dd-mm-yyyy" size="16" name="f_ini_trab_sonda" class="form-control" />
+                                                    <input id="p19" type="text" readonly="" value="dd-mm-yyyy" size="16" name="f_ini_trab_bomba" class="form-control" />
                                                     <span class="input-group-btn add-on">
                                                         <button class="btn btn-theme" type="button" name="btn_datepicker" ><i class="icon-calendar"></i></button>
                                                     </span>
@@ -279,7 +279,7 @@
                                             <label class="control-label">Hora de inicio de trabajo:</label>
                                             <div class="controls">
                                                 <div class="input-group bootstrap-timepicker">
-                                                    <input id="p20" onkeypress="return horaVal(event)" type="time" class="form-control" name="h_ini_trab_sonda" />                                                
+                                                    <input id="p20" onkeypress="return horaVal(event)" type="time" class="form-control" name="h_ini_trab_bomba" />                                                
                                                 </div>
                                             </div>
                                         </div>
@@ -413,7 +413,7 @@
             function soloLetras(e) {
                 key = e.which || e.keyCode;
                 tecla = String.fromCharCode(key).toLowerCase();
-                letras = "áéíóúabcdefghijklmnñopqrstuvwxyz";
+                letras = "áéíóúabcdefghijklmnñopqrstuvwxyz , ";
                 especiales = "8-37-39-46";
                 tecla_especial = false
 
@@ -522,7 +522,7 @@
                 element = document.getElementById("contenido");
                 check = document.getElementById("check");
 
-                if (check.checked) {
+                if (document.getElementById("check").checked) {
                     element.style.display = 'block';
                 } else {
                     element.style.display = 'none';
@@ -534,9 +534,8 @@
         <!--register-->
         <script>
             function registrar() {
-                var check = "input[name='activa_reg_bcg']";
-
-                if ($(check).is(':checked')) {
+               var check = document.getElementById("check");
+                if(check.checked) {
                         var aceptado = "ok";
                         var p1 = $('#p1').val();
                         var p2 = $('#p2').val();
@@ -597,7 +596,7 @@
                         alert('Por favor llene todos los campos');
                         return false;
                     }else{
-                                        $.ajax({
+                $.ajax({
                     async: true,
                     cache: false,
                     dataType: "html",
@@ -622,7 +621,7 @@
 
                     }
                 }else{
-                    var aceptado = "ok";
+                    var aceptado = "";
                     var p1 = $('#p1').val();
                     var p2 = $('#p2').val();
                     var p3 = $('#p3').val();

@@ -19,6 +19,9 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="../assets/css/style-system.css" />
         <script languaje="javascript" src="../jquery-3.3.1.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
+        <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
 
     <body>
@@ -78,7 +81,7 @@
                             <h5>Cargar archivo CSV</h5>                                  
                         </div>
                         <div class="widget-content nopadding">
-                            <form class="form-horizontal" enctype="multipart/form-data" action="../methods/CargarCSV.php" method="post" >
+                            <div class="form-horizontal" enctype="multipart/form-data">
 
                                 <div class="control-group">
                                     <label class="control-label">Seleccionar Sitio Geográfico</label>
@@ -92,13 +95,13 @@
                                         ?>
                                         <select id="select" onchange="mostrarInputs(this.value)">
                                             <option value="0">Seleccionar Sitio</option>
-                                            
+
                                             <?php
                                             foreach ($result as $data) {
-                                                echo "<option  value=" . $data['_id'] . ">" . $data['NombreSitio'] . "</option>";                                               
+                                                echo "<option  value=" . $data['_id'] . ">" . $data['NombreSitio'] . "</option>";
                                             }
                                             ?>    
-                                            
+
                                         </select>
                                         <!--style="display:none;"-->
                                         <input type="text"  id="inp" name="inp"  value="" />
@@ -130,9 +133,9 @@
                                 <!---->                                        
 
                                 <div class="form-actions">
-                                    <button type="submit" id="btn" disabled="disabled" name="cargar" class="btn btn-success" >Cargar</button>
+                                    <button onclick="registrar()" id="btnCargarCSV" disabled="disabled" name="cargar" class="btn btn-success" >Cargar</button>
                                 </div>                                        
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -178,6 +181,9 @@
         <script src="../assets/js/matrix.js"></script>
         <script src="../assets/js/select2.min.js"></script>
         <script src="../assets/js/wysihtml5-0.3.0.js"></script>
+        
+        <!--Alertify js-->
+        <script src="../assets/alertifyjs/alertify.js"></script>
 
         <script type="text/javascript">
                                         // This function is called from the pop-up menus to transfer to
@@ -218,70 +224,71 @@
         -->
         <script type="text/javascript">
 
-            function enviar(url, data) {
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", url, true);
-                xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xmlhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        //va el codigo de resultado
-                        if (this.response) {
-                            alert(this.response);
-                            //setTimeout("location.href = 'index.php';",3500);
-                            //element2.style.display='none';
-                           
+            //Ocultar Boton Cargar CSV           
 
-                        } else {
-                            alert("REGISTRO FALLIDO");
-                            
-                        }
-                    }
-                };
-                
-                  xmlhttp.send(data);
-
-            }
             function registrar() {
+                var btncargarcsv = document.getElementById("btnCargarCSV");
                 var select = document.getElementById("select").value;
                 var radio1 = document.getElementById("radio1");
                 var radio2 = document.getElementById("radio2");
                 var radio3 = document.getElementById("radio3");
-                var file = document.getElementById("fileInput");
-                var datos = new FormData();
-                //INDEXAMOS LOS DATOS CLAVE : VALOR
-                datos.append("excel", file.files[0]);
-                datos.append("sitio", select)
-
-
-
-
+                var file = document.getElementById("fileInput").files[0];
+                //var file = $('input[type=file]').val();
 
                 if (select != 0) {
 
                     if (radio1.checked) {
-                        
-                        enviar("../methods/CargarCSV.php", datos);
+                        btncargarcsv.style.display = 'none';
+                        enviar("../methods/CargarCSV.php", file, select);
                     } else if (radio2.checked) {
-                        enviar("url", datos);
+                        enviar("../methods/CargarCSVBCG.php", file, select);
                     } else if (radio3.checked) {
-                       enviar("url", datos);
-                    } else {
-                        alert("selecciona el tipo de archivo!");
+                        enviar("url", datos);
+                    } else {                        
+                        alertify.alert('Carga de archivos CSV', 'Porfavor seleccione el tipo de archivo');
                     }
-                } else {
-                    alert("selecciona el sitio geografico!");
-
+                } else {                    
+                    alertify.alert('Carga de archivos CSV', 'Porfavor seleccione el sitio geografico');
                 }
+            }
+
+            function enviar(url, file, select) {
+                var datos = new FormData();
+                //Ideaxacion de datos clave : valor
+                datos.append("csv", file);
+                datos.append("sitio", select);
+
+                jQuery.ajax({
+                    url: url,
+                    data: datos,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    success: function (r) {
+//                        alert("Datos cargados correctamente");
+                        alertify.success("Archivo cargado correctamente");
+                        //setTimeout("location.href='SubirArchivos.php';", 3500);
+                        btnCargarCSV.style.display = 'none';
+                        $("#resultado").html("Archivo cargado exitosamente");
+                    },
+                    beforeSend : function(){
+                        $("#resultado").html("Procesando, espere por favor...");
+                    },
+                    error: function(r){
+                        alertify.error("El archivo no pudo cargarse");
+                    }
+                });
             }
 
             $("#fileInput").change(function () {
                 $("button").prop("disabled", this.files.length == 0);
             });
-            
-            function mostrarInputs(){
+
+            function mostrarInputs() {
                 var select = document.getElementById("select").value;
                 document.getElementById("inp").value = select;
-            }
+            }                        
         </script>
 
     </body>

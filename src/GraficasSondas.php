@@ -107,7 +107,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                 <div>
 
                                     <div class="control-group">
-                                        <label class="control-label">Seleccionar Sitio Geográfico</label>
+                                        <label class="control-label">Seleccionar Tipo de Gráfica</label>
                                         <div class="controls">
                                             <select id="tipoGrafica" onchange="myFunction()">
                                                 <option value="TT">Temperatura-Tiempo</option>

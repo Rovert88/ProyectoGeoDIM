@@ -4,6 +4,31 @@ require '../vendor/autoload.php';
 
 class DBConnection {
     
+    //Conexion principal
+    public function ConectarBD(){
+        $host = '127.0.0.1';
+        $port = '27017';
+        $uss = rawurldecode('GeoDIM');
+        $pass = rawurldecode('');
+        $db = 'GeoDIMTests';
+        
+        $urlConexion = sprintf('mongodb://%s:%s/%s', $host, $port, $db);
+        $cliente = new MongoDB\Client($urlConexion);
+        return $cliente->selectDatabase($db);
+    }
+    
+    //Preparacion de coleccion Archivos Sondas de Inspeccion
+    public function PreparaCollArchivosSI($cadenaArchSI){
+        $coleccion = $cadenaArchSI.'RegistrosSI';
+        return $coleccion;
+    }
+    
+    //Preparacion de coleccion Archivos Bombas de Calor Geotermico
+    public function PreparaCollArchivosBCG($cadenaArchBCG){
+        $coleccion = $cadenaArchBCG.'RegistrosBCG';
+        return $coleccion;
+    }
+    
     //Sitios Geograficos Connection
     public function SGConn() {
         $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
@@ -15,7 +40,7 @@ class DBConnection {
     //Upload CSV SI Connection
     public function UpCSVSIConn() {
         $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
-        $collection = $client->GeoDIM->RegistrosSI;
+        $collection = $client->GeoDIMTests->RegistrosSITest;
     
         return $collection;
     }
@@ -23,7 +48,7 @@ class DBConnection {
     //Upload CSV BCG Connection
     public function UpCSVBCGConn() {
         $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
-        $collection = $client->GeoDIM->RegistrosBCG;
+        $collection = $client->GeoDIMTests->RegistrosBCG;
     
         return $collection;
     }

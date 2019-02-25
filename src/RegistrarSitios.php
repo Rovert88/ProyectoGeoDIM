@@ -93,7 +93,8 @@
                                     <div class="control-group">
                                         <label style="text-align: center; font-size: 20px; color: #000;">Sitio Geográfico (SG)</label>
                                     </div>
-                                    <!--primer campo-->
+                                    
+                                    <!--Campo NombreSitio-->
                                     <div class="control-group">
                                         <label class="control-label">Nombre del Sitio: </label>
                                         <div class="controls">
@@ -101,7 +102,7 @@
                                         </div>
                                     </div>
 
-                                    <!--segundo campo-->
+                                    <!--Campo UbicacionSitio-->
                                     <div class="control-group">
                                         <label class="control-label">Ubicación del Sitio: </label>
                                         <div class="controls">
@@ -109,7 +110,7 @@
                                         </div>
                                     </div>
 
-                                    <!--tercer campo-->
+                                    <!--Campo LocalizacionSitio-->
                                     <div class="control-group">
                                         <label class="control-label">Localización del Sitio: </label>
                                         <div class="controls">
@@ -117,7 +118,7 @@
                                         </div>
                                     </div>
 
-                                    <!--cuarto campo-->
+                                    <!--Campo RegistradoPor-->
                                     <div class="control-group">
                                         <label class="control-label">Registrado por: </label>
                                         <div class="controls">
@@ -125,7 +126,7 @@
                                         </div>
                                     </div>
 
-                                    <!--quinto campo-->
+                                    <!--Campo TipoClimaSitio-->
                                     <div class="control-group">
                                         <label class="control-label">Tipo de clima: </label>
                                         <div class="controls">
@@ -141,6 +142,7 @@
                                         <label style="text-align:center; font-size:20px; color:#000;">Sonda de Inspección (SI)</label>
                                     </div>
 
+                                    <!--Campo NombreSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Nombre de Sonda: </label>
                                         <div class="controls">
@@ -148,6 +150,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo DispositivoSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Dispositivo: </label>
                                         <div class="controls">
@@ -155,6 +158,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo NoSerieDispSonda-->
                                     <div class="control-group">
                                         <label class="control-label">No. de serie del dispositivo: </label>
                                         <div class="controls">
@@ -162,6 +166,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo VSODispSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Versión de S.O. del dispositivo: </label>
                                         <div class="controls">
@@ -169,6 +174,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo FechaIniTrabSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Fecha de inicio de trabajo:</label>
                                         <div class="controls">
@@ -182,18 +188,17 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo HoraIniTrabSonda-->
                                     <div class="form-group">
                                         <label class="control-label">Hora de inicio de trabajo:</label>
                                         <div class="controls">
                                             <div class="input-group bootstrap-timepicker">
-                                                <input id="p11" onkeypress="return horaVal(event)" type="time" class="form-control" name="h_ini_trab_sonda" />
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-theme04" type="button"><i class="icon-time"></i></button>
-                                                </span>
+                                                <input id="p11" onkeypress="return horaVal(event)" type="time" class="form-control" name="h_ini_trab_sonda" />                                                
                                             </div>
                                         </div>
                                     </div>
 
+                                    <!--Campo TipoAlimentDispSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Tipo de alimentación: </label>
                                         <div class="controls">
@@ -201,6 +206,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo ProfSonda-->
                                     <div class="control-group">
                                         <label class="control-label">Profundidad (m): </label>
                                         <div class="controls">
@@ -208,6 +214,7 @@
                                         </div>
                                     </div>
 
+                                    <!--Campo NoSensoresSonda-->
                                     <div class="control-group">
                                         <label class="control-label">No. de sensores: </label>
                                         <div class="controls">
@@ -233,7 +240,10 @@
                                         </div>
                                     </div>
 
+                                    <!--Seccion FormBCG -->
                                     <div id="contenido" style="display: none;">
+                                        
+                                        <!--Campo NombreBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Nombre de Bomba: </label>
                                             <div class="controls">
@@ -241,6 +251,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo DispositivoBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Dispositivo: </label>
                                             <div class="controls">
@@ -248,6 +259,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo NoSerieDispBomba-->
                                         <div class="control-group">
                                             <label class="control-label">No. de serie del dispositivo: </label>
                                             <div class="controls">
@@ -255,6 +267,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo VSODispBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Versión de S.O. del dispositivo: </label>
                                             <div class="controls">
@@ -262,6 +275,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo FechaIniTrabBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Fecha de inicio de trabajo:</label>
                                             <div class="controls">
@@ -275,6 +289,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo HoraIniTrabBomba-->
                                         <div class="form-group">
                                             <label class="control-label">Hora de inicio de trabajo:</label>
                                             <div class="controls">
@@ -284,6 +299,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo TipoAlimenDispBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Tipo de alimentación: </label>
                                             <div class="controls">
@@ -291,6 +307,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo UbicacionSitioBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Ubicación en el sitio: </label>
                                             <div class="controls">
@@ -298,6 +315,7 @@
                                             </div>
                                         </div>
 
+                                        <!--Campo NoVariablesBomba-->
                                         <div class="control-group">
                                             <label class="control-label">No. de variables: </label>
                                             <div class="controls">
@@ -379,7 +397,7 @@
         <script src="../assets/lib/advanced-form-components.js"></script>
         <!--Date-Time picker FIN-->
 
-        <!--Alertify-->
+        <!--Alertify js-->
         <script src="../assets/alertifyjs/alertify.js"></script>
 
         <script type="text/javascript">
@@ -592,8 +610,8 @@
                         || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == "" || $('#p15').val() == ""
                         || $('#p16').val() == "" || $('#p17').val() == "" || $('#p18').val() == "" || $('#p19').val() == "" || $('#p20').val() == ""
                         || $('#p21').val() == "" || $('#p22').val() == "" || $('#p23').val() == ""){
-                        
-                        alert('Por favor llene todos los campos');
+                                                
+                        alertify.alert('Registro de Sitios Geograficos', 'Porfavor llene todos los campos');
                         return false;
                     }else{
                 $.ajax({
@@ -658,7 +676,7 @@
                        || $('#p6').val() == "" || $('#p7').val() == "" || $('#p8').val() == "" || $('#p9').val() == "" || $('#p10').val() == ""
                        || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == ""){
                        
-                       alert('Por favor llene todos los campos');
+                       alertify.alert('Registro de Sitios Geograficos', 'Porfavor llene todos los campos');
                        return false;
                     }else{
                 $.ajax({

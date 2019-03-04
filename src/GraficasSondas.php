@@ -45,14 +45,11 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
     <body>
 
-
-
         <!--Header-part-->
         <div>
             <h1>GeoDIM</h1>
         </div>
         <!--close-Header-part-->
-
 
         <!--top-Header-menu-->
         <div id="user-nav" class="navbar navbar-inverse">
@@ -78,8 +75,9 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
                 <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas</a></li>
+                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                     </ul>
                 </li>
                 <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
@@ -109,7 +107,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                     <div class="control-group">
                                         <label class="control-label">Seleccionar Tipo de Gráfica</label>
                                         <div class="controls">
-                                            <select id="tipoGrafica" onchange="myFunction()">
+                                            <select id="tipoGrafica" onchange="selectTipoGrafica()">
                                                 <option value="TT">Temperatura-Tiempo</option>
                                                 <option value="TP">Temperatura-Profundidad</option>
                                             </select>
@@ -142,7 +140,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
                                             // como se llama el atributo ?
                                             ?>                 
-                                            <select id="sitio" onchange="myFunction2()">
+                                            <select id="sitio" onchange="selectSitioGeografico()">
                                                 <option value=0>Selecciona el Sitio</option>
                                                 <?php
                                                 foreach ($result as $r) {
@@ -286,7 +284,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 //Select
                                             var tip_graf;
 
-                                            function myFunction() {
+                                            function selectTipoGrafica() {
                                                 tip_graf = document.getElementById("tipoGrafica").value;
                                                 if (tip_graf === "TP") {
 
@@ -301,14 +299,18 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 
                                             }
-                                            var idSitio = 0;
-                                           function myFunction2(){
+   /*Donde obtienes los valores de los radiobuton?
+    * Son esos
+    * Pero esos son pcuando los habilitas y desabilias no?
+    * */                                         
+                                           var idSitio = 0;
+                                           function selectSitioGeografico(){
                                             idSitio = document.getElementById("sitio").value;
                                            } 
                                             //AJAX grafica
                                             function graficaAJAX() {
                                                 if (idSitio === 0) {
-                                                     alert("Selecciona el Sitio !");
+                                                     alert("Seleccione un sitio porfavor");
                                                      // Recuerdas como se usa?
                                                 } else {
                                                     var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
@@ -327,7 +329,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 
                                                     if (tip_graf === "TT") {
-                                                        url = "charts.php"; //en cual ?
+                                                        url = "charts.php"; // es este el tipo de grafica si ?
                                                     } else {
                                                         url = "TempProf.php";//Esa, bueno seria para las dos, porque los datos los toma de la misma coleccion
                                                     }

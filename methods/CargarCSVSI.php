@@ -2,10 +2,10 @@
 require '../classes/ConexionDB.php';
 require '../classes/GeneralOp.php';
 
-$connect = new DBConnection();
-$traerColl = $connect->ConectarBD();
-$nombreColl = $connect->PreparaCollArchivosSI($_POST['sitio']);
-$coll = $traerColl->$nombreColl;
+$connect = new DBConnection();  //Instancia de la clase DBConnection
+$traerColl = $connect->ConectarBD(); //Llamada al metodo para seleccionar la BD
+$nombreColl = $connect->PreparaCollArchivosSI($_POST['sitio']); //Asignacion del nombre de la coleccion a traves del id de sitio seleccionado
+$coll = $traerColl->$nombreColl; //Asignacion de la coleccion con su nombre y conexion a BD seleccionada
 $op = new GeneralOP();
 
 if(isset($_POST['sitio'])){
@@ -24,7 +24,7 @@ if(isset($_POST['sitio'])){
         'text/tab-separated-values',
         'text/tsv',
         'application/x-csv',
-        ' application/x-www-form-urlencoded');
+        'application/x-www-form-urlencoded');
     $arrayDatos = array();
     
     if(in_array($_FILES['csv']['type'], $mime_types)){

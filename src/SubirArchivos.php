@@ -56,8 +56,9 @@
                 </li>			  
                 <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas</a></li>
+                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                     </ul>
                 </li>
                 <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
@@ -239,11 +240,13 @@
 
                     if (radio1.checked) {
                         btncargarcsv.style.display = 'none';
-                        enviar("../methods/CargarCSV.php", file, select);
+                        enviar("../methods/CargarCSVSI.php", file, select);
                     } else if (radio2.checked) {
+                        btncargarcsv.style.display = 'none';
                         enviar("../methods/CargarCSVBCG.php", file, select);
                     } else if (radio3.checked) {
-                        enviar("url", datos);
+                        btncargarcsv.style.display = 'none';
+                        enviar("../methods/CargarCSVBatCR800.php", file, select);
                     } else {                        
                         alertify.alert('Carga de archivos CSV', 'Porfavor seleccione el tipo de archivo');
                     }
@@ -266,9 +269,8 @@
                     processData: false,
                     type: 'POST',
                     success: function (r) {
-//                        alert("Datos cargados correctamente");
                         alertify.success("Archivo cargado correctamente");
-                        //setTimeout("location.href='SubirArchivos.php';", 3500);
+                        setTimeout("location.href='SubirArchivos.php';", 3500);
                         btnCargarCSV.style.display = 'none';
                         $("#resultado").html("Archivo cargado exitosamente");
                     },

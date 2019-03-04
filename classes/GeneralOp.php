@@ -1,10 +1,5 @@
 <?php
 
-
-require "../classes/Modelos/ModeloSitiosGeograficos.php";
-require "../classes/Modelos/ModeloSondasInspeccion.php";
-require "../classes/Modelos/ModeloBombasCalorG.php";
-
 class GeneralOp {
 
     private $datos = array();       
@@ -26,13 +21,18 @@ class GeneralOp {
         $time = explode(' ', $fecha[2]);
         return $time[0] . "-" . $fecha[1] . "-" . $fecha[0] . " " . $time[1] . ":00.000Z";
     }
-
+    
+    /*Metodo para consultar todos los datos de cualquier coleccion
+    15 min para SI y BCG y 1 hr para BatCR800*/
     public function consulta15min($f_ini, $f_fin, $operaciones) {
         $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
         $result = $operaciones->findAll($rango);
         return $result;
     }
 
+    //Metodos de consulta para Sondas de Inspeccion
+    
+    //Consulta cada 30 min
     public function consulta30min($f_ini, $f_fin, $operaciones) {
         $fecha = array();
         $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
@@ -79,7 +79,13 @@ class GeneralOp {
         return $fecha;
     }
     
-    public function consulta1dia($idsitio = null,$f_ini, $f_fin, $operaciones) {
+    /*
+        El metodo de consulta 1 dia tiene 4 parametros de los cuales el 
+     * idsitio no era obligatorio cuando lo agrege pero despues se necestia para la consulta porque ya
+     * estan relacioados los datos por lo cual quitamos que sea opcional
+     *      */
+    //Consulta cada dia
+    public function consulta1dia($idsitio, $f_ini, $f_fin, $operaciones) {
         // seleccina Fecha_HoraRegistro donde sea mayor a $f_ini y menor que $f_fin y donde id sea iguala $sitio
         //
         //AND { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] }
@@ -205,52 +211,140 @@ class GeneralOp {
                     "T75_min"=>$T75_min,                    
                     ]);
       
-        //array_push($this->datos,$resultado);
         return $resultado;
     }        
     
-    public function insertarSitios ($SG, $SI, $BCG){
-        $connection = new DBConnection();
-        $coll = $connection->regSGConn();
-        
-        //Llamada a objetos de clases SG, SI, BCG
-//        $sg = new ModeloSitiosGeograficos();
-//        $si = new ModeloSondasInspeccion();
-//        $bcg = new ModeloBombasCalorG();
-        
-        $collection = $coll->SitiosGeograficos;
-        $result = $collection->insertOne([
-            'NombreSitio'=>$SG->getNombreSG(),
-            'UbicacionSitio'=>$SG->getUbicacionSG(),
-            'CoordSitio'=>$SG->getLocalizacionSG(),
-            'RegPor'=>$SG->getRegistradoPor(),
-            'ClimaSitio'=>$SG->getTipoClimaSG(),
-            'DatosSondaInspeccion'=>[
-                'NombreSonda'=>$SI->getNombreSI(),
-                'TipoDispSonda'=>$SI->getDispsitivoSI(),
-                'NoSerieDispSonda'=>$SI->getNoSerieDispSI(),
-                'VerSODispSonda'=>$SI->getVSODispSI(),
-                'FechaIniTrabSonda'=>$SI->getFechaIniTrabSI(),
-                'HoraIniTrabSonda'=>$SI->getHoraIniTrabSI(),
-                'TipoAlimentacionDispSonda'=>$SI->getAlimentDispSI(),
-                'ProfSonda'=>$SI->getProfundidadSI(),
-                'NoSenSonda'=>$SI->getNoSensoresSI()
-            ],
-            'DatosBombaCalorGeotermico'=>[
-                'NombreBomba'=>$BCG->getNombreBCG(),
-                'TipoDispBomba'=>$BCG->getDispositivoBCG(),
-                'NoSerieDispBomba'=>$BCG->getNoSerieDispBCG(),
-                'VerSODispBomba'=>$BCG->getVSODispBCG(),
-                'FechaIniTrabBomba'=>$BCG->getFechaIniTrabBCG(),
-                'HoraIniTrabBomba'=>$BCG->geHoraIniTrabBCG(),
-                'TipoAlimentacionDispBomba'=>$BCG->getAlimentDispBCG(),
-                'UbicacionEnSitio'=>$BCG->getUbicacionSitioBCG(),
-                'NoVariables'=>$BCG->getNoVariablesBCG()
-            ]
-        ]);
-        
+    
+    //Metodos de consulta para Bombas de Calor Geotermico
+    
+    //Consulta cada 30 min
+    public function consulta30minBCG($f_ini, $f_fin, $operaciones){
+        $fecha = array();
+        $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
+        $result = $operaciones->findAll($rango);
+        $cont = 1;
+        foreach($result as $dato){
+            if(($cont % 2) == 0){
+                $datetime = $dato['Fecha_HoraRegistro']->toDateTime();
+                $a = $datetime->format('Y-m-d\TH:i:s.u');
+                array_push($fecha, [
+                    "Fecha_HoraRegistro" => $a,
+                    "Bat_CR800" => $dato["Bat_CR800"],
+                    "Temp_CR800" => $dato["Temp_CR800"],
+                    "EAT_DegF" => $dato["EAT_DegF"],
+                    "LAT_DegF" => $dato["LAT_DegF"],
+                    "EWT_DegF" => $dato["EWT_DegF"],
+                    "LWT_DegF" => $dato["LWT_DegF"],
+                    "CT_Amp" => $dato["CT_Amp"],
+                    "EAT_DegC" => $dato["EAT_DegC"],
+                    "LAT_DegC" => $dato["LAT_DegC"],
+                    "EWT_DegC" => $dato["EWT_DegC"],
+                    "LWT_DegC" => $dato["LWT_DegC"],
+                ]);
+            }
+            $cont += 1;
+        }
+        return $fecha;
     }
     
+    //Consulta cada dia
+    public function consulta1diaBCG($idsitio, $f_ini, $f_fin, $operaciones){
+        $rango = array("\$and" => array(array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))), array('NombreSitio' => $idsitio)));
+        $result = $operaciones->findAll($rango);
+        $resultado = array();
+        $prom = 0;
+        $cont = 0;
+        $Bat_CR800 = 0;
+        $Temp_CR800 = 0;
+        $EAT_DegF = 0;
+        $LAT_DegF = 0;
+        $EWT_DegF = 0;
+        $LWT_DegF = 0;        
+        $CT_Amp = 0;
+        $EAT_DegC = 0;
+        $LAT_DegC = 0;
+        $EWT_DegC = 0;
+        $LWT_DegC = 0;
+        
+        foreach($result as $dato){
+            $prom += $dato["Bat_CR800"];
+            $Temp_CR800 += $dato["Temp_CR800"];
+            $EAT_DegF += $dato["EAT_DegF"];
+            $LAT_DegF += $dato["LAT_DegF"];
+            $EWT_DegF += $dato["EWT_DegF"];
+            $LWT_DegF += $dato["LWT_DegF"];            
+            $CT_Amp += $dato["CT_Amp"];
+            $EAT_DegC += $dato["EAT_DegC"];
+            $LAT_DegC += $dato["LAT_DegC"];
+            $EWT_DegC += $dato["EWT_DegC"];
+            $LWT_DegC += $dato["LWT_DegC"];
+            $cont += 1;
+        }
+        
+        $prom = $prom/$cont;
+        $Temp_CR800 = $Temp_CR800/$cont;
+        $EAT_DegF = $EAT_DegF/$cont;
+        $LAT_DegF = $LAT_DegF/$cont;
+        $EWT_DegF = $EWT_DegF/$cont;
+        $LWT_DegF = $LWT_DegF/$cont;
+        $CT_Amp = $CT_Amp/$cont;
+        $EAT_DegC = $EAT_DegC/$cont;
+        $LAT_DegC = $LAT_DegC/$cont;
+        $EWT_DegC = $EWT_DegC/$cont;
+        $LWT_DegC = $LWT_DegC/$cont;
+        
+        //Insertar los promedios en un array para enviarlos al metodo de graficacion
+        array_push($resultado,[
+            "Bat_CR800" => $prom,
+            "Temp_CR800" => $Temp_CR800,
+            "EAT_DegF" => $EAT_DegF,
+            "LAT_DegF" => $LAT_DegF,
+            "EWT_DegF" => $EWT_DegF,
+            "LWT_DegF" => $LWT_DegF,
+            "CT_Amp" => $CT_Amp,
+            "EAT_DegC" => $EAT_DegC,
+            "LAT_DegC" => $LAT_DegC,
+            "EWT_DegC" => $EWT_DegC,
+            "LWT_DegC" => $LWT_DegC,
+        ]);
+        
+        //Se regresa el array con los datos
+        return $resultado;
+    }
     
-
+    //Metodos de consulta para Bateria de CR800*************
+    
+    //Consulta cada 30 min
+    //Funsiones consultas de datos bateria CR800
+    public function consulta1hrBatCR800($f_ini, $f_fin, $operaciones){        
+        $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
+        $result = $operaciones->findAll($rango);
+        
+        return $result;
+    }
+    
+    //Consulta cada dia
+    public function consulta1diaBatCR800($idsitio, $f_ini, $f_fin, $operaciones){
+        $rango = array("\$and" => array(array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))), array('NombreSitio' => $idsitio)));
+        $result = $operaciones->findAll($rango);
+        $resultado = array();
+        $prom = 0;
+        $cont = 0;
+        $BattV_Min = 0;
+        
+        foreach($result as $dato){
+            $prom += $dato["BattV_Min"];
+            $cont += 1;
+        }
+        
+        $prom = $prom/$cont;
+        
+        //Insertar los promedio en un array para enviarlos al metodo de graficacion
+        array_push($resultado,[
+            "BattV_Min" => $prom,
+        ]);
+        
+        //Se regresa el array con los datos
+        return $resultado;
+    }
 }

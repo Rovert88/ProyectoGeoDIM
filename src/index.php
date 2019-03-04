@@ -25,8 +25,7 @@
 		  </div>
         <!--close-Header-part-->
 
-
-		  <!--top-Header-menu-->
+        <!--top-Header-menu-->
 		  <div id="user-nav" class="navbar navbar-inverse">
 			<ul class="nav">
 			  <li ><a><i class="icon icon-upload-alt style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
@@ -50,8 +49,9 @@
 			  
                           <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                               <ul>
-                                  <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
-                                  <li><a href="GraficasBombas.php">Gráficas de Bombas</a></li>
+                                  <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
+                                  <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                                  <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                               </ul>
                           </li>
 			  <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>

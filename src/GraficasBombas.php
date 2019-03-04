@@ -7,7 +7,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 <html lang="es">
     <head>
-        <title>Gráficas de Sondas de Inspección</title>
+        <title>Gráficas de Bombas de Calor Geotérmico</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
@@ -15,8 +15,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.js"></script>
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.min.js"></script>
-
-
 
         <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
@@ -45,14 +43,11 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
     <body>
 
-
-
         <!--Header-part-->
         <div>
             <h1>GeoDIM</h1>
         </div>
         <!--close-Header-part-->
-
 
         <!--top-Header-menu-->
         <div id="user-nav" class="navbar navbar-inverse">
@@ -78,8 +73,9 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
                 <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas</a></li>
+                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                     </ul>
                 </li>
                 <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
@@ -94,7 +90,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--main-container-part-->
         <div class="style-sidebar" id="content">
-            <h1 class="title-style">Gráficas de Sondas de Inspección</h1>
+            <h1 class="title-style">Gráficas de Bombas de Calor Geotérmico</h1>
             <div class="container-fluid">                        
                 <hr>
                 <div class="row-fluid">
@@ -117,7 +113,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                             $result = $coll->find();
                                             
                                             ?>                 
-                                            <select id="sitio" onchange="myFunction2()">
+                                            <select id="sitio" onchange="selectSitioGeografico()">
                                                 <option value=0>Selecciona el Sitio</option>
                                                 <?php
                                                 foreach ($result as $r) {
@@ -127,6 +123,18 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                             </select>
                                         </div>
                                     </div>
+                                    
+                                    <!--select para elegir bomba-->
+<!--                                    <div class="control-group">
+                                        <label class="control-label">Seleccionar BCG del Sitio Geográfico</label>
+                                        <div class="controls">
+                                            <select id="s_bcg">
+                                                <option></option>
+                                                <option></option>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>-->
 
                                     <div class="control-group">
                                         <label class="control-label">Intervalo</label>
@@ -257,11 +265,52 @@ require ("../assets/fusioncharts/fusioncharts.php");
 	// resets the menu selection upon entry to this page:
 	function resetMenu() {
 	   document.gomenu.selector.selectedIndex = 2;
-	}
+	}                                
 	</script>
         
         <script type="text/javascript">
-            //
+            //Select Sitio Geografico
+            var idSitio = 0;
+            function selectSitioGeografico(){
+                idSitio = document.getElementById("sitio").value;
+            }
+            
+            //AJAX grafica
+            function graficaAJAX(){
+                if(idSitio === 0){
+                    alert("Seleccione un sitio porfavor");
+                }else{
+                    var f_ini, f_fin, intervalo, url, valor_intervalo;
+                    //Obtener datos del formulario
+                    f_ini = document.getElementById('inicio').value;
+                    f_fin = document.getElementById('fin').value;
+                    intervalo = document.getElementsByName("intervalo");
+                    
+                    for(x = 0; x < intervalo.length; x++){
+                        if($(intervalo[x]).is(':checked')){
+                            valor_intervalo = intervalo[x].value;
+                        }
+                    }
+                    
+                    url = "GraficasBCG.php";
+                    
+                    $.ajax({
+                        async: true,
+                        cache: false,
+                        dataType: "html",
+                        type: 'POST',
+                        url: url,
+                        data: "inter="+valor_intervalo+"&ini="+f_ini+"&fin="+f_fin+"&sitio="+idSitio,
+                        success: function(response){
+                            $("#chart-container").html(response);
+                        },
+                        beforeSend: function(){
+                            $("#chart-contanier").html("Procesando...");
+                        },
+                        error: function(objXMLHttpResponse){}
+                    });
+                }
+            }            
         </script>
     </body>
 </html>

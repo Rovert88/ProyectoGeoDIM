@@ -3,21 +3,20 @@
 <?php
 require '../classes/ConexionDB.php';
 require '../classes/CRUD.php';
-require ("../assets/fusioncharts/fusioncharts.php");
 require '../vendor/autoload.php';
 require '../classes/GeneralOp.php';
 //Conexion
 $connect = new DBConnection();
-$objData = $connect->GSIConn();
-
-
 $objData = $connect->UpCSVSIConn();
 $operaciones = new CRUD($objData);
 $generalOp = new GeneralOp();
 
+//Obtener Parametos del POST
+$id = $_POST['sitio'];
 $intervalo = $_POST['inter'];
 $f_ini2 = $f_ini = $_POST['ini'];
 $f_fin2 = $f_fin = $_POST['fin'];
+
 $cont = 0;
 $datos = array();
 $arrData = array();
@@ -50,8 +49,8 @@ $dataseries25 = array();
 $dataseries26 = array();
 $dataseries27 = array();
 $dataseries28 = array();
-$f_ini = $generalOp->ordenaFechai($f_ini);
 
+$f_ini = $generalOp->ordenaFechai($f_ini);
 $f_fin = $generalOp->ordenaFechaf($f_fin);
 
 if ($intervalo == '15min') {
@@ -62,16 +61,30 @@ if ($intervalo == '15min') {
         $datos = $generalOp->consulta30min($f_ini, $f_fin, $operaciones);
         $data = $datos;
     } else {
-        for ($i = $f_ini2; $i <= $f_fin2; $i = date("m/d/Y", strtotime($i . "+ 1 days"))) {
+        // Graficas a un dia
+        
+        //Obtiene la lista de dias de diaini  a diafin y obtiene los datos
+        //solo se cambiaria aqui el form y solo se tomaria el primer imput
+        // osea f_ini
+        // Dia siguiente
+        $fecha = $f_fin2;
+        if ($f_ini2 == $f_fin2){
+        $fecha = date("m/d/Y",strtotime($f_ini2."+ 1 days"));
+        }
+        
+        // haber pruebalo robert
+        
+        for ($i = $f_ini2; $i <= $fecha ; $i = date("m/d/Y", strtotime($i . "+ 1 days"))) {
             $f = $i;
             $f_ini = $generalOp->ordenaFechai($f);
             $f_fin = $generalOp->ordenaFechaf($f);
             array_push($categoryArray, ["label" => $f_ini]);
-            $a = $generalOp->consulta1dia($f_ini, $f_fin, $operaciones);
+            // LOs Datos ya estan relacionados en la BD?
+            //Si, ya tienen el id en cada registro
+            $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones);
             array_push($datos, $a);
         }
-
-
+        
         for ($long = 0; $long <= sizeof($datos) - 1; $long++) {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
@@ -271,7 +284,8 @@ if ($intervalo == '15min') {
                 } else {
                     $dst75min = $datos[$long][$lo]['T75_min'];
                 }
-
+                
+                //Insercion de datos en sus respectivos arrays
                 array_push($dataseries1, ["value" => $dsta]);
                 array_push($dataseries2, ["value" => $dst0avg]);
                 array_push($dataseries3, ["value" => $dst0max]);
@@ -526,139 +540,40 @@ if ($intervalo != "1dia") {
         }
 
 
-
-        array_push($categoryArray, array(
-            "label" => $a
-        ));
-
-        array_push($dataseries1, array(
-            "value" => $dsta
-        ));
-
-        array_push($dataseries2, array(
-            "value" => $dst0avg
-        ));
-
-        array_push($dataseries3, array(
-            "value" => $dst0max
-        ));
-
-        array_push($dataseries4, array(
-            "value" => $dst0min
-        ));
-
-        array_push($dataseries5, array(
-            "value" => $dst1avg
-        ));
-
-        array_push($dataseries6, array(
-            "value" => $dst1max
-        ));
-
-        array_push($dataseries7, array(
-            "value" => $dst1min
-        ));
-
-        array_push($dataseries8, array(
-            "value" => $dst2avg
-        ));
-
-        array_push($dataseries9, array(
-            "value" => $dst2max
-        ));
-
-        array_push($dataseries10, array(
-            "value" => $dst2min
-        ));
-
-        array_push($dataseries11, array(
-            "value" => $dst3avg
-        ));
-
-        array_push($dataseries12, array(
-            "value" => $dst3max
-        ));
-
-        array_push($dataseries13, array(
-            "value" => $dst3min
-        ));
-
-        array_push($dataseries14, array(
-            "value" => $dst4avg
-        ));
-
-        array_push($dataseries15, array(
-            "value" => $dst4max
-        ));
-
-        array_push($dataseries16, array(
-            "value" => $dst4min
-        ));
-
-        array_push($dataseries17, array(
-            "value" => $dst5avg
-        ));
-
-        array_push($dataseries18, array(
-            "value" => $dst5max
-        ));
-
-        array_push($dataseries19, array(
-            "value" => $dst5min
-        ));
-
-        array_push($dataseries20, array(
-            "value" => $dst6avg
-        ));
-
-        array_push($dataseries21, array(
-            "value" => $dst6max
-        ));
-
-        array_push($dataseries22, array(
-            "value" => $dst6min
-        ));
-
-        array_push($dataseries23, array(
-            "value" => $dst7avg
-        ));
-
-        array_push($dataseries24, array(
-            "value" => $dst7max
-        ));
-
-        array_push($dataseries25, array(
-            "value" => $dst7min
-        ));
-
-        array_push($dataseries26, array(
-            "value" => $dst75avg
-        ));
-
-        array_push($dataseries27, array(
-            "value" => $dst75max
-        ));
-
-        array_push($dataseries28, array(
-            "value" => $dst75min
-        ));
+        //Armar arrays de datos para graficar
+        array_push($categoryArray, array("label" => $a));
+        array_push($dataseries1, array("value" => $dsta));
+        array_push($dataseries2, array("value" => $dst0avg));
+        array_push($dataseries3, array("value" => $dst0max));
+        array_push($dataseries4, array("value" => $dst0min));
+        array_push($dataseries5, array("value" => $dst1avg));
+        array_push($dataseries6, array("value" => $dst1max));
+        array_push($dataseries7, array("value" => $dst1min));
+        array_push($dataseries8, array("value" => $dst2avg));
+        array_push($dataseries9, array("value" => $dst2max));
+        array_push($dataseries10, array("value" => $dst2min));
+        array_push($dataseries11, array("value" => $dst3avg));
+        array_push($dataseries12, array("value" => $dst3max));
+        array_push($dataseries13, array("value" => $dst3min));
+        array_push($dataseries14, array("value" => $dst4avg));
+        array_push($dataseries15, array("value" => $dst4max));
+        array_push($dataseries16, array("value" => $dst4min));
+        array_push($dataseries17, array("value" => $dst5avg));
+        array_push($dataseries18, array("value" => $dst5max));
+        array_push($dataseries19, array("value" => $dst5min));
+        array_push($dataseries20, array("value" => $dst6avg));
+        array_push($dataseries21, array("value" => $dst6max));
+        array_push($dataseries22, array("value" => $dst6min));
+        array_push($dataseries23, array("value" => $dst7avg));
+        array_push($dataseries24, array("value" => $dst7max));
+        array_push($dataseries25, array("value" => $dst7min));
+        array_push($dataseries26, array("value" => $dst75avg));
+        array_push($dataseries27, array("value" => $dst75max));
+        array_push($dataseries28, array("value" => $dst75min));
     }
 }
 ?>           
-
-
-
-        <!--main-container-part-->
-
-
-
-        <!--                                  <div id="chart-container2"></div> Div de la grafica-->
-
-        <canvas id="line-chart" width="800" height="450"></canvas>
-
-
-        <!--end-main-container-part-->
-
+    <canvas id="line-chart" width="800" height="450"></canvas>
 
     </body>
 </html>
@@ -668,8 +583,8 @@ if ($intervalo != "1dia") {
     new Chart(document.getElementById("line-chart"), {
         type: 'line',
         pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+	fill: false,
+	lineTension: 0,
         data: {
             labels: [
 <?php
@@ -690,9 +605,9 @@ foreach ($dataseries1 as $d) {
                     ],
                     label: "Temp_Amb",
                     borderColor: "#000000",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0
                 },
                 {
                     data: [
@@ -706,8 +621,8 @@ foreach ($dataseries2 as $d) {
                     label: "T0_avg",
                     borderColor: "#C40000",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -721,8 +636,8 @@ foreach ($dataseries3 as $d) {
                     label: "T0_max",
                     borderColor: "#FF0000",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -736,8 +651,8 @@ foreach ($dataseries4 as $d) {
                     label: "T0_min",
                     borderColor: "#FF8585",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -751,8 +666,8 @@ foreach ($dataseries5 as $d) {
                     label: "T1_avg",
                     borderColor: "#A200FF",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -765,9 +680,9 @@ foreach ($dataseries6 as $d) {
                     ],
                     label: "T1_max",
                     borderColor: "#8800D6",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 }, {
                     data: [
 <?php
@@ -779,9 +694,9 @@ foreach ($dataseries7 as $d) {
                     ],
                     label: "T1_min",
                     borderColor: "#D48AFF",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -795,8 +710,8 @@ foreach ($dataseries8 as $d) {
                     label: "T2_avg",
                     borderColor: "#2B00FF",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -809,9 +724,9 @@ foreach ($dataseries9 as $d) {
                     ],
                     label: "T2_max",
                     borderColor: "#1E00B5",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -824,9 +739,9 @@ foreach ($dataseries10 as $d) {
                     ],
                     label: "T2_min",
                     borderColor: "#6F52FF",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -840,8 +755,8 @@ foreach ($dataseries11 as $d) {
                     label: "T3_avg",
                     borderColor: "#008504",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -855,8 +770,8 @@ foreach ($dataseries12 as $d) {
                     label: "T3_max",
                     borderColor: "#698A6A",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -870,8 +785,8 @@ foreach ($dataseries13 as $d) {
                     label: "T3_min",
                     borderColor: "#DEB500",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -885,8 +800,8 @@ foreach ($dataseries14 as $d) {
                     label: "T4_avg",
                     borderColor: "#DEC143",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -900,8 +815,8 @@ foreach ($dataseries15 as $d) {
                     label: "T4_max",
                     borderColor: "#FFE46B",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -915,8 +830,8 @@ foreach ($dataseries16 as $d) {
                     label: "T4_min",
                     borderColor: "#735600",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -930,8 +845,8 @@ foreach ($dataseries17 as $d) {
                     label: "T5_avg",
                     borderColor: "#75632A",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -944,9 +859,9 @@ foreach ($dataseries18 as $d) {
                     ],
                     label: "T5_max",
                     borderColor: "#B5983F",
-                  pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -959,9 +874,9 @@ foreach ($dataseries19 as $d) {
                     ],
                     label: "T5_min",
                     borderColor: "#0065B8",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -975,8 +890,8 @@ foreach ($dataseries20 as $d) {
                     label: "T6_avg",
                     borderColor: "#4181B5",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -990,8 +905,8 @@ foreach ($dataseries21 as $d) {
                     label: "T6_max",
                     borderColor: "#78A6CC",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1005,8 +920,8 @@ foreach ($dataseries22 as $d) {
                     label: "T6_min",
                     borderColor: "#DE7600",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1019,9 +934,9 @@ foreach ($dataseries23 as $d) {
                     ],
                     label: "T7_avg",
                     borderColor: "#C9700A",
-                  pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1034,9 +949,9 @@ foreach ($dataseries24 as $d) {
                     ],
                     label: "T7_max",
                     borderColor: "#EDAA5C",
-                  pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1049,9 +964,9 @@ foreach ($dataseries25 as $d) {
                     ],
                     label: "T7_min",
                     borderColor: "#427500",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1064,9 +979,9 @@ foreach ($dataseries26 as $d) {
                     ],
                     label: "T75_avg",
                     borderColor: "#4F7321",
-                   pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1080,8 +995,8 @@ foreach ($dataseries27 as $d) {
                     label: "T75_max",
                     borderColor: "#789157",
                     pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    fill: false,
+                    lineTension: 0,
                 },
                 {
                     data: [
@@ -1094,9 +1009,9 @@ foreach ($dataseries28 as $d) {
                     ],
                     label: "T75_min",
                     borderColor: "#8e5ea2",
-                  pointRadius: 0,
-					fill: false,
-					lineTension: 0,
+                    pointRadius: 0,
+                    fill: false,
+                    lineTension: 0,
                 }
             ]
         },

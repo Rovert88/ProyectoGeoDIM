@@ -112,9 +112,10 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                         <label class="control-label">Seleccionar Sitio Geográfico</label>
                                         <div class="controls">
                                             <?php
-                                            $conn = new DBConnection();
-                                            $coll = $conn->SGConn();
-                                            $result = $coll->find();
+                                            $connect = new DBConnection();
+                                            $traerColl = $connect->ConectarBD();
+                                            $collection = $traerColl->SitiosGeograficos;
+                                            $result = $collection->find();
 
                                             // como se llama el atributo ?
                                             ?>                 

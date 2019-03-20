@@ -16,9 +16,10 @@ require '../classes/GeneralOp.php';
     <body>
         Temperatura-Profundidad
         <?php
-        $conn = new DBConnection();
-        $collection = $conn->UpCSVSIConn();
-        $operaciones = new CRUD($collection);
+        $connect = new DBConnection();
+        $traerColl = $connect->ConectarBD();
+        $objData = $traerColl->Registros_Sondas_Inspeccion;
+        $operaciones = new CRUD($objData);
         $generalOp = new GeneralOp();
         //Recibir Parametros
         $idSitio = $_POST['sitio'];
@@ -48,20 +49,20 @@ require '../classes/GeneralOp.php';
             $a = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
             array_push($datos, $a);
         }
-        var_dump($datos);
+        //var_dump($datos);
         // For para obtener los arreglos con datos
         for ($long = 0; $long <= sizeof($datos) - 1; $long++) {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
-                array_push($dataseries1, ["value" => $datos[$long][$lo]['T0_avg']]);
-                array_push($dataseries2, ["value" => $datos[$long][$lo]['T1_avg']]);
-                array_push($dataseries3, ["value" => $datos[$long][$lo]['T2_avg']]);
-                array_push($dataseries4, ["value" => $datos[$long][$lo]['T3_avg']]);
-                array_push($dataseries5, ["value" => $datos[$long][$lo]['T4_avg']]);
-                array_push($dataseries6, ["value" => $datos[$long][$lo]['T5_avg']]);
-                array_push($dataseries7, ["value" => $datos[$long][$lo]['T6_avg']]);
-                array_push($dataseries8, ["value" => $datos[$long][$lo]['T7_avg']]);
-                array_push($dataseries9, ["value" => $datos[$long][$lo]['T75_avg']]);
+                array_push($dataseries1, ["value" => $datos[$long][$lo]['T0_10cm_Avg']]);
+                array_push($dataseries2, ["value" => $datos[$long][$lo]['T1_1m_Avg']]);
+                array_push($dataseries3, ["value" => $datos[$long][$lo]['T2_2m_Avg']]);
+                array_push($dataseries4, ["value" => $datos[$long][$lo]['T3_3m_Avg']]);
+                array_push($dataseries5, ["value" => $datos[$long][$lo]['T4_4m_Avg']]);
+                array_push($dataseries6, ["value" => $datos[$long][$lo]['T5_5m_Avg']]);
+                array_push($dataseries7, ["value" => $datos[$long][$lo]['T6_6m_Avg']]);
+                array_push($dataseries8, ["value" => $datos[$long][$lo]['T7_7m_Avg']]);
+                array_push($dataseries9, ["value" => $datos[$long][$lo]['T7_5_7_5m_Avg']]);
             }
         }
 

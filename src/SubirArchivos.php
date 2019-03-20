@@ -89,9 +89,9 @@
                                     <div class="controls">
                                         <?php
                                         require "../classes/ConexionDB.php";
-                                        $conn = new DBConnection();
-                                        $collection = $conn->SGConn();
-
+                                        $connection = new DBConnection();
+                                        $traerColl = $connection->ConectarBD();
+                                        $collection = $traerColl->SitiosGeograficos;
                                         $result = $collection->find();
                                         ?>
                                         <select id="select" onchange="mostrarInputs(this.value)">

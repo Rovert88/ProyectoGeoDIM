@@ -2,9 +2,12 @@
 
 require_once '../classes/ConexionDB.php';
 
+//$connect = new DBConnection();
+//$collection = $connect->SGConn();
+//Conexion
 $connect = new DBConnection();
-$collection = $connect->SGConn();
-
+$traerColl = $connect->ConectarBD();
+$coleccion = $traerColl->SitiosGeograficos;
 
 if($_POST){
     if($_POST["ok"] == ""){
@@ -58,6 +61,6 @@ if($_POST){
         );
     }
 
-   $collection->insertOne($data);
+   $coleccion->insertOne($data);
    
 }

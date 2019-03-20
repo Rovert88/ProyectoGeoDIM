@@ -2,7 +2,6 @@
 
 <?php
 require '../classes/ConexionDB.php';
-require ("../assets/fusioncharts/fusioncharts.php");
 ?>
 
 <html lang="es">
@@ -104,9 +103,10 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                         <div class="controls">
                                             <?php                                           
 
-                                            $conn = new DBConnection();
-                                            $coll = $conn->SGConn();
-                                            $result = $coll->find();
+                                            $connection = new DBConnection();
+                                            $traerColl = $connection->ConectarBD();
+                                            $collection = $traerColl->SitiosGeograficos;
+                                            $result = $collection->find();
                                             
                                             ?>                 
                                             <select id="sitio" onchange="selectSitioGeografico()">

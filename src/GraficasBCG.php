@@ -193,15 +193,15 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
         foreach($data as $dataset){
             
 //            if($intervalo == '2min'){
-//                $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
+//                $datetime = $dataset['TIMESTAMP']->toDateTime();
 //                $a = $datetime->format('Y-m-d\TH:i:s.u');
 //            }else{
 //                if($intervalo == "4min"){
-//                    $a = $dataset['Fecha_HoraRegistro'];
+//                    $a = $dataset['TIMESTAMP'];
 //                }
 //            }
             
-            $a = $dataset['Fecha_HoraRegistro'];
+            $a = $dataset['TIMESTAMP'];
             
             //Validaciones NAN
             //Bat_CR800

@@ -8,7 +8,8 @@ require '../classes/GeneralOp.php';
 
 //conexion
 $connect = new DBConnection();
-$objData = $connect->UpCSVBCR800Conn(); //Cambiar***
+$traerColl = $connect->ConectarBD();
+$objData = $traerColl->Registros_Bateria_CR800;
 $operaciones = new CRUD($objData);
 $generalOp = new GeneralOp();
 
@@ -28,7 +29,7 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
 
 //Elegir intervalos
 if ($intervalo == '1hr') {
-    $datos2 = $generalOp->consulta15min($f_ini, $f_fin, $operaciones); //Crear metodo***
+    $datos2 = $generalOp->consulta15min($id, $f_ini, $f_fin, $operaciones); //Crear metodo***
     $data = iterator_to_array($datos2);
 } else {
 
@@ -57,10 +58,10 @@ if ($intervalo == '1hr') {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
                 //BattV_Min
-                if ($datos[$long][$lo]['BattV_M'] == "NAN") {
+                if ($datos[$long][$lo]['BattV_Min'] == "NAN") {
                     $dtsbvm = 0;
                 } else {
-                    $dtsbvm = $datos[$long][$lo]['BattV_M'];
+                    $dtsbvm = $datos[$long][$lo]['BattV_Min'];
                 }
 
                 //Insercion de los datos en un array
@@ -86,12 +87,12 @@ if ($intervalo != "1dia") {
 
     foreach ($data as $dataset) {
         if ($intervalo == '1hr') {
-            $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
+            $datetime = $dataset['TIMESTAMP']->toDateTime();
             $a = $datetime->format('Y-m-d\TH:i:s.u');
         }
 
         //Validacion NAN
-        //Battv_Min
+        //BattV_Min
         if ($dataset['BattV_Min'] == "NAN") {
             $dtsbvm = 0;
         } else {
@@ -100,16 +101,14 @@ if ($intervalo != "1dia") {
 
         //Armar array de datos para graficar
         array_push($categoryArray, array("label" => $a));
-        array_push($dataSeries1, array("value" => $dtsbvm));
+        array_push($dataSeries1, array("value" => $dtsbvm));        
     }
 }
 ?>
         <canvas id="line-chart" width="800" height="450"></canvas>
     </body>
 </html>
-<!--
-haber pruebalo
--->
+
 <script>
     new Chart(document.getElementById("line-chart"), {
         type: 'line',

@@ -7,7 +7,6 @@ require '../vendor/autoload.php';
 require '../classes/GeneralOp.php';
 //Conexion
 $connect = new DBConnection();
-//$objData = $connect->UpCSVSIConn(); //Cambiar a conexion
 $traerColl = $connect->ConectarBD();
 $objData = $traerColl->Registros_Sondas_Inspeccion;
 $operaciones = new CRUD($objData);
@@ -85,200 +84,200 @@ if ($intervalo == '15min') {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
                 //Validacion NAN
-                //Temp_Amb
-                if ($datos[$long][$lo]['Temp_Amb'] == "NAN") {
+                //PTemp_C_Avg
+                if ($datos[$long][$lo]['PTemp_C_Avg'] == "NAN") {
                     $dsta = 0;
                 } else {
-                    $dsta = $datos[$long][$lo]['Temp_Amb'];
+                    $dsta = $datos[$long][$lo]['PTemp_C_Avg'];
                 }
 
-                //T0_avg
-                if ($datos[$long][$lo]['T0_avg'] == "NAN") {
+                //T0_10cm_Avg
+                if ($datos[$long][$lo]['T0_10cm_Avg'] == "NAN") {
                     $dst0avg = 0;
                 } else {
-                    $dst0avg = $datos[$long][$lo]['T0_avg'];
+                    $dst0avg = $datos[$long][$lo]['T0_10cm_Avg'];
                 }
 
-                //T0_max
-                if ($datos[$long][$lo]['T0_max'] == "NAN") {
+                //T0_10cm_Max
+                if ($datos[$long][$lo]['T0_10cm_Max'] == "NAN") {
                     $dst0max = 0;
                 } else {
-                    $dst0max = $datos[$long][$lo]['T0_max'];
+                    $dst0max = $datos[$long][$lo]['T0_10cm_Max'];
                 }
 
-                //T0_min
-                if ($datos[$long][$lo]['T0_min'] == "NAN") {
+                //T0_10cm_Min
+                if ($datos[$long][$lo]['T0_10cm_Min'] == "NAN") {
                     $dst0min = 0;
                 } else {
-                    $dst0min = $datos[$long][$lo]['T0_min'];
+                    $dst0min = $datos[$long][$lo]['T0_10cm_Min'];
                 }
 
-                //T1_avg
-                if ($datos[$long][$lo]['T1_avg'] == "NAN") {
+                //T1_1m_Avg
+                if ($datos[$long][$lo]['T1_1m_Avg'] == "NAN") {
                     $dst1avg = 0;
                 } else {
-                    $dst1avg = $datos[$long][$lo]['T1_avg'];
+                    $dst1avg = $datos[$long][$lo]['T1_1m_Avg'];
                 }
 
-                //T1_max
-                if ($datos[$long][$lo]['T1_max'] == "NAN") {
+                //T1_1m_Max
+                if ($datos[$long][$lo]['T1_1m_Max'] == "NAN") {
                     $dst1max = 0;
                 } else {
-                    $dst1max = $datos[$long][$lo]['T1_max'];
+                    $dst1max = $datos[$long][$lo]['T1_1m_Max'];
                 }
 
-                //T1_min
-                if ($datos[$long][$lo]['T1_min'] == "NAN") {
+                //T1_1m_Min
+                if ($datos[$long][$lo]['T1_1m_Min'] == "NAN") {
                     $dst1min = 0;
                 } else {
-                    $dst1min = $datos[$long][$lo]['T1_min'];
+                    $dst1min = $datos[$long][$lo]['T1_1m_Min'];
                 }
 
-                //T2_avg
-                if ($datos[$long][$lo]['T2_avg'] == "NAN") {
+                //T2_2m_Avg
+                if ($datos[$long][$lo]['T2_2m_Avg'] == "NAN") {
                     $dst2avg = 0;
                 } else {
-                    $dst2avg = $datos[$long][$lo]['T2_avg'];
+                    $dst2avg = $datos[$long][$lo]['T2_2m_Avg'];
                 }
 
-                //T2_max
-                if ($datos[$long][$lo]['T2_max'] == "NAN") {
+                //T2_2m_Max
+                if ($datos[$long][$lo]['T2_2m_Max'] == "NAN") {
                     $dst2max = 0;
                 } else {
-                    $dst2max = $datos[$long][$lo]['T2_max'];
+                    $dst2max = $datos[$long][$lo]['T2_2m_Max'];
                 }
 
-                //T2_min
-                if ($datos[$long][$lo]['T2_min'] == "NAN") {
+                //T2_2m_Min
+                if ($datos[$long][$lo]['T2_2m_Min'] == "NAN") {
                     $dst2min = 0;
                 } else {
-                    $dst2min = $datos[$long][$lo]['T2_min'];
+                    $dst2min = $datos[$long][$lo]['T2_2m_Min'];
                 }
 
-                //T3_avg
-                if ($datos[$long][$lo]['T3_avg'] == "NAN") {
+                //T3_3m_Avg
+                if ($datos[$long][$lo]['T3_3m_Avg'] == "NAN") {
                     $dst3avg = 0;
                 } else {
-                    $dst3avg = $datos[$long][$lo]['T3_avg'];
+                    $dst3avg = $datos[$long][$lo]['T3_3m_Avg'];
                 }
 
-                //T3_max
-                if ($datos[$long][$lo]['T3_max'] == "NAN") {
+                //T3_3m_Max
+                if ($datos[$long][$lo]['T3_3m_Max'] == "NAN") {
                     $dst3max = 0;
                 } else {
-                    $dst3max = $datos[$long][$lo]['T3_max'];
+                    $dst3max = $datos[$long][$lo]['T3_3m_Max'];
                 }
 
-                //T3_min
-                if ($datos[$long][$lo]['T3_min'] == "NAN") {
+                //T3_3m_Min
+                if ($datos[$long][$lo]['T3_3m_Min'] == "NAN") {
                     $dst3min = 0;
                 } else {
-                    $dst3min = $datos[$long][$lo]['T3_min'];
+                    $dst3min = $datos[$long][$lo]['T3_3m_Min'];
                 }
 
-                //T4_avg
-                if ($datos[$long][$lo]['T4_avg'] == "NAN") {
+                //T4_4m_Avg
+                if ($datos[$long][$lo]['T4_4m_Avg'] == "NAN") {
                     $dst4avg = 0;
                 } else {
-                    $dst4avg = $datos[$long][$lo]['T4_avg'];
+                    $dst4avg = $datos[$long][$lo]['T4_4m_Avg'];
                 }
 
-                //T4_max
-                if ($datos[$long][$lo]['T4_max'] == "NAN") {
+                //T4_4m_Max
+                if ($datos[$long][$lo]['T4_4m_Max'] == "NAN") {
                     $dst4max = 0;
                 } else {
-                    $dst4max = $datos[$long][$lo]['T4_max'];
+                    $dst4max = $datos[$long][$lo]['T4_4m_Max'];
                 }
 
-                //T4_min
-                if ($datos[$long][$lo]['T4_min'] == "NAN") {
+                //T4_4m_Min
+                if ($datos[$long][$lo]['T4_4m_Min'] == "NAN") {
                     $dst4min = 0;
                 } else {
-                    $dst4min = $datos[$long][$lo]['T4_min'];
+                    $dst4min = $datos[$long][$lo]['T4_4m_Min'];
                 }
 
-                //T5_avg
-                if ($datos[$long][$lo]['T5_avg'] == "NAN") {
+                //T5_5m_Avg
+                if ($datos[$long][$lo]['T5_5m_Avg'] == "NAN") {
                     $dst5avg = 0;
                 } else {
-                    $dst5avg = $datos[$long][$lo]['T5_avg'];
+                    $dst5avg = $datos[$long][$lo]['T5_5m_Avg'];
                 }
 
-                //T5_max
-                if ($datos[$long][$lo]['T5_max'] == "NAN") {
+                //T5_5m_Max
+                if ($datos[$long][$lo]['T5_5m_Max'] == "NAN") {
                     $dst5max = 0;
                 } else {
-                    $dst5max = $datos[$long][$lo]['T5_max'];
+                    $dst5max = $datos[$long][$lo]['T5_5m_Max'];
                 }
 
-                //T5_min
-                if ($datos[$long][$lo]['T5_min'] == "NAN") {
+                //T5_5m_Min
+                if ($datos[$long][$lo]['T5_5m_Min'] == "NAN") {
                     $dst5min = 0;
                 } else {
-                    $dst5min = $datos[$long][$lo]['T5_min'];
+                    $dst5min = $datos[$long][$lo]['T5_5m_Min'];
                 }
 
-                //T6_avg
-                if ($datos[$long][$lo]['T6_avg'] == "NAN") {
+                //T6_6m_Avg
+                if ($datos[$long][$lo]['T6_6m_Avg'] == "NAN") {
                     $dst6avg = 0;
                 } else {
-                    $dst6avg = $datos[$long][$lo]['T6_avg'];
+                    $dst6avg = $datos[$long][$lo]['T6_6m_Avg'];
                 }
 
-                //T6_max
-                if ($datos[$long][$lo]['T6_max'] == "NAN") {
+                //T6_6m_Max
+                if ($datos[$long][$lo]['T6_6m_Max'] == "NAN") {
                     $dst6max = 0;
                 } else {
-                    $dst6max = $datos[$long][$lo]['T6_max'];
+                    $dst6max = $datos[$long][$lo]['T6_6m_Max'];
                 }
 
-                //T6_min
-                if ($datos[$long][$lo]['T6_min'] == "NAN") {
+                //T6_6m_Min
+                if ($datos[$long][$lo]['T6_6m_Min'] == "NAN") {
                     $dst6min = 0;
                 } else {
-                    $dst6min = $datos[$long][$lo]['T6_min'];
+                    $dst6min = $datos[$long][$lo]['T6_6m_Min'];
                 }
 
-                //T7_avg
-                if ($datos[$long][$lo]['T7_avg'] == "NAN") {
+                //T7_7m_Avg
+                if ($datos[$long][$lo]['T7_7m_Avg'] == "NAN") {
                     $dst7avg = 0;
                 } else {
-                    $dst7avg = $datos[$long][$lo]['T7_avg'];
+                    $dst7avg = $datos[$long][$lo]['T7_7m_Avg'];
                 }
 
-                //T7_max
-                if ($datos[$long][$lo]['T7_max'] == "NAN") {
+                //T7_7m_Max
+                if ($datos[$long][$lo]['T7_7m_Max'] == "NAN") {
                     $dst7max = 0;
                 } else {
-                    $dst7max = $datos[$long][$lo]['T7_max'];
+                    $dst7max = $datos[$long][$lo]['T7_7m_Max'];
                 }
 
-                //T7_min
-                if ($datos[$long][$lo]['T7_min'] == "NAN") {
+                //T7_7m_Min
+                if ($datos[$long][$lo]['T7_7m_Min'] == "NAN") {
                     $dst7min = 0;
                 } else {
-                    $dst7min = $datos[$long][$lo]['T7_min'];
+                    $dst7min = $datos[$long][$lo]['T7_7m_Min'];
                 }
 
-                //T75_avg
-                if ($datos[$long][$lo]['T75_avg'] == "NAN") {
+                //T7_5_7_5m_Avg
+                if ($datos[$long][$lo]['T7_5_7_5m_Avg'] == "NAN") {
                     $dst75avg = 0;
                 } else {
-                    $dst75avg = $datos[$long][$lo]['T75_avg'];
+                    $dst75avg = $datos[$long][$lo]['T7_5_7_5m_Avg'];
                 }
 
-                //T75_max
-                if ($datos[$long][$lo]['T75_max'] == "NAN") {
+                //T7_5_7_5m_Max
+                if ($datos[$long][$lo]['T7_5_7_5m_Max'] == "NAN") {
                     $dst75max = 0;
                 } else {
-                    $dst75max = $datos[$long][$lo]['T75_max'];
+                    $dst75max = $datos[$long][$lo]['T7_5_7_5m_Max'];
                 }
 
-                //T75_min
-                if ($datos[$long][$lo]['T75_min'] == "NAN") {
+                //T7_5_7_5m_Min
+                if ($datos[$long][$lo]['T7_5_7_5m_Min'] == "NAN") {
                     $dst75min = 0;
                 } else {
-                    $dst75min = $datos[$long][$lo]['T75_min'];
+                    $dst75min = $datos[$long][$lo]['T7_5_7_5m_Min'];
                 }
 
                 //Insercion de datos en sus respectivos arrays
@@ -330,209 +329,209 @@ if ($intervalo == '15min') {
             foreach ($data as $dataset) {
 
                 if ($intervalo == '15min') {
-                    $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
+                    $datetime = $dataset['TIMESTAMP']->toDateTime();
                     $a = $datetime->format('Y-m-d\TH:i:s.u');
                 } else {
                     if ($intervalo == "30min") {
-                        $a = $dataset['Fecha_HoraRegistro'];
+                        $a = $dataset['TIMESTAMP'];
                     }
                 }
 
                 //Validacion NAN
-                //Temp_Amb
-                if ($dataset['Temp_Amb'] == "NAN") {
+                //PTemp_C_Avg
+                if ($dataset['PTemp_C_Avg'] == "NAN") {
                     $dsta = 0;
                 } else {
-                    $dsta = $dataset['Temp_Amb'];
+                    $dsta = $dataset['PTemp_C_Avg'];
                 }
 
-                //T0_avg
-                if ($dataset['T0_avg'] == "NAN") {
+                //T0_10cm_Avg
+                if ($dataset['T0_10cm_Avg'] == "NAN") {
                     $dst0avg = 0;
                 } else {
-                    $dst0avg = $dataset['T0_avg'];
+                    $dst0avg = $dataset['T0_10cm_Avg'];
                 }
 
-                //T0_max
-                if ($dataset['T0_max'] == "NAN") {
+                //T0_10cm_Max
+                if ($dataset['T0_10cm_Max'] == "NAN") {
                     $dst0max = 0;
                 } else {
-                    $dst0max = $dataset['T0_max'];
+                    $dst0max = $dataset['T0_10cm_Max'];
                 }
 
-                //T0_min
-                if ($dataset['T0_min'] == "NAN") {
+                //T0_10cm_Min
+                if ($dataset['T0_10cm_Min'] == "NAN") {
                     $dst0min = 0;
                 } else {
-                    $dst0min = $dataset['T0_min'];
+                    $dst0min = $dataset['T0_10cm_Min'];
                 }
 
-                //T1_avg
-                if ($dataset['T1_avg'] == "NAN") {
+                //T1_1m_Avg
+                if ($dataset['T1_1m_Avg'] == "NAN") {
                     $dst1avg = 0;
                 } else {
-                    $dst1avg = $dataset['T1_avg'];
+                    $dst1avg = $dataset['T1_1m_Avg'];
                 }
 
-                //T1_max
-                if ($dataset['T1_max'] == "NAN") {
+                //T1_1m_Max
+                if ($dataset['T1_1m_Max'] == "NAN") {
                     $dst1max = 0;
                 } else {
-                    $dst1max = $dataset['T1_max'];
+                    $dst1max = $dataset['T1_1m_Max'];
                 }
 
-                //T1_min
-                if ($dataset['T1_min'] == "NAN") {
+                //T1_1m_Min
+                if ($dataset['T1_1m_Min'] == "NAN") {
                     $dst1min = 0;
                 } else {
-                    $dst1min = $dataset['T1_min'];
+                    $dst1min = $dataset['T1_1m_Min'];
                 }
 
-                //T2_avg
-                if ($dataset['T2_avg'] == "NAN") {
+                //T2_2m_Avg
+                if ($dataset['T2_2m_Avg'] == "NAN") {
                     $dst2avg = 0;
                 } else {
-                    $dst2avg = $dataset['T2_avg'];
+                    $dst2avg = $dataset['T2_2m_Avg'];
                 }
 
-                //T2_max
-                if ($dataset['T2_max'] == "NAN") {
+                //T2_2m_Max
+                if ($dataset['T2_2m_Max'] == "NAN") {
                     $dst2max = 0;
                 } else {
-                    $dst2max = $dataset['T2_max'];
+                    $dst2max = $dataset['T2_2m_Max'];
                 }
 
-                //T2_min
-                if ($dataset['T2_min'] == "NAN") {
+                //T2_2m_Min
+                if ($dataset['T2_2m_Min'] == "NAN") {
                     $dst2min = 0;
                 } else {
-                    $dst2min = $dataset['T2_min'];
+                    $dst2min = $dataset['T2_2m_Min'];
                 }
 
-                //T3_avg
-                if ($dataset['T3_avg'] == "NAN") {
+                //T3_3m_Avg
+                if ($dataset['T3_3m_Avg'] == "NAN") {
                     $dst3avg = 0;
                 } else {
-                    $dst3avg = $dataset['T3_avg'];
+                    $dst3avg = $dataset['T3_3m_Avg'];
                 }
 
-                //T3_max
-                if ($dataset['T3_max'] == "NAN") {
+                //T3_3m_Max
+                if ($dataset['T3_3m_Max'] == "NAN") {
                     $dst3max = 0;
                 } else {
-                    $dst3max = $dataset['T3_max'];
+                    $dst3max = $dataset['T3_3m_Max'];
                 }
 
-                //T3_min
-                if ($dataset['T3_min'] == "NAN") {
+                //T3_3m_Min
+                if ($dataset['T3_3m_Min'] == "NAN") {
                     $dst3min = 0;
                 } else {
-                    $dst3min = $dataset['T3_min'];
+                    $dst3min = $dataset['T3_3m_Min'];
                 }
 
-                //T4_avg
-                if ($dataset['T4_avg'] == "NAN") {
+                //T4_4m_Avg
+                if ($dataset['T4_4m_Avg'] == "NAN") {
                     $dst4avg = 0;
                 } else {
-                    $dst4avg = $dataset['T4_avg'];
+                    $dst4avg = $dataset['T4_4m_Avg'];
                 }
 
-                //T4_max
-                if ($dataset['T4_max'] == "NAN") {
+                //T4_4m_Max
+                if ($dataset['T4_4m_Max'] == "NAN") {
                     $dst4max = 0;
                 } else {
-                    $dst4max = $dataset['T4_max'];
+                    $dst4max = $dataset['T4_4m_Max'];
                 }
 
-                //T4_min
-                if ($dataset['T4_min'] == "NAN") {
+                //T4_4m_Min
+                if ($dataset['T4_4m_Min'] == "NAN") {
                     $dst4min = 0;
                 } else {
-                    $dst4min = $dataset['T4_min'];
+                    $dst4min = $dataset['T4_4m_Min'];
                 }
 
-                //T5_avg
-                if ($dataset['T5_avg'] == "NAN") {
+                //T5_5m_Avg
+                if ($dataset['T5_5m_Avg'] == "NAN") {
                     $dst5avg = 0;
                 } else {
-                    $dst5avg = $dataset['T5_avg'];
+                    $dst5avg = $dataset['T5_5m_Avg'];
                 }
 
-                //T5_max
-                if ($dataset['T5_max'] == "NAN") {
+                //T5_5m_Max
+                if ($dataset['T5_5m_Max'] == "NAN") {
                     $dst5max = 0;
                 } else {
-                    $dst5max = $dataset['T5_max'];
+                    $dst5max = $dataset['T5_5m_Max'];
                 }
 
-                //T5_min
-                if ($dataset['T5_min'] == "NAN") {
+                //T5_5m_Min
+                if ($dataset['T5_5m_Min'] == "NAN") {
                     $dst5min = 0;
                 } else {
-                    $dst5min = $dataset['T5_min'];
+                    $dst5min = $dataset['T5_5m_Min'];
                 }
 
-                //T6_avg
-                if ($dataset['T6_avg'] == "NAN") {
+                //T6_6m_Avg
+                if ($dataset['T6_6m_Avg'] == "NAN") {
                     $dst6avg = 0;
                 } else {
-                    $dst6avg = $dataset['T6_avg'];
+                    $dst6avg = $dataset['T6_6m_Avg'];
                 }
 
-                //T6_max
-                if ($dataset['T6_max'] == "NAN") {
+                //T6_6m_Max
+                if ($dataset['T6_6m_Max'] == "NAN") {
                     $dst6max = 0;
                 } else {
-                    $dst6max = $dataset['T6_max'];
+                    $dst6max = $dataset['T6_6m_Max'];
                 }
 
-                //T6_min
-                if ($dataset['T6_min'] == "NAN") {
+                //T6_6m_Min
+                if ($dataset['T6_6m_Min'] == "NAN") {
                     $dst6min = 0;
                 } else {
-                    $dst6min = $dataset['T6_min'];
+                    $dst6min = $dataset['T6_6m_Min'];
                 }
 
-                //T7_avg
-                if ($dataset['T7_avg'] == "NAN") {
+                //T7_7m_Avg
+                if ($dataset['T7_7m_Avg'] == "NAN") {
                     $dst7avg = 0;
                 } else {
-                    $dst7avg = $dataset['T7_avg'];
+                    $dst7avg = $dataset['T7_7m_Avg'];
                 }
 
-                //T7_max
-                if ($dataset['T7_max'] == "NAN") {
+                //T7_7m_Max
+                if ($dataset['T7_7m_Max'] == "NAN") {
                     $dst7max = 0;
                 } else {
-                    $dst7max = $dataset['T7_max'];
+                    $dst7max = $dataset['T7_7m_Max'];
                 }
 
-                //T7_min
-                if ($dataset['T7_min'] == "NAN") {
+                //T7_7m_Min
+                if ($dataset['T7_7m_Min'] == "NAN") {
                     $dst7min = 0;
                 } else {
-                    $dst7min = $dataset['T7_min'];
+                    $dst7min = $dataset['T7_7m_Min'];
                 }
 
-                //T75_avg
-                if ($dataset['T75_avg'] == "NAN") {
+                //T7_5_7_5m_Avg
+                if ($dataset['T7_5_7_5m_Avg'] == "NAN") {
                     $dst75avg = 0;
                 } else {
-                    $dst75avg = $dataset['T75_avg'];
+                    $dst75avg = $dataset['T7_5_7_5m_Avg'];
                 }
 
-                //T75_max
-                if ($dataset['T75_max'] == "NAN") {
+                //T7_5_7_5m_Max
+                if ($dataset['T7_5_7_5m_Max'] == "NAN") {
                     $dst75max = 0;
                 } else {
-                    $dst75max = $dataset['T75_max'];
+                    $dst75max = $dataset['T7_5_7_5m_Max'];
                 }
 
-                //T75_min
-                if ($dataset['T75_min'] == "NAN") {
+                //T7_5_7_5m_Min
+                if ($dataset['T7_5_7_5m_Min'] == "NAN") {
                     $dst75min = 0;
                 } else {
-                    $dst75min = $dataset['T75_min'];
+                    $dst75min = $dataset['T7_5_7_5m_Min'];
                 }
 
                 //Armar arrays de datos para graficar
@@ -598,7 +597,7 @@ foreach ($dataseries1 as $d) {
 }
 ?>
                     ],
-                    label: "Temp_Amb",
+                    label: "PTemp_C_Avg",
                     borderColor: "#000000",
                     pointRadius: 0,
                     fill: false,
@@ -613,7 +612,7 @@ foreach ($dataseries2 as $d) {
 }
 ?>
                     ],
-                    label: "T0_avg",
+                    label: "T0_10cm_Avg",
                     borderColor: "#C40000",
                     pointRadius: 0,
                     fill: false,
@@ -628,7 +627,7 @@ foreach ($dataseries3 as $d) {
 }
 ?>
                     ],
-                    label: "T0_max",
+                    label: "T0_10cm_Max",
                     borderColor: "#FF0000",
                     pointRadius: 0,
                     fill: false,
@@ -643,7 +642,7 @@ foreach ($dataseries4 as $d) {
 }
 ?>
                     ],
-                    label: "T0_min",
+                    label: "T0_10cm_Min",
                     borderColor: "#FF8585",
                     pointRadius: 0,
                     fill: false,
@@ -658,7 +657,7 @@ foreach ($dataseries5 as $d) {
 }
 ?>
                     ],
-                    label: "T1_avg",
+                    label: "T1_1m_Avg",
                     borderColor: "#A200FF",
                     pointRadius: 0,
                     fill: false,
@@ -673,7 +672,7 @@ foreach ($dataseries6 as $d) {
 }
 ?>
                     ],
-                    label: "T1_max",
+                    label: "T1_1m_Max",
                     borderColor: "#8800D6",
                     pointRadius: 0,
                     fill: false,
@@ -687,7 +686,7 @@ foreach ($dataseries7 as $d) {
 }
 ?>
                     ],
-                    label: "T1_min",
+                    label: "T1_1m_Min",
                     borderColor: "#D48AFF",
                     pointRadius: 0,
                     fill: false,
@@ -702,7 +701,7 @@ foreach ($dataseries8 as $d) {
 }
 ?>
                     ],
-                    label: "T2_avg",
+                    label: "T2_2m_Avg",
                     borderColor: "#2B00FF",
                     pointRadius: 0,
                     fill: false,
@@ -717,7 +716,7 @@ foreach ($dataseries9 as $d) {
 }
 ?>
                     ],
-                    label: "T2_max",
+                    label: "T2_2m_Max",
                     borderColor: "#1E00B5",
                     pointRadius: 0,
                     fill: false,
@@ -732,7 +731,7 @@ foreach ($dataseries10 as $d) {
 }
 ?>
                     ],
-                    label: "T2_min",
+                    label: "T2_2m_Min",
                     borderColor: "#6F52FF",
                     pointRadius: 0,
                     fill: false,
@@ -747,7 +746,7 @@ foreach ($dataseries11 as $d) {
 }
 ?>
                     ],
-                    label: "T3_avg",
+                    label: "T3_3m_Avg",
                     borderColor: "#008504",
                     pointRadius: 0,
                     fill: false,
@@ -762,7 +761,7 @@ foreach ($dataseries12 as $d) {
 }
 ?>
                     ],
-                    label: "T3_max",
+                    label: "T3_3m_Max",
                     borderColor: "#698A6A",
                     pointRadius: 0,
                     fill: false,
@@ -777,7 +776,7 @@ foreach ($dataseries13 as $d) {
 }
 ?>
                     ],
-                    label: "T3_min",
+                    label: "T3_3m_Min",
                     borderColor: "#DEB500",
                     pointRadius: 0,
                     fill: false,
@@ -792,7 +791,7 @@ foreach ($dataseries14 as $d) {
 }
 ?>
                     ],
-                    label: "T4_avg",
+                    label: "T4_4m_Avg",
                     borderColor: "#DEC143",
                     pointRadius: 0,
                     fill: false,
@@ -807,7 +806,7 @@ foreach ($dataseries15 as $d) {
 }
 ?>
                     ],
-                    label: "T4_max",
+                    label: "T4_4m_Max",
                     borderColor: "#FFE46B",
                     pointRadius: 0,
                     fill: false,
@@ -822,7 +821,7 @@ foreach ($dataseries16 as $d) {
 }
 ?>
                     ],
-                    label: "T4_min",
+                    label: "T4_4m_Min",
                     borderColor: "#735600",
                     pointRadius: 0,
                     fill: false,
@@ -837,7 +836,7 @@ foreach ($dataseries17 as $d) {
 }
 ?>
                     ],
-                    label: "T5_avg",
+                    label: "T5_5m_Avg",
                     borderColor: "#75632A",
                     pointRadius: 0,
                     fill: false,
@@ -852,7 +851,7 @@ foreach ($dataseries18 as $d) {
 }
 ?>
                     ],
-                    label: "T5_max",
+                    label: "T5_5m_Max",
                     borderColor: "#B5983F",
                     pointRadius: 0,
                     fill: false,
@@ -867,7 +866,7 @@ foreach ($dataseries19 as $d) {
 }
 ?>
                     ],
-                    label: "T5_min",
+                    label: "T5_5m_Min",
                     borderColor: "#0065B8",
                     pointRadius: 0,
                     fill: false,
@@ -882,7 +881,7 @@ foreach ($dataseries20 as $d) {
 }
 ?>
                     ],
-                    label: "T6_avg",
+                    label: "T6_6m_Avg",
                     borderColor: "#4181B5",
                     pointRadius: 0,
                     fill: false,
@@ -897,7 +896,7 @@ foreach ($dataseries21 as $d) {
 }
 ?>
                     ],
-                    label: "T6_max",
+                    label: "T6_6m_Max",
                     borderColor: "#78A6CC",
                     pointRadius: 0,
                     fill: false,
@@ -912,7 +911,7 @@ foreach ($dataseries22 as $d) {
 }
 ?>
                     ],
-                    label: "T6_min",
+                    label: "T6_6m_Min",
                     borderColor: "#DE7600",
                     pointRadius: 0,
                     fill: false,
@@ -927,7 +926,7 @@ foreach ($dataseries23 as $d) {
 }
 ?>
                     ],
-                    label: "T7_avg",
+                    label: "T7_7m_Avg",
                     borderColor: "#C9700A",
                     pointRadius: 0,
                     fill: false,
@@ -942,7 +941,7 @@ foreach ($dataseries24 as $d) {
 }
 ?>
                     ],
-                    label: "T7_max",
+                    label: "T7_7m_Max",
                     borderColor: "#EDAA5C",
                     pointRadius: 0,
                     fill: false,
@@ -957,7 +956,7 @@ foreach ($dataseries25 as $d) {
 }
 ?>
                     ],
-                    label: "T7_min",
+                    label: "T7_7m_Min",
                     borderColor: "#427500",
                     pointRadius: 0,
                     fill: false,
@@ -972,7 +971,7 @@ foreach ($dataseries26 as $d) {
 }
 ?>
                     ],
-                    label: "T75_avg",
+                    label: "T7_5_7_5m_Avg",
                     borderColor: "#4F7321",
                     pointRadius: 0,
                     fill: false,
@@ -987,7 +986,7 @@ foreach ($dataseries27 as $d) {
 }
 ?>
                     ],
-                    label: "T75_max",
+                    label: "T7_5_7_5m_Max",
                     borderColor: "#789157",
                     pointRadius: 0,
                     fill: false,
@@ -1002,7 +1001,7 @@ foreach ($dataseries28 as $d) {
 }
 ?>
                     ],
-                    label: "T75_min",
+                    label: "T7_5_7_5m_Min",
                     borderColor: "#8e5ea2",
                     pointRadius: 0,
                     fill: false,

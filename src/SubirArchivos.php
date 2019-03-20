@@ -19,7 +19,7 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="../assets/css/style-system.css" />
         <script languaje="javascript" src="../jquery-3.3.1.js"></script>
-        
+
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
@@ -28,7 +28,7 @@
 
         <!--Header-part-->
         <div>
-            <h1>GeoDIM</h1>
+            <h3>ManagementGT</h3>
         </div>
         <!--close-Header-part-->
 
@@ -124,14 +124,12 @@
                                     </div>
                                 </div>   
 
-                                <!----->
                                 <div class="control-group">
                                     <label class="control-label">Seleccionar archivo</label>
                                     <div class="controls">                                                
                                         <input type="file" name="archivo" id="fileInput"/>                                                                                                                                                    
                                     </div>
-                                </div>                                                                                       
-                                <!---->                                        
+                                </div>                                                                                                                                                               
 
                                 <div class="form-actions">
                                     <button onclick="registrar()" id="btnCargarCSV" disabled="disabled" name="cargar" class="btn btn-success" >Cargar</button>
@@ -182,7 +180,7 @@
         <script src="../assets/js/matrix.js"></script>
         <script src="../assets/js/select2.min.js"></script>
         <script src="../assets/js/wysihtml5-0.3.0.js"></script>
-        
+
         <!--Alertify js-->
         <script src="../assets/alertifyjs/alertify.js"></script>
 
@@ -211,18 +209,6 @@
                                         }
         </script>
 
-        <!--Metodo insertar
-            Solo asi Robert solo id ya que es unico en mongodb y ya con eso hacemos la referencia, no importa si 
-        le pones en _id un nombre como "los homeros" aparecera tal cual
-        Pues yo creo que no, ese id no lo ocuparia para otra cosa, pero habria que aegurarse que sea unico, es decir cuando 
-        se vaya a registrar otro sitio con ese nombre ya no lo dejaria
-        si lees la doc de mongo db ya esta definido como llame primaria por asi decirlo el campo _id y no se puede repetir 
-        Entonces no se puede asi, habria que buscar otroa forma no?
-        no, para nosostrso es mejor porque es unico ese id o value que obtengas del select lo vas a agregar en el documento 
-        donde guardas los datos en un campo llamado sitio, asi ya podra existir el id muchas veces en la coleccion de los datos es 
-        como una relacion de uno a muchos,
-        okey entonces cuando guarde un sitio el campo "_id" seria igual a lo que este en el campo 
-        -->
         <script type="text/javascript">
 
             //Ocultar Boton Cargar CSV           
@@ -233,33 +219,28 @@
                 var radio1 = document.getElementById("radio1");
                 var radio2 = document.getElementById("radio2");
                 var radio3 = document.getElementById("radio3");
+                var tipoarchivo = $("input:radio[name='radios']:checked").val();
                 var file = document.getElementById("fileInput").files[0];
-                //var file = $('input[type=file]').val();
 
                 if (select != 0) {
 
-                    if (radio1.checked) {
+                    if (radio1.checked || radio2.checked || radio3.checked) {
                         btncargarcsv.style.display = 'none';
-                        enviar("../methods/CargarCSVSI.php", file, select);
-                    } else if (radio2.checked) {
-                        btncargarcsv.style.display = 'none';
-                        enviar("../methods/CargarCSVBCG.php", file, select);
-                    } else if (radio3.checked) {
-                        btncargarcsv.style.display = 'none';
-                        enviar("../methods/CargarCSVBatCR800.php", file, select);
-                    } else {                        
+                        enviar("../methods/CargarCSVSI.php", file, select, tipoarchivo);
+                    } else {
                         alertify.alert('Carga de archivos CSV', 'Porfavor seleccione el tipo de archivo');
                     }
-                } else {                    
+                } else {
                     alertify.alert('Carga de archivos CSV', 'Porfavor seleccione el sitio geografico');
                 }
             }
 
-            function enviar(url, file, select) {
+            function enviar(url, file, select, tipoarchivo) {
                 var datos = new FormData();
                 //Ideaxacion de datos clave : valor
                 datos.append("csv", file);
                 datos.append("sitio", select);
+                datos.append("tipoarchivo", tipoarchivo);
 
                 jQuery.ajax({
                     url: url,
@@ -274,10 +255,10 @@
                         btnCargarCSV.style.display = 'none';
                         $("#resultado").html("Archivo cargado exitosamente");
                     },
-                    beforeSend : function(){
+                    beforeSend: function () {
                         $("#resultado").html("Procesando, espere por favor...");
                     },
-                    error: function(r){
+                    error: function (r) {
                         alertify.error("El archivo no pudo cargarse");
                     }
                 });
@@ -290,7 +271,7 @@
             function mostrarInputs() {
                 var select = document.getElementById("select").value;
                 document.getElementById("inp").value = select;
-            }                        
+            }
         </script>
 
     </body>

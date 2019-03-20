@@ -4,9 +4,9 @@ require '../classes/ConexionDB.php';
 require '../classes/GeneralOp.php';
 
 $connect = new DBConnection();
-$traerColl = $connect->ConectarBD();
-$nombreColl = $connect->PreparaCollArchivosBCG($_POST['sitio']);
-$coll = $traerColl->$nombreColl;
+$selectColl = $connect->ConectarBD();
+//$nombreColl = $connect->PreparaCollArchivosBCG($_POST['sitio']);
+$coll = $selectColl->Registros_Bombas_Calor_Geotermico;
 $op = new GeneralOp();
 
 

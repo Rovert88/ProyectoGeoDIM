@@ -33,10 +33,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <link rel="stylesheet" href="../assets/css/timepicker.css" />
         <link rel="stylesheet" href="../assets/css/personal-style.css" />
 
-        <!--graphics js-->
-        <script src="../assets/fusioncharts/fusioncharts.js"></script>
-        <script src="../assets/fusioncharts/fusioncharts.theme.fint.js"></script>
-
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
@@ -45,7 +41,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--Header-part-->
         <div>
-            <h1>GeoDIM</h1>
+            <h3>ManagementGT</h3>
         </div>
         <!--close-Header-part-->
 
@@ -124,30 +120,19 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                         </div>
                                     </div>
                                     
-                                    <!--select para elegir bomba-->
-<!--                                    <div class="control-group">
-                                        <label class="control-label">Seleccionar BCG del Sitio Geográfico</label>
-                                        <div class="controls">
-                                            <select id="s_bcg">
-                                                <option></option>
-                                                <option></option>
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </div>-->
-
                                     <div class="control-group">
-                                        <label class="control-label">Intervalo</label>
+                                        <label class="control-label">Intervalo (Minutos)</label>
                                         <div class="controls">
+<!--                                            <label>
+                                                <input type="radio" name="intervalo" value="2min" checked id="rd1" /> 
+                                                2 Minutos</label>
                                             <label>
-                                                <input type="radio" name="intervalo" value="15min" checked id="rd1" /> 
-                                                15 Minutos</label>
-                                            <label>
-                                                <input type="radio" name="intervalo" value="30min" id="rd2" />
-                                                30 Minutos</label>
+                                                <input type="radio" name="intervalo" value="4min" id="rd2" />
+                                                4 Minutos</label>
                                             <label>
                                                 <input type="radio" name="intervalo" value="1dia" id="rd3"/>
-                                                1 Día</label>
+                                                1 Día</label>-->
+                                            <label><input onkeypress="return soloNumeros(event)" type="text" id="intervalo" name="intervalo" placeholder="Ej. 2, 4, 6, 10" /></label>    
                                         </div>
                                     </div>
 
@@ -243,6 +228,9 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <script src="../assets/lib/advanced-form-components.js"></script>
         <!--Date-Time picker FIN-->
         
+        <!--Alertify js-->
+        <script src="../assets/alertifyjs/alertify.js"></script>
+        
         <script type="text/javascript">
 	  // This function is called from the pop-up menus to transfer to
 	  // a different page. Ignore if the value returned is a null string:
@@ -267,31 +255,47 @@ require ("../assets/fusioncharts/fusioncharts.php");
 	   document.gomenu.selector.selectedIndex = 2;
 	}                                
 	</script>
-        
+               
         <script type="text/javascript">
             //Select Sitio Geografico
             var idSitio = 0;
+                        
             function selectSitioGeografico(){
                 idSitio = document.getElementById("sitio").value;
             }
             
             //AJAX grafica
             function graficaAJAX(){
-                if(idSitio === 0){
-                    alert("Seleccione un sitio porfavor");
-                }else{
-                    var f_ini, f_fin, intervalo, url, valor_intervalo;
-                    //Obtener datos del formulario
-                    f_ini = document.getElementById('inicio').value;
-                    f_fin = document.getElementById('fin').value;
-                    intervalo = document.getElementsByName("intervalo");
+                var f_ini, f_fin, inter = 0;
+                f_ini = document.getElementById('inicio').value;
+                f_fin = document.getElementById('fin').value;
+                inter = document.getElementById("intervalo").value;
+                
+                //Validar sitio seleccionado
+                if(idSitio === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Seleccione un sitio porfavor');
+                }                          
+                
+                //Validar intervalo vacio o menor a 2
+                if (inter.length === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Seleccione un intervalo porfavor');
+                }else if(inter < 2){
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Ingrese un número mayor o igual que 2');
+                }                                
+                
+                //Validar fecha inicio o fin vacias
+                if(f_ini.length === 0 || f_fin.length === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Llene el campo de fecha de inicio o fecha final');
+                }
+               
+                else{
                     
-                    for(x = 0; x < intervalo.length; x++){
-                        if($(intervalo[x]).is(':checked')){
-                            valor_intervalo = intervalo[x].value;
-                        }
-                    }
-                    
+                    //Obtener url del script
+                    var url;                                       
                     url = "GraficasBCG.php";
                     
                     $.ajax({
@@ -300,7 +304,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                         dataType: "html",
                         type: 'POST',
                         url: url,
-                        data: "inter="+valor_intervalo+"&ini="+f_ini+"&fin="+f_fin+"&sitio="+idSitio,
+                        data: "inter="+inter+"&ini="+f_ini+"&fin="+f_fin+"&sitio="+idSitio,
                         success: function(response){
                             $("#chart-container").html(response);
                         },

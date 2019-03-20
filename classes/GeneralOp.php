@@ -24,8 +24,9 @@ class GeneralOp {
     
     /*Metodo para consultar todos los datos de cualquier coleccion
     15 min para SI y BCG y 1 hr para BatCR800*/
-    public function consulta15min($f_ini, $f_fin, $operaciones) {
-        $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
+    public function consulta15min($idsitio, $f_ini, $f_fin, $operaciones) {
+        
+        $rango = array("\$and"=>array(array( "Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NombreSitio' => $idsitio)));
         $result = $operaciones->findAll($rango);
         return $result;
     }
@@ -33,9 +34,9 @@ class GeneralOp {
     //Metodos de consulta para Sondas de Inspeccion
     
     //Consulta cada 30 min
-    public function consulta30min($f_ini, $f_fin, $operaciones) {
-        $fecha = array();
-        $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
+    public function consulta30min($idsitio, $f_ini, $f_fin, $operaciones) {
+        $fecha = array();        
+        $rango = array("\$and"=>array(array( "Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NombreSitio' => $idsitio)));
         $result = $operaciones->findAll($rango);
         $cont = 1;
         foreach ($result as $dato) {
@@ -86,9 +87,7 @@ class GeneralOp {
      *      */
     //Consulta cada dia
     public function consulta1dia($idsitio, $f_ini, $f_fin, $operaciones) {
-        // seleccina Fecha_HoraRegistro donde sea mayor a $f_ini y menor que $f_fin y donde id sea iguala $sitio
-        //
-        //AND { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] }
+
         $rango = array("\$and"=>array(array( "Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NombreSitio' => $idsitio)));
         $result = $operaciones->findAll($rango); 
         $resultado= array();
@@ -218,13 +217,13 @@ class GeneralOp {
     //Metodos de consulta para Bombas de Calor Geotermico
     
     //Consulta cada 30 min
-    public function consulta30minBCG($f_ini, $f_fin, $operaciones){
+    public function consulta30minBCG($idsitio, $f_ini, $f_fin, $operaciones){
         $fecha = array();
         $rango = array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000)));
         $result = $operaciones->findAll($rango);
         $cont = 1;
         foreach($result as $dato){
-            if(($cont % 2) == 0){
+            if(($cont % 5) == 0){
                 $datetime = $dato['Fecha_HoraRegistro']->toDateTime();
                 $a = $datetime->format('Y-m-d\TH:i:s.u');
                 array_push($fecha, [
@@ -245,6 +244,110 @@ class GeneralOp {
             $cont += 1;
         }
         return $fecha;
+    }
+    
+        //Metodo de prueba para intervalo libre
+    public function consultaIntervalo($idsitio, $intervalo, $f_ini, $f_fin, $operaciones){
+        //Valores para intervalo libre
+        $intervalo_muestreo = 2;
+        //$cont = 0;
+        
+        //Valores de la consulta
+        $fecha = array();
+        $rango = array("\$and"=>array(array( "Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NombreSitio' => $idsitio)));
+        $result = $operaciones->findAll($rango);
+        $cont = 0;
+        
+        foreach($result as $dato){
+            if($cont % floor($intervalo / $intervalo_muestreo) == 0){
+                $datetime = $dato['Fecha_HoraRegistro']->toDateTime();
+                $a = $datetime->format('Y-m-d\TH:i:s.u');
+                array_push($fecha, [
+                    "Fecha_HoraRegistro" => $a,
+                    "Bat_CR800" => $dato["Bat_CR800"],
+                    "Temp_CR800" => $dato["Temp_CR800"],
+                    "EAT_DegF" => $dato["EAT_DegF"],
+                    "LAT_DegF" => $dato["LAT_DegF"],
+                    "EWT_DegF" => $dato["EWT_DegF"],
+                    "LWT_DegF" => $dato["LWT_DegF"],
+                    "CT_Amp" => $dato["CT_Amp"],
+                    "EAT_DegC" => $dato["EAT_DegC"],
+                    "LAT_DegC" => $dato["LAT_DegC"],
+                    "EWT_DegC" => $dato["EWT_DegC"],
+                    "LWT_DegC" => $dato["LWT_DegC"],
+                ]);
+            }
+            $cont += 1;
+        }
+        return $fecha;
+    }
+    
+    //Metodo de prueba para intervalo libre con promedio
+    public function consultaIntervaloProm($idsitio, $intervalo, $f_ini, $f_fin, $operaciones){
+        $intervalo_muestreo = 2;
+        $cont = 0;
+        $rango = array("\$and" => array(array("Fecha_HoraRegistro" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))), array('NombreSitio' => $idsitio)));
+        $result = $operaciones->findAll($rango);
+        $resultado = array();
+        //Variables de los datasets
+        $Bat_CR800 = 0;
+        $Temp_CR800 = 0;
+        $EAT_DegF = 0;
+        $LAT_DegF = 0;
+        $EWT_DegF = 0;
+        $LWT_DegF = 0;        
+        $CT_Amp = 0;
+        $EAT_DegC = 0;
+        $LAT_DegC = 0;
+        $EWT_DegC = 0;
+        $LWT_DegC = 0;
+        
+        //Sumar los valores por si mismos
+        foreach ($result as $dato){
+            $Bat_CR800 += $dato["Bat_CR800"];
+            $Temp_CR800 += $dato["Temp_CR800"];
+            $EAT_DegF += $dato["EAT_DegF"];
+            $LAT_DegF += $dato["LAT_DegF"];
+            $EWT_DegF += $dato["EWT_DegF"];
+            $LWT_DegF += $dato["LWT_DegF"];
+            $CT_Amp += $dato["CT_Amp"];
+            $EAT_DegC += $dato["EAT_DegC"];
+            $LAT_DegC += $dato["LAT_DegC"];
+            $EWT_DegC += $dato["EWT_DegC"];
+            $LWT_DegC += $dato["LWT_DegC"];
+            $cont += 1;
+        }
+        
+        //Calcular el promedio
+        $Bat_CR800 += $Bat_CR800 / $cont;
+        $Temp_CR800 += $Temp_CR800 / $cont;
+        $EAT_DegF += $EAT_DegF / $cont;
+        $LAT_DegF += $LAT_DegF / $cont;
+        $EWT_DegF += $EWT_DegF / $cont;
+        $LWT_DegF += $LWT_DegF / $cont;
+        $CT_Amp += $CT_Amp / $cont;
+        $EAT_DegC += $EAT_DegC / $cont;
+        $LAT_DegC += $LAT_DegC / $cont;
+        $EWT_DegC += $EWT_DegC / $cont;
+        $LWT_DegC += $LWT_DegC / $cont;
+        
+        //Insertar los promedios en un array para enviarlos al metodo de graficacion
+        array_push($resultado,[
+            "Bat_CR800" => $Bat_CR800,
+            "Temp_CR800" => $Temp_CR800,
+            "EAT_DegF" => $EAT_DegF,
+            "LAT_DegF" => $LAT_DegF,
+            "EWT_DegF" => $EWT_DegF,
+            "LWT_DegF" => $LWT_DegF,
+            "CT_Amp" => $CT_Amp,
+            "EAT_DegC" => $EAT_DegC,
+            "LAT_DegC" => $LAT_DegC,
+            "EWT_DegC" => $EWT_DegC,
+            "LWT_DegC" => $LWT_DegC,
+        ]);
+        
+        //Se regresa el array con los datos
+        return $resultado;
     }
     
     //Consulta cada dia
@@ -280,7 +383,7 @@ class GeneralOp {
             $LWT_DegC += $dato["LWT_DegC"];
             $cont += 1;
         }
-        
+              
         $prom = $prom/$cont;
         $Temp_CR800 = $Temp_CR800/$cont;
         $EAT_DegF = $EAT_DegF/$cont;
@@ -311,7 +414,7 @@ class GeneralOp {
         //Se regresa el array con los datos
         return $resultado;
     }
-    
+      
     //Metodos de consulta para Bateria de CR800*************
     
     //Consulta cada 30 min

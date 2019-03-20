@@ -9,7 +9,9 @@ require '../classes/GeneralOp.php';
 
 //Conexion
 $connect = new DBConnection();
-$objData = $connect->UpCSVBCGConn();
+//$objData = $connect->UpCSVBCGConn();
+$traerColl = $connect->ConectarBD();
+$objData = $traerColl->Registros_Bombas_Calor_Geotermico;
 $operaciones = new CRUD($objData);
 $generalOp = new GeneralOp();
 
@@ -19,6 +21,9 @@ $intervalo = $_POST['inter'];
 $f_iniform = $f_ini = $_POST['ini'];
 $f_finform = $f_fin = $_POST['fin'];
 $cont = 0;
+
+//Valores para intervalo libre
+$intervalo_muestreo = 2;
 
 //Arrays de datos a graficar
 $datos = array();
@@ -40,12 +45,13 @@ $f_ini = $generalOp->ordenaFechai($f_ini);
 $f_fin = $generalOp->ordenaFechaf($f_fin);
 
 //Elegir intervalos
-if($intervalo == '15min'){
-    $datos2 = $generalOp->consulta15min($f_ini, $f_fin, $operaciones);
-    $data = iterator_to_array($datos2);
-}else{
-    if ($intervalo == '30min') {
-    $datos = $generalOp->consulta30minBCG($f_ini, $f_fin, $operaciones);
+
+//if($intervalo == '2'){
+//    $datos2 = $generalOp->consulta15min($id, $f_ini, $f_fin, $operaciones);
+//    $data = iterator_to_array($datos2);
+//}else{
+    if ($intervalo >= '2') {
+    $datos = $generalOp->consultaIntervalo($id, $intervalo, $f_ini, $f_fin, $operaciones);
     $data = $datos;
 }else{
     
@@ -55,117 +61,120 @@ if($intervalo == '15min'){
     /*Sumar 1 dia para hacer dia siguiente
      * Para sumar 1 dia se tomara el valor de $f_ini
      */
-    $fecha = $f_finform;
-    if($f_iniform == $f_finform){
-        $fecha = date("m/d/Y", strtotime($f_iniform."+ 1 days"));
-    }
+    if($intervalo == '1440'){
     
-    for($i = $f_iniform; $i <= $fecha; $i = date("m/d/Y", strtotime($i. "+ 1 days"))){
-        $f = $i;
-        $f_ini = $generalOp->ordenaFechai($f);
-        $f_fin = $generalOp->ordenaFechaf($f);
-        array_push($categoryArray, ["label" => $f_ini]);
-        $a = $generalOp->consulta1diaBCG($id, $f_ini, $f_fin, $operaciones);
-        array_push($datos, $a);
-    }
+        $fecha = $f_finform;
+        if($f_iniform == $f_finform){
+            $fecha = date("m/d/Y", strtotime($f_iniform."+ 1 days"));
+        }
 
-        //Validaciones de valores
-        for($long = 0; $long <= sizeof($datos) - 1; $long++){
-            for($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++){
+        for($i = $f_iniform; $i <= $fecha; $i = date("m/d/Y", strtotime($i. "+ 1 days"))){
+            $f = $i;
+            $f_ini = $generalOp->ordenaFechai($f);
+            $f_fin = $generalOp->ordenaFechaf($f);
+            array_push($categoryArray, ["label" => $f_ini]);
+            $a = $generalOp->consulta1diaBCG($id, $f_ini, $f_fin, $operaciones);
+            array_push($datos, $a);
+        }
 
-                //Bat_CR800
-                if($datos[$long][$lo]['Bat_CR800'] == "NAN"){
-                    $dtsbcr = 0;
-                }else{
-                    $dtsbcr = $datos[$long][$lo]['Bat_CR800'];
+            //Validaciones de valores
+            for($long = 0; $long <= sizeof($datos) - 1; $long++){
+                for($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++){
+
+                    //Bat_CR800
+                    if($datos[$long][$lo]['Bat_CR800'] == "NAN"){
+                        $dtsbcr = 0;
+                    }else{
+                        $dtsbcr = $datos[$long][$lo]['Bat_CR800'];
+                    }
+
+                    //Temp_CR800
+                    if($datos[$long][$lo]['Temp_CR800'] == "NAN"){
+                        $dtstcr = 0;
+                    }else{
+                        $dtstcr = $datos[$long][$lo]['Temp_CR800'];
+                    }
+
+                    //EAT_DegF
+                    if($datos[$long][$lo]['EAT_DegF'] == "NAN"){
+                        $dtseatf = 0;
+                    }else{
+                        $dtseatf = $datos[$long][$lo]['EAT_DegF'];
+                    }
+
+                    //LAT_DegF
+                    if($datos[$long][$lo]['LAT_DegF'] == "NAN"){
+                        $dtslatf = 0;
+                    }else{
+                        $dtslatf = $datos[$long][$lo]['LAT_DegF'];
+                    }
+
+                    //EWT_DegF
+                    if($datos[$long][$lo]['EWT_DegF'] == "NAN"){
+                        $dtsewtf = 0;
+                    }else{
+                        $dtsewtf = $datos[$long][$lo]['EWT_DegF'];
+                    }
+
+                    //LWT_DegF
+                    if($datos[$long][$lo]['LWT_DegF'] == "NAN"){
+                        $dtslwtf = 0;
+                    }else{
+                        $dtslwtf = $datos[$long][$lo]['LWT_DegF'];
+                    }
+
+                    //CT_Amp
+                    if($datos[$long][$lo]['CT_Amp'] == "NAN"){
+                        $dtscta = 0;
+                    }else{
+                        $dtscta = $datos[$long][$lo]['CT_Amp'];
+                    }
+
+                    //EAT_DegC
+                    if($datos[$long][$lo]['EAT_DegC'] == "NAN"){
+                        $dtseatc = 0;
+                    }else{
+                        $dtseatc = $datos[$long][$lo]['EAT_DegC'];
+                    }
+
+                    //LAT_DegC
+                    if($datos[$long][$lo]['LAT_DegC'] == "NAN"){
+                        $dtslatc = 0;
+                    }else{
+                        $dtslatc = $datos[$long][$lo]['LAT_DegC'];
+                    }
+
+                    //EWT_DegC
+                    if($datos[$long][$lo]['EWT_DegC'] == "NAN"){
+                        $dtsewtc = 0;
+                    }else{
+                        $dtsewtc = $datos[$long][$lo]['EWT_DegC'];
+                    }
+
+                    //LWT_DegC
+                    if($datos[$long][$lo]['LWT_DegC'] == "NAN"){
+                        $dtslwtc = 0;
+                    }else{
+                        $dtslwtc = $datos[$long][$lo]['LWT_DegC'];
+                    }
+
+                    //Insercion de datos en sus respectivos arrays
+                    array_push($dataSeries1, ["value" => $dtsbcr]);
+                    array_push($dataSeries2, ["value" => $dtstcr]);
+                    array_push($dataSeries3, ["value" => $dtseatf]);
+                    array_push($dataSeries4, ["value" => $dtslatf]);
+                    array_push($dataSeries5, ["value" => $dtsewtf]);
+                    array_push($dataSeries6, ["value" => $dtslwtf]);
+                    array_push($dataSeries7, ["value" => $dtscta]);
+                    array_push($dataSeries8, ["value" => $dtseatc]);
+                    array_push($dataSeries9, ["value" => $dtslatc]);
+                    array_push($dataSeries10, ["value" => $dtsewtc]);
+                    array_push($dataSeries11, ["value" => $dtslwtc]);
                 }
-
-                //Temp_CR800
-                if($datos[$long][$lo]['Temp_CR800'] == "NAN"){
-                    $dtstcr = 0;
-                }else{
-                    $dtstcr = $datos[$long][$lo]['Temp_CR800'];
-                }
-
-                //EAT_DegF
-                if($datos[$long][$lo]['EAT_DegF'] == "NAN"){
-                    $dtseatf = 0;
-                }else{
-                    $dtseatf = $datos[$long][$lo]['EAT_DegF'];
-                }
-
-                //LAT_DegF
-                if($datos[$long][$lo]['LAT_DegF'] == "NAN"){
-                    $dtslatf = 0;
-                }else{
-                    $dtslatf = $datos[$long][$lo]['LAT_DegF'];
-                }
-
-                //EWT_DegF
-                if($datos[$long][$lo]['EWT_DegF'] == "NAN"){
-                    $dtsewtf = 0;
-                }else{
-                    $dtsewtf = $datos[$long][$lo]['EWT_DegF'];
-                }
-
-                //LWT_DegF
-                if($datos[$long][$lo]['LWT_DegF'] == "NAN"){
-                    $dtslwtf = 0;
-                }else{
-                    $dtslwtf = $datos[$long][$lo]['LWT_DegF'];
-                }
-
-                //CT_Amp
-                if($datos[$long][$lo]['CT_Amp'] == "NAN"){
-                    $dtscta = 0;
-                }else{
-                    $dtscta = $datos[$long][$lo]['CT_Amp'];
-                }
-
-                //EAT_DegC
-                if($datos[$long][$lo]['EAT_DegC'] == "NAN"){
-                    $dtseatc = 0;
-                }else{
-                    $dtseatc = $datos[$long][$lo]['EAT_DegC'];
-                }
-
-                //LAT_DegC
-                if($datos[$long][$lo]['LAT_DegC'] == "NAN"){
-                    $dtslatc = 0;
-                }else{
-                    $dtslatc = $datos[$long][$lo]['LAT_DegC'];
-                }
-
-                //EWT_DegC
-                if($datos[$long][$lo]['EWT_DegC'] == "NAN"){
-                    $dtsewtc = 0;
-                }else{
-                    $dtsewtc = $datos[$long][$lo]['EWT_DegC'];
-                }
-
-                //LWT_DegC
-                if($datos[$long][$lo]['LWT_DegC'] == "NAN"){
-                    $dtslwtc = 0;
-                }else{
-                    $dtslwtc = $datos[$long][$lo]['LWT_DegC'];
-                }
-
-                //Insercion de datos en sus respectivos arrays
-                array_push($dataSeries1, ["value" => $dtsbcr]);
-                array_push($dataSeries2, ["value" => $dtstcr]);
-                array_push($dataSeries3, ["value" => $dtseatf]);
-                array_push($dataSeries4, ["value" => $dtslatf]);
-                array_push($dataSeries5, ["value" => $dtsewtf]);
-                array_push($dataSeries6, ["value" => $dtslwtf]);
-                array_push($dataSeries7, ["value" => $dtscta]);
-                array_push($dataSeries8, ["value" => $dtseatc]);
-                array_push($dataSeries9, ["value" => $dtslatc]);
-                array_push($dataSeries10, ["value" => $dtsewtc]);
-                array_push($dataSeries11, ["value" => $dtslwtc]);
             }
         }
     }
-}
+//}
 ?>
 
 <!--Se trae la libreria Chart.js-->
@@ -178,19 +187,21 @@ if($intervalo == '15min'){
     <!--Se arreglan los valores para graficarlos-->
     <?php
     //Convertir cursor Mongo en array
-    if($intervalo != "1dia"){
+   // if($intervalo != "1dia"){
         asort($data);
         
         foreach($data as $dataset){
             
-            if($intervalo == '15min'){
-                $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
-                $a = $datetime->format('Y-m-d\TH:i:s.u');
-            }else{
-                if($intervalo == "30min"){
-                    $a = $dataset['Fecha_HoraRegistro'];
-                }
-            }
+//            if($intervalo == '2min'){
+//                $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
+//                $a = $datetime->format('Y-m-d\TH:i:s.u');
+//            }else{
+//                if($intervalo == "4min"){
+//                    $a = $dataset['Fecha_HoraRegistro'];
+//                }
+//            }
+            
+            $a = $dataset['Fecha_HoraRegistro'];
             
             //Validaciones NAN
             //Bat_CR800
@@ -285,7 +296,7 @@ if($intervalo == '15min'){
             array_push($dataSeries10, array("value" => $dtsewtc));
             array_push($dataSeries11, array("value" => $dtslwtc));
         }
-    }
+    //}
     ?>
     <canvas id="line-chart" width="800" height="450"></canvas>
         
@@ -318,7 +329,7 @@ if($intervalo == '15min'){
                     ],
                     label: "Bat_CR800",
                     borderColor: "#000000",
-                    pointRadius: 0,
+                    pointRadius: 1,
                     fill: false,
                     lineTension: 0
                 },

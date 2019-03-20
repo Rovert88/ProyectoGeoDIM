@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="../assets/css/style-system.css" />
         <link rel="stylesheet" href="../assets/css/timepicker.css" />
         <link rel="stylesheet" href="../assets/css/personal-style.css" />
-        
+
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
 
@@ -32,7 +32,7 @@
 
         <!--Header-part-->
         <div>
-            <h1>GeoDIM</h1>
+            <h3>ManagementGT</h3>
         </div>
         <!--close-Header-part-->
 
@@ -58,7 +58,6 @@
                         <li><a href="SubirArchivos.php">Cargar archivo</a></li>
                     </ul>
                 </li>
-
                 <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                     <ul>
                         <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
@@ -94,7 +93,7 @@
                                     <div class="control-group">
                                         <label style="text-align: center; font-size: 20px; color: #000;">Sitio Geográfico (SG)</label>
                                     </div>
-                                    
+
                                     <!--Campo NombreSitio-->
                                     <div class="control-group">
                                         <label class="control-label">Nombre del Sitio: </label>
@@ -243,7 +242,7 @@
 
                                     <!--Seccion FormBCG -->
                                     <div id="contenido" style="display: none;">
-                                        
+
                                         <!--Campo NombreBomba-->
                                         <div class="control-group">
                                             <label class="control-label">Nombre de Bomba: </label>
@@ -442,22 +441,42 @@
                         break;
                     }
                 }
-                
-                if(key == 8){return true;}
-                if(key == 32){return true;}
-                if(key == 37){return true;}
-                if(key == 38){return true;}
-                if(key == 39){return true;}
-                if(key == 40){return true;}
-                if(key == 36){return true;}
-                if(key == 35){return true;}
-                if(key == 16){return true;}
-                if(key == 46){return true;}
-                if(key == 32){return true;}
+
+                if (key == 8) {
+                    return true;}
+                if (key == 32) {
+                    return true;}
+                if (key == 37) {
+                    return true;
+                }
+                if (key == 38) {
+                    return true;
+                }
+                if (key == 39) {
+                    return true;
+                }
+                if (key == 40) {
+                    return true;
+                }
+                if (key == 36) {
+                    return true;
+                }
+                if (key == 35) {
+                    return true;
+                }
+                if (key == 16) {
+                    return true;
+                }
+                if (key == 46) {
+                    return true;
+                }
+                if (key == 32) {
+                    return true;
+                }
 
                 if (letras.indexOf(tecla) == -1 && !tecla_especial) {
                     return false;
-                }                
+                }
             }
         </script>
         <!--soloLetras-end-->
@@ -476,18 +495,39 @@
                         break;
                     }
                 }
-                
-                if(key == 8){return true;}
-                if(key == 32){return true;}
-                if(key == 37){return true;}
-                if(key == 38){return true;}
-                if(key == 39){return true;}
-                if(key == 40){return true;}
-                if(key == 36){return true;}
-                if(key == 35){return true;}
-                if(key == 16){return true;}
-                if(key == 46){return true;}
-                if(key == 9){return true;}
+
+                if (key == 8) {
+                    return true;
+                }
+                if (key == 32) {
+                    return true;
+                }
+                if (key == 37) {
+                    return true;
+                }
+                if (key == 38) {
+                    return true;
+                }
+                if (key == 39) {
+                    return true;
+                }
+                if (key == 40) {
+                    return true;
+                }
+                if (key == 36) {
+                    return true;
+                }
+                if (key == 35) {
+                    return true;
+                }
+                if (key == 16) {
+                    return true;
+                }
+                if (key == 46) {
+                    return true;}
+                if (key == 9) {
+                    return true;
+                }
 
                 if (numeros.indexOf(tecla) == -1 && !tecla_especial) {
                     return false;
@@ -553,93 +593,93 @@
         <!--register-->
         <script>
             function registrar() {
-               var check = document.getElementById("check");
-                if(check.checked) {
-                        var aceptado = "ok";
-                        var p1 = $('#p1').val();
-                        var p2 = $('#p2').val();
-                        var p3 = $('#p3').val();
-                        var p4 = $('#p4').val();
-                        var p5 = $('#p5').val();
-                        var p6 = $('#p6').val();
-                        var p7 = $('#p7').val();
-                        var p8 = $('#p8').val();
-                        var p9 = $('#p9').val();
-                        var p10 = $('#p10').val();
-                        var p11 = $('#p11').val();
-                        var p12 = $('#p12').val();
-                        var p13 = $('#p13').val().replace(',', '.');
-                        var p14 = $('#p14').val();
-                        var p15 = $('#p15').val();
-                        var p16 = $('#p16').val();
-                        var p17 = $('#p17').val();
-                        var p18 = $('#p18').val();
-                        var p19 = $('#p19').val();
-                        var p20 = $('#p20').val();
-                        var p21 = $('#p21').val();
-                        var p22 = $('#p22').val();
-                        var p23 = $('#p23').val();
-                        
-                        form_datos = "ok=" + aceptado +
-                        "&p1=" + p1 +
-                        "&p2=" + p2 +
-                        "&p3=" + p3 +
-                        "&p4=" + p4 +
-                        "&p5=" + p5 +
-                        "&p6=" + p6 +
-                        "&p7=" + p7 +
-                        "&p8=" + p8 +
-                        "&p9=" + p9 +
-                        "&p10=" + p10 +
-                        "&p10=" + p10 +
-                        "&p11=" + p11 +
-                        "&p12=" + p12 +
-                        "&p13=" + p13 +
-                        "&p14=" + p14 +
-                        "&p15=" + p15 +
-                        "&p16=" + p16 +
-                        "&p17=" + p17 +
-                        "&p18=" + p18 +
-                        "&p19=" + p19 +
-                        "&p20=" + p20 +
-                        "&p21=" + p21 +
-                        "&p22=" + p22 +
-                        "&p23=" + p23;
-                
+                var check = document.getElementById("check");
+                if (check.checked) {
+                    var aceptado = "ok";
+                    var p1 = $('#p1').val();
+                    var p2 = $('#p2').val();
+                    var p3 = $('#p3').val();
+                    var p4 = $('#p4').val();
+                    var p5 = $('#p5').val();
+                    var p6 = $('#p6').val();
+                    var p7 = $('#p7').val();
+                    var p8 = $('#p8').val();
+                    var p9 = $('#p9').val();
+                    var p10 = $('#p10').val();
+                    var p11 = $('#p11').val();
+                    var p12 = $('#p12').val();
+                    var p13 = $('#p13').val().replace(',', '.');
+                    var p14 = $('#p14').val();
+                    var p15 = $('#p15').val();
+                    var p16 = $('#p16').val();
+                    var p17 = $('#p17').val();
+                    var p18 = $('#p18').val();
+                    var p19 = $('#p19').val();
+                    var p20 = $('#p20').val();
+                    var p21 = $('#p21').val();
+                    var p22 = $('#p22').val();
+                    var p23 = $('#p23').val();
+
+                    form_datos = "ok=" + aceptado +
+                            "&p1=" + p1 +
+                            "&p2=" + p2 +
+                            "&p3=" + p3 +
+                            "&p4=" + p4 +
+                            "&p5=" + p5 +
+                            "&p6=" + p6 +
+                            "&p7=" + p7 +
+                            "&p8=" + p8 +
+                            "&p9=" + p9 +
+                            "&p10=" + p10 +
+                            "&p10=" + p10 +
+                            "&p11=" + p11 +
+                            "&p12=" + p12 +
+                            "&p13=" + p13 +
+                            "&p14=" + p14 +
+                            "&p15=" + p15 +
+                            "&p16=" + p16 +
+                            "&p17=" + p17 +
+                            "&p18=" + p18 +
+                            "&p19=" + p19 +
+                            "&p20=" + p20 +
+                            "&p21=" + p21 +
+                            "&p22=" + p22 +
+                            "&p23=" + p23;
+
                     if ($('#p1').val() == "" || $('#p2').val() == "" || $('#p3').val() == "" || $('#p4').val() == "" || $('#p5').val() == ""
-                        || $('#p6').val() == "" || $('#p7').val() == "" || $('#p8').val() == "" || $('#p9').val() == "" || $('#p10').val() == ""
-                        || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == "" || $('#p15').val() == ""
-                        || $('#p16').val() == "" || $('#p17').val() == "" || $('#p18').val() == "" || $('#p19').val() == "" || $('#p20').val() == ""
-                        || $('#p21').val() == "" || $('#p22').val() == "" || $('#p23').val() == ""){
-                                                
+                            || $('#p6').val() == "" || $('#p7').val() == "" || $('#p8').val() == "" || $('#p9').val() == "" || $('#p10').val() == ""
+                            || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == "" || $('#p15').val() == ""
+                            || $('#p16').val() == "" || $('#p17').val() == "" || $('#p18').val() == "" || $('#p19').val() == "" || $('#p20').val() == ""
+                            || $('#p21').val() == "" || $('#p22').val() == "" || $('#p23').val() == "") {
+
                         alertify.alert('Registro de Sitios Geograficos', 'Porfavor llene todos los campos');
                         return false;
-                    }else{
-                $.ajax({
-                    async: true,
-                    cache: false,
-                    dataType: "html",
-                    type: 'POST',
-                    url:  '../methods/InsertarDatosForms.php',
-                    data: form_datos,
-                    success: function (r) {
+                    } else {
+                        $.ajax({
+                            async: true,
+                            cache: false,
+                            dataType: "html",
+                            type: 'POST',
+                            url: '../methods/InsertarDatosForms.php',
+                            data: form_datos,
+                            success: function (r) {
 
-                            alertify.success("Registro exitoso");
-                            setTimeout("location.href= 'RegistrarSitios.php';", 3500);
-                            element2.style.display = 'none';
-                            $("#resultado").html("Registro Exitoso");
-                    },
-                    beforeSend: function () {
-                       $("#resultado").html("Procesando, espere por favor...");
+                                alertify.success("Registro exitoso");
+                                setTimeout("location.href= 'RegistrarSitios.php';", 3500);
+                                element2.style.display = 'none';
+                                $("#resultado").html("Registro Exitoso");
+                            },
+                            beforeSend: function () {
+                                $("#resultado").html("Procesando, espere por favor...");
 
-                    },
-                    error: function (r) {
-                         alertify.error("Registro fallido");
+                            },
+                            error: function (r) {
+                                alertify.error("Registro fallido");
+                            }
+                        });
+
                     }
-                });
-
-                    }
-                }else{
+                } else {
                     var aceptado = "";
                     var p1 = $('#p1').val();
                     var p2 = $('#p2').val();
@@ -655,54 +695,54 @@
                     var p12 = $('#p12').val();
                     var p13 = $('#p13').val().replace(',', '.');
                     var p14 = $('#p14').val();
-                    
+
                     form_datos = "ok=" + aceptado +
-                        "&p1=" + p1 +
-                        "&p2=" + p2 +
-                        "&p3=" + p3 +
-                        "&p4=" + p4 +
-                        "&p5=" + p5 +
-                        "&p6=" + p6 +
-                        "&p7=" + p7 +
-                        "&p8=" + p8 +
-                        "&p9=" + p9 +
-                        "&p10=" + p10 +
-                        "&p10=" + p10 +
-                        "&p11=" + p11 +
-                        "&p12=" + p12 +
-                        "&p13=" + p13 +
-                        "&p14=" + p14;
-                
-                    if($('#p1').val() == "" || $('#p2').val() == "" || $('#p3').val() == "" || $('#p4').val() == "" || $('#p5').val() == ""
-                       || $('#p6').val() == "" || $('#p7').val() == "" || $('#p8').val() == "" || $('#p9').val() == "" || $('#p10').val() == ""
-                       || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == ""){
-                       
-                       alertify.alert('Registro de Sitios Geograficos', 'Porfavor llene todos los campos');
-                       return false;
-                    }else{
-                $.ajax({
-                    async: true,
-                    cache: false,
-                    dataType: "html",
-                    type: 'POST',
-                    url:  '../methods/InsertarDatosForms.php',
-                    data: form_datos,
-                    success: function (r) {
+                            "&p1=" + p1 +
+                            "&p2=" + p2 +
+                            "&p3=" + p3 +
+                            "&p4=" + p4 +
+                            "&p5=" + p5 +
+                            "&p6=" + p6 +
+                            "&p7=" + p7 +
+                            "&p8=" + p8 +
+                            "&p9=" + p9 +
+                            "&p10=" + p10 +
+                            "&p10=" + p10 +
+                            "&p11=" + p11 +
+                            "&p12=" + p12 +
+                            "&p13=" + p13 +
+                            "&p14=" + p14;
 
-                            alertify.success("Registro exitoso");
-                            setTimeout("location.href= 'RegistrarSitios.php';", 3500);
-                            element2.style.display = 'none';
-                            $("#resultado").html("Registro Exitoso");
-                    },
-                    beforeSend: function () {
-                       $("#resultado").html("Procesando, espere por favor...");
+                    if ($('#p1').val() == "" || $('#p2').val() == "" || $('#p3').val() == "" || $('#p4').val() == "" || $('#p5').val() == ""
+                            || $('#p6').val() == "" || $('#p7').val() == "" || $('#p8').val() == "" || $('#p9').val() == "" || $('#p10').val() == ""
+                            || $('#p11').val() == "" || $('#p12').val() == "" || $('#p13').val() == "" || $('#p14').val() == "") {
 
-                    },
-                    error: function (r) {
-                         alertify.error("Registro fallido");
-                    }
-                });
-               
+                        alertify.alert('Registro de Sitios Geograficos', 'Porfavor llene todos los campos');
+                        return false;
+                    } else {
+                        $.ajax({
+                            async: true,
+                            cache: false,
+                            dataType: "html",
+                            type: 'POST',
+                            url: '../methods/InsertarDatosForms.php',
+                            data: form_datos,
+                            success: function (r) {
+
+                                alertify.success("Registro exitoso");
+                                setTimeout("location.href= 'RegistrarSitios.php';", 3500);
+                                element2.style.display = 'none';
+                                $("#resultado").html("Registro Exitoso");
+                            },
+                            beforeSend: function () {
+                                $("#resultado").html("Procesando, espere por favor...");
+
+                            },
+                            error: function (r) {
+                                alertify.error("Registro fallido");
+                            }
+                        });
+
 
 
                     }

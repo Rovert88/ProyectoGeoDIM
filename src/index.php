@@ -21,7 +21,7 @@
         
         <!--Header-part-->
 		  <div>
-			<h1>GeoDIM</h1>
+			<h3>ManagementGT</h3>
 		  </div>
         <!--close-Header-part-->
 
@@ -66,7 +66,7 @@
 
 		<!--main-container-part-->
 		<div id="content">
-                    <h1 class="title-style">Bienvenido a GeoDIM</h1>
+                    <h1 class="title-style">Bienvenido a ManagementGT</h1>
                     <div class="container-fluid">                        
                         <hr>
                         <div class="row-fluid">
@@ -76,7 +76,7 @@
                               <h5></h5>
                             </div>
                               <div class="widget-content" align="justify">
-                                  GeoDIM es un sistema que le permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico de diferentes 
+                                  ManagementGT es un sistema que le permite consultar datos de temperaturas de las Sondas de Inspección y Bombas de Calor Geotérmico de diferentes 
                                   Sitios Geográficos así como consultar los datos de los propios sitios y las sondas de inspección y bombas de calor geotérmico con las que 
                                   cuente cada uno de ellos.<br /> <br />
                                   
@@ -89,7 +89,7 @@
                                   Puede cargar archivos CSV de registros de temperaturas de Sondas de Inspección, Bombas de Calor Geotérmico o voltajes de batería de CR800
                                   diríjase al menú de la izquierda y haga clic sobre el botón "Archivo"s, esto desplegará un submenú y podrá dar clic en la opción "Cargar archivo".
                                   En esta encontrará un formulario donde podrá elegir el tipo de archivo que desea subir (Sonda de Inspección, Bomba de Calor Geotérmico o Batería
-                                  de CR800) y acontinuación mediante un botón podrá seleccionar un archivo de su sistema para que este sea almacenado en la base de datos de GeoDIM.<br /> <br />
+                                  de CR800) y acontinuación mediante un botón podrá seleccionar un archivo de su sistema para que este sea almacenado en la base de datos de ManagementGT.<br /> <br />
                                   
                                   Para consultar las gráficas de una sonda o bomba diríjase al menú de la izquierda y haga clic sobre el botón Gráficas de datos. Esto desplegará un 
                                   submenú para elegir el tipo de gráfica a mostrar (Gráficas de Sondas de Inspección o Graficas de Bombas de Calor Geotérmico). Al entrar en cualquiera 

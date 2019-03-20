@@ -16,8 +16,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.js"></script>
         <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.min.js"></script>
 
-
-
         <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="../assets/css/fullcalendar.css" />
@@ -35,10 +33,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <link rel="stylesheet" href="../assets/css/timepicker.css" />
         <link rel="stylesheet" href="../assets/css/personal-style.css" />
 
-        <!--graphics js-->
-        <script src="../assets/fusioncharts/fusioncharts.js"></script>
-        <script src="../assets/fusioncharts/fusioncharts.theme.fint.js"></script>
-
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
@@ -47,7 +41,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--Header-part-->
         <div>
-            <h1>GeoDIM</h1>
+            <h3>ManagementGT</h3>
         </div>
         <!--close-Header-part-->
 
@@ -118,22 +112,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                         <label class="control-label">Seleccionar Sitio Geográfico</label>
                                         <div class="controls">
                                             <?php
-                                            /*
-                                             * puedes incluir tu conexion aqui y la coleccion porfa
-                                             * Listo, sabes como realizar una conuslta peri que solo selccione una columna y no los documntos ?
-                                             * No, osea como traer eso que esta seleccionado?
-                                             * hacer un "select name from tabla" para no sleccionar todos los datos y sea mas eficiiente ja
-                                             * he visto que hacen algo como esto: $consulta = array(["NombreSitio"]=>"Humeros"), pero eso solo 
-                                             * va a traer ese dato. Para que traiga toda esa columna no se como podria ser, estuve buscando pero
-                                             * no encontre algo, debaje buscar algo a ver si encuentro rapodo, sale, vas a ocupar la compu? si no
-                                             * para que tambien busue aca
-                                             * probare algo como lo tenia david
-                                             *          despues lo checamos mientras asi
-                                             * cada uno tiene su ID unico verdad?
-                                             * Si seria este de aca 
-                                             * los otros dos de abajo, estan asi porque le puse que el id fuera el 
-                                             */
-
                                             $conn = new DBConnection();
                                             $coll = $conn->SGConn();
                                             $result = $coll->find();
@@ -165,6 +143,13 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                                 1 Día</label>
                                         </div>
                                     </div>
+
+                                    <!--                                    <div class="control-group">
+                                                                            <label class="control-label">Intervalo (Minutos)</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="intervalo" placeholder="Ej. 15, 30, 45, etc" />
+                                                                            </div>
+                                                                        </div>-->
 
                                     <div class="control-group">
                                         <label class="control-label">Periodo</label>
@@ -299,19 +284,16 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 
                                             }
-   /*Donde obtienes los valores de los radiobuton?
-    * Son esos
-    * Pero esos son pcuando los habilitas y desabilias no?
-    * */                                         
-                                           var idSitio = 0;
-                                           function selectSitioGeografico(){
-                                            idSitio = document.getElementById("sitio").value;
-                                           } 
+
+                                            var idSitio = 0;
+                                            function selectSitioGeografico() {
+                                                idSitio = document.getElementById("sitio").value;
+                                            }
                                             //AJAX grafica
                                             function graficaAJAX() {
                                                 if (idSitio === 0) {
-                                                     alert("Seleccione un sitio porfavor");
-                                                     // Recuerdas como se usa?
+                                                    alert("Seleccione un sitio porfavor");
+                                                    // Recuerdas como se usa?
                                                 } else {
                                                     var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
                                                     //Obtener Datos del Formulario
@@ -329,17 +311,9 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 
                                                     if (tip_graf === "TT") {
-                                                        url = "charts.php"; // es este el tipo de grafica si ?
+                                                        url = "charts.php";
                                                     } else {
-                                                        url = "TempProf.php";//Esa, bueno seria para las dos, porque los datos los toma de la misma coleccion
-                                                    }
-
-
-
-                                                    if (f_ini === "" && f_fin === "") {
-
-                                                    } else {
-
+                                                        url = "TempProf.php";
                                                     }
 
                                                     $.ajax({
@@ -348,7 +322,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                                         dataType: "html",
                                                         type: 'POST',
                                                         url: url,
-                                                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin+"&sitio="+idSitio,
+                                                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
                                                         success: function (response) {
                                                             $("#chart-container").html(response);
                                                         },

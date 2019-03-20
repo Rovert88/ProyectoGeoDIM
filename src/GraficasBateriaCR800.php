@@ -33,10 +33,6 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <link rel="stylesheet" href="../assets/css/timepicker.css" />
         <link rel="stylesheet" href="../assets/css/personal-style.css" />
 
-        <!--graphics js-->
-        <script src="../assets/fusioncharts/fusioncharts.js"></script>
-        <script src="../assets/fusioncharts/fusioncharts.theme.fint.js"></script>
-
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
@@ -45,7 +41,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--Header-part-->
         <div>
-            <h1>GeoDIM</h1>
+            <h3>ManagementGT</h3>
         </div>
         <!--close-Header-part-->
 

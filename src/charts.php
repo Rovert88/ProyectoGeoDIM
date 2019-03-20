@@ -7,7 +7,9 @@ require '../vendor/autoload.php';
 require '../classes/GeneralOp.php';
 //Conexion
 $connect = new DBConnection();
-$objData = $connect->UpCSVSIConn();
+//$objData = $connect->UpCSVSIConn(); //Cambiar a conexion
+$traerColl = $connect->ConectarBD();
+$objData = $traerColl->Registros_Sondas_Inspeccion;
 $operaciones = new CRUD($objData);
 $generalOp = new GeneralOp();
 
@@ -17,9 +19,9 @@ $intervalo = $_POST['inter'];
 $f_ini2 = $f_ini = $_POST['ini'];
 $f_fin2 = $f_fin = $_POST['fin'];
 
-$cont = 0;
+//$cont = 0;
 $datos = array();
-$arrData = array();
+//$arrData = array();
 $categoryArray = array();
 $dataseries1 = array();
 $dataseries2 = array();
@@ -54,37 +56,31 @@ $f_ini = $generalOp->ordenaFechai($f_ini);
 $f_fin = $generalOp->ordenaFechaf($f_fin);
 
 if ($intervalo == '15min') {
-    $datos2 = $generalOp->consulta15min($f_ini, $f_fin, $operaciones);
+    $datos2 = $generalOp->consulta15min($id, $f_ini, $f_fin, $operaciones);
     $data = iterator_to_array($datos2);
 } else {
     if ($intervalo == '30min') {
-        $datos = $generalOp->consulta30min($f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consulta30min($id, $f_ini, $f_fin, $operaciones);
         $data = $datos;
     } else {
         // Graficas a un dia
-        
         //Obtiene la lista de dias de diaini  a diafin y obtiene los datos
-        //solo se cambiaria aqui el form y solo se tomaria el primer imput
-        // osea f_ini
+        //solo se cambiaria aqui el form y solo se tomaria el primer imput        
         // Dia siguiente
         $fecha = $f_fin2;
-        if ($f_ini2 == $f_fin2){
-        $fecha = date("m/d/Y",strtotime($f_ini2."+ 1 days"));
+        if ($f_ini2 == $f_fin2) {
+            $fecha = date("m/d/Y", strtotime($f_ini2 . "+ 1 days"));
         }
-        
-        // haber pruebalo robert
-        
-        for ($i = $f_ini2; $i <= $fecha ; $i = date("m/d/Y", strtotime($i . "+ 1 days"))) {
+
+        for ($i = $f_ini2; $i <= $fecha; $i = date("m/d/Y", strtotime($i . "+ 1 days"))) {
             $f = $i;
             $f_ini = $generalOp->ordenaFechai($f);
             $f_fin = $generalOp->ordenaFechaf($f);
             array_push($categoryArray, ["label" => $f_ini]);
-            // LOs Datos ya estan relacionados en la BD?
-            //Si, ya tienen el id en cada registro
             $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones);
             array_push($datos, $a);
         }
-        
+
         for ($long = 0; $long <= sizeof($datos) - 1; $long++) {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
@@ -284,7 +280,7 @@ if ($intervalo == '15min') {
                 } else {
                     $dst75min = $datos[$long][$lo]['T75_min'];
                 }
-                
+
                 //Insercion de datos en sus respectivos arrays
                 array_push($dataseries1, ["value" => $dsta]);
                 array_push($dataseries2, ["value" => $dst0avg]);
@@ -326,254 +322,253 @@ if ($intervalo == '15min') {
     </head>
     <body>
 
-<?php
+        <?php
 //Convertir cursor Mongo en array
-if ($intervalo != "1dia") {
-    asort($data);
+        if ($intervalo != "1dia") {
+            asort($data);
 
-    foreach ($data as $dataset) {
+            foreach ($data as $dataset) {
 
-        if ($intervalo == '15min') {
-            $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
-            $a = $datetime->format('Y-m-d\TH:i:s.u');
-        } else {
-            if ($intervalo == "30min") {
-                $a = $dataset['Fecha_HoraRegistro'];
+                if ($intervalo == '15min') {
+                    $datetime = $dataset['Fecha_HoraRegistro']->toDateTime();
+                    $a = $datetime->format('Y-m-d\TH:i:s.u');
+                } else {
+                    if ($intervalo == "30min") {
+                        $a = $dataset['Fecha_HoraRegistro'];
+                    }
+                }
+
+                //Validacion NAN
+                //Temp_Amb
+                if ($dataset['Temp_Amb'] == "NAN") {
+                    $dsta = 0;
+                } else {
+                    $dsta = $dataset['Temp_Amb'];
+                }
+
+                //T0_avg
+                if ($dataset['T0_avg'] == "NAN") {
+                    $dst0avg = 0;
+                } else {
+                    $dst0avg = $dataset['T0_avg'];
+                }
+
+                //T0_max
+                if ($dataset['T0_max'] == "NAN") {
+                    $dst0max = 0;
+                } else {
+                    $dst0max = $dataset['T0_max'];
+                }
+
+                //T0_min
+                if ($dataset['T0_min'] == "NAN") {
+                    $dst0min = 0;
+                } else {
+                    $dst0min = $dataset['T0_min'];
+                }
+
+                //T1_avg
+                if ($dataset['T1_avg'] == "NAN") {
+                    $dst1avg = 0;
+                } else {
+                    $dst1avg = $dataset['T1_avg'];
+                }
+
+                //T1_max
+                if ($dataset['T1_max'] == "NAN") {
+                    $dst1max = 0;
+                } else {
+                    $dst1max = $dataset['T1_max'];
+                }
+
+                //T1_min
+                if ($dataset['T1_min'] == "NAN") {
+                    $dst1min = 0;
+                } else {
+                    $dst1min = $dataset['T1_min'];
+                }
+
+                //T2_avg
+                if ($dataset['T2_avg'] == "NAN") {
+                    $dst2avg = 0;
+                } else {
+                    $dst2avg = $dataset['T2_avg'];
+                }
+
+                //T2_max
+                if ($dataset['T2_max'] == "NAN") {
+                    $dst2max = 0;
+                } else {
+                    $dst2max = $dataset['T2_max'];
+                }
+
+                //T2_min
+                if ($dataset['T2_min'] == "NAN") {
+                    $dst2min = 0;
+                } else {
+                    $dst2min = $dataset['T2_min'];
+                }
+
+                //T3_avg
+                if ($dataset['T3_avg'] == "NAN") {
+                    $dst3avg = 0;
+                } else {
+                    $dst3avg = $dataset['T3_avg'];
+                }
+
+                //T3_max
+                if ($dataset['T3_max'] == "NAN") {
+                    $dst3max = 0;
+                } else {
+                    $dst3max = $dataset['T3_max'];
+                }
+
+                //T3_min
+                if ($dataset['T3_min'] == "NAN") {
+                    $dst3min = 0;
+                } else {
+                    $dst3min = $dataset['T3_min'];
+                }
+
+                //T4_avg
+                if ($dataset['T4_avg'] == "NAN") {
+                    $dst4avg = 0;
+                } else {
+                    $dst4avg = $dataset['T4_avg'];
+                }
+
+                //T4_max
+                if ($dataset['T4_max'] == "NAN") {
+                    $dst4max = 0;
+                } else {
+                    $dst4max = $dataset['T4_max'];
+                }
+
+                //T4_min
+                if ($dataset['T4_min'] == "NAN") {
+                    $dst4min = 0;
+                } else {
+                    $dst4min = $dataset['T4_min'];
+                }
+
+                //T5_avg
+                if ($dataset['T5_avg'] == "NAN") {
+                    $dst5avg = 0;
+                } else {
+                    $dst5avg = $dataset['T5_avg'];
+                }
+
+                //T5_max
+                if ($dataset['T5_max'] == "NAN") {
+                    $dst5max = 0;
+                } else {
+                    $dst5max = $dataset['T5_max'];
+                }
+
+                //T5_min
+                if ($dataset['T5_min'] == "NAN") {
+                    $dst5min = 0;
+                } else {
+                    $dst5min = $dataset['T5_min'];
+                }
+
+                //T6_avg
+                if ($dataset['T6_avg'] == "NAN") {
+                    $dst6avg = 0;
+                } else {
+                    $dst6avg = $dataset['T6_avg'];
+                }
+
+                //T6_max
+                if ($dataset['T6_max'] == "NAN") {
+                    $dst6max = 0;
+                } else {
+                    $dst6max = $dataset['T6_max'];
+                }
+
+                //T6_min
+                if ($dataset['T6_min'] == "NAN") {
+                    $dst6min = 0;
+                } else {
+                    $dst6min = $dataset['T6_min'];
+                }
+
+                //T7_avg
+                if ($dataset['T7_avg'] == "NAN") {
+                    $dst7avg = 0;
+                } else {
+                    $dst7avg = $dataset['T7_avg'];
+                }
+
+                //T7_max
+                if ($dataset['T7_max'] == "NAN") {
+                    $dst7max = 0;
+                } else {
+                    $dst7max = $dataset['T7_max'];
+                }
+
+                //T7_min
+                if ($dataset['T7_min'] == "NAN") {
+                    $dst7min = 0;
+                } else {
+                    $dst7min = $dataset['T7_min'];
+                }
+
+                //T75_avg
+                if ($dataset['T75_avg'] == "NAN") {
+                    $dst75avg = 0;
+                } else {
+                    $dst75avg = $dataset['T75_avg'];
+                }
+
+                //T75_max
+                if ($dataset['T75_max'] == "NAN") {
+                    $dst75max = 0;
+                } else {
+                    $dst75max = $dataset['T75_max'];
+                }
+
+                //T75_min
+                if ($dataset['T75_min'] == "NAN") {
+                    $dst75min = 0;
+                } else {
+                    $dst75min = $dataset['T75_min'];
+                }
+
+                //Armar arrays de datos para graficar
+                array_push($categoryArray, array("label" => $a));
+                array_push($dataseries1, array("value" => $dsta));
+                array_push($dataseries2, array("value" => $dst0avg));
+                array_push($dataseries3, array("value" => $dst0max));
+                array_push($dataseries4, array("value" => $dst0min));
+                array_push($dataseries5, array("value" => $dst1avg));
+                array_push($dataseries6, array("value" => $dst1max));
+                array_push($dataseries7, array("value" => $dst1min));
+                array_push($dataseries8, array("value" => $dst2avg));
+                array_push($dataseries9, array("value" => $dst2max));
+                array_push($dataseries10, array("value" => $dst2min));
+                array_push($dataseries11, array("value" => $dst3avg));
+                array_push($dataseries12, array("value" => $dst3max));
+                array_push($dataseries13, array("value" => $dst3min));
+                array_push($dataseries14, array("value" => $dst4avg));
+                array_push($dataseries15, array("value" => $dst4max));
+                array_push($dataseries16, array("value" => $dst4min));
+                array_push($dataseries17, array("value" => $dst5avg));
+                array_push($dataseries18, array("value" => $dst5max));
+                array_push($dataseries19, array("value" => $dst5min));
+                array_push($dataseries20, array("value" => $dst6avg));
+                array_push($dataseries21, array("value" => $dst6max));
+                array_push($dataseries22, array("value" => $dst6min));
+                array_push($dataseries23, array("value" => $dst7avg));
+                array_push($dataseries24, array("value" => $dst7max));
+                array_push($dataseries25, array("value" => $dst7min));
+                array_push($dataseries26, array("value" => $dst75avg));
+                array_push($dataseries27, array("value" => $dst75max));
+                array_push($dataseries28, array("value" => $dst75min));
             }
         }
-
-        //Validacion NAN
-        //Temp_Amb
-        if ($dataset['Temp_Amb'] == "NAN") {
-            $dsta = 0;
-        } else {
-            $dsta = $dataset['Temp_Amb'];
-        }
-
-        //T0_avg
-        if ($dataset['T0_avg'] == "NAN") {
-            $dst0avg = 0;
-        } else {
-            $dst0avg = $dataset['T0_avg'];
-        }
-
-        //T0_max
-        if ($dataset['T0_max'] == "NAN") {
-            $dst0max = 0;
-        } else {
-            $dst0max = $dataset['T0_max'];
-        }
-
-        //T0_min
-        if ($dataset['T0_min'] == "NAN") {
-            $dst0min = 0;
-        } else {
-            $dst0min = $dataset['T0_min'];
-        }
-
-        //T1_avg
-        if ($dataset['T1_avg'] == "NAN") {
-            $dst1avg = 0;
-        } else {
-            $dst1avg = $dataset['T1_avg'];
-        }
-
-        //T1_max
-        if ($dataset['T1_max'] == "NAN") {
-            $dst1max = 0;
-        } else {
-            $dst1max = $dataset['T1_max'];
-        }
-
-        //T1_min
-        if ($dataset['T1_min'] == "NAN") {
-            $dst1min = 0;
-        } else {
-            $dst1min = $dataset['T1_min'];
-        }
-
-        //T2_avg
-        if ($dataset['T2_avg'] == "NAN") {
-            $dst2avg = 0;
-        } else {
-            $dst2avg = $dataset['T2_avg'];
-        }
-
-        //T2_max
-        if ($dataset['T2_max'] == "NAN") {
-            $dst2max = 0;
-        } else {
-            $dst2max = $dataset['T2_max'];
-        }
-
-        //T2_min
-        if ($dataset['T2_min'] == "NAN") {
-            $dst2min = 0;
-        } else {
-            $dst2min = $dataset['T2_min'];
-        }
-
-        //T3_avg
-        if ($dataset['T3_avg'] == "NAN") {
-            $dst3avg = 0;
-        } else {
-            $dst3avg = $dataset['T3_avg'];
-        }
-
-        //T3_max
-        if ($dataset['T3_max'] == "NAN") {
-            $dst3max = 0;
-        } else {
-            $dst3max = $dataset['T3_max'];
-        }
-
-        //T3_min
-        if ($dataset['T3_min'] == "NAN") {
-            $dst3min = 0;
-        } else {
-            $dst3min = $dataset['T3_min'];
-        }
-
-        //T4_avg
-        if ($dataset['T4_avg'] == "NAN") {
-            $dst4avg = 0;
-        } else {
-            $dst4avg = $dataset['T4_avg'];
-        }
-
-        //T4_max
-        if ($dataset['T4_max'] == "NAN") {
-            $dst4max = 0;
-        } else {
-            $dst4max = $dataset['T4_max'];
-        }
-
-        //T4_min
-        if ($dataset['T4_min'] == "NAN") {
-            $dst4min = 0;
-        } else {
-            $dst4min = $dataset['T4_min'];
-        }
-
-        //T5_avg
-        if ($dataset['T5_avg'] == "NAN") {
-            $dst5avg = 0;
-        } else {
-            $dst5avg = $dataset['T5_avg'];
-        }
-
-        //T5_max
-        if ($dataset['T5_max'] == "NAN") {
-            $dst5max = 0;
-        } else {
-            $dst5max = $dataset['T5_max'];
-        }
-
-        //T5_min
-        if ($dataset['T5_min'] == "NAN") {
-            $dst5min = 0;
-        } else {
-            $dst5min = $dataset['T5_min'];
-        }
-
-        //T6_avg
-        if ($dataset['T6_avg'] == "NAN") {
-            $dst6avg = 0;
-        } else {
-            $dst6avg = $dataset['T6_avg'];
-        }
-
-        //T6_max
-        if ($dataset['T6_max'] == "NAN") {
-            $dst6max = 0;
-        } else {
-            $dst6max = $dataset['T6_max'];
-        }
-
-        //T6_min
-        if ($dataset['T6_min'] == "NAN") {
-            $dst6min = 0;
-        } else {
-            $dst6min = $dataset['T6_min'];
-        }
-
-        //T7_avg
-        if ($dataset['T7_avg'] == "NAN") {
-            $dst7avg = 0;
-        } else {
-            $dst7avg = $dataset['T7_avg'];
-        }
-
-        //T7_max
-        if ($dataset['T7_max'] == "NAN") {
-            $dst7max = 0;
-        } else {
-            $dst7max = $dataset['T7_max'];
-        }
-
-        //T7_min
-        if ($dataset['T7_min'] == "NAN") {
-            $dst7min = 0;
-        } else {
-            $dst7min = $dataset['T7_min'];
-        }
-
-        //T75_avg
-        if ($dataset['T75_avg'] == "NAN") {
-            $dst75avg = 0;
-        } else {
-            $dst75avg = $dataset['T75_avg'];
-        }
-
-        //T75_max
-        if ($dataset['T75_max'] == "NAN") {
-            $dst75max = 0;
-        } else {
-            $dst75max = $dataset['T75_max'];
-        }
-
-        //T75_min
-        if ($dataset['T75_min'] == "NAN") {
-            $dst75min = 0;
-        } else {
-            $dst75min = $dataset['T75_min'];
-        }
-
-
-        //Armar arrays de datos para graficar
-        array_push($categoryArray, array("label" => $a));
-        array_push($dataseries1, array("value" => $dsta));
-        array_push($dataseries2, array("value" => $dst0avg));
-        array_push($dataseries3, array("value" => $dst0max));
-        array_push($dataseries4, array("value" => $dst0min));
-        array_push($dataseries5, array("value" => $dst1avg));
-        array_push($dataseries6, array("value" => $dst1max));
-        array_push($dataseries7, array("value" => $dst1min));
-        array_push($dataseries8, array("value" => $dst2avg));
-        array_push($dataseries9, array("value" => $dst2max));
-        array_push($dataseries10, array("value" => $dst2min));
-        array_push($dataseries11, array("value" => $dst3avg));
-        array_push($dataseries12, array("value" => $dst3max));
-        array_push($dataseries13, array("value" => $dst3min));
-        array_push($dataseries14, array("value" => $dst4avg));
-        array_push($dataseries15, array("value" => $dst4max));
-        array_push($dataseries16, array("value" => $dst4min));
-        array_push($dataseries17, array("value" => $dst5avg));
-        array_push($dataseries18, array("value" => $dst5max));
-        array_push($dataseries19, array("value" => $dst5min));
-        array_push($dataseries20, array("value" => $dst6avg));
-        array_push($dataseries21, array("value" => $dst6max));
-        array_push($dataseries22, array("value" => $dst6min));
-        array_push($dataseries23, array("value" => $dst7avg));
-        array_push($dataseries24, array("value" => $dst7max));
-        array_push($dataseries25, array("value" => $dst7min));
-        array_push($dataseries26, array("value" => $dst75avg));
-        array_push($dataseries27, array("value" => $dst75max));
-        array_push($dataseries28, array("value" => $dst75min));
-    }
-}
-?>           
-    <canvas id="line-chart" width="800" height="450"></canvas>
+        ?>           
+        <canvas id="line-chart" width="800" height="450"></canvas>
 
     </body>
 </html>
@@ -583,8 +578,8 @@ if ($intervalo != "1dia") {
     new Chart(document.getElementById("line-chart"), {
         type: 'line',
         pointRadius: 0,
-	fill: false,
-	lineTension: 0,
+        fill: false,
+        lineTension: 0,
         data: {
             labels: [
 <?php

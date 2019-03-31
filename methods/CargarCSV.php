@@ -1,4 +1,7 @@
 <?php
+
+set_time_limit(300);
+
 require '../classes/ConexionDB.php';
 require '../classes/GeneralOp.php';
 
@@ -24,8 +27,7 @@ if(isset($_POST['sitio'])){
         'text/tab-separated-values',
         'text/tsv',
         'application/x-csv',
-        'application/x-www-form-urlencoded');
-    $arrayDatos = array();
+        'application/x-www-form-urlencoded');    
     
     //Seleccionar la coleccion segun el tipo de archivo seleccionado
     switch ($tipoArchivo){

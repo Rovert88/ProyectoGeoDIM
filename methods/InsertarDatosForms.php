@@ -2,8 +2,6 @@
 
 require_once '../classes/ConexionDB.php';
 
-//$connect = new DBConnection();
-//$collection = $connect->SGConn();
 //Conexion
 $connect = new DBConnection();
 $traerColl = $connect->ConectarBD();

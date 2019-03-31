@@ -53,21 +53,21 @@
         <div class="style-sidebar" id="sidebar">
             <ul>
                 <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos CSV</span> </a>
                     <ul>
-                        <li><a href="SubirArchivos.php">Cargar archivo</a></li>
+                        <li><a href="SubirArchivosCSV.php">Cargar Archivo</a></li>
                     </ul>
                 </li>
                 <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasSondasInspeccion.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombasCalorGeotermico.php">Gráficas de Bombas de Calor Geotérmico</a></li>
                         <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                     </ul>
                 </li>
-                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios Geográficos</span> </a>
                     <ul>
-                        <li><a href="RegistrarSitios.html">Registrar Sitios</a></li>
+                        <li><a href="RegistrarSitiosGeograficos.php">Registrar Sitios</a></li>
                         <li><a href="#">Editar Sitios</a></li>
                     </ul>
                 </li>
@@ -665,7 +665,7 @@
                             success: function (r) {
 
                                 alertify.success("Registro exitoso");
-                                setTimeout("location.href= 'RegistrarSitios.php';", 3500);
+                                setTimeout("location.href= 'RegistrarSitiosGeograficos.php';", 3500);
                                 element2.style.display = 'none';
                                 $("#resultado").html("Registro Exitoso");
                             },
@@ -730,7 +730,7 @@
                             success: function (r) {
 
                                 alertify.success("Registro exitoso");
-                                setTimeout("location.href= 'RegistrarSitios.php';", 3500);
+                                setTimeout("location.href= 'RegistrarSitiosGeograficos.php';", 3500);
                                 element2.style.display = 'none';
                                 $("#resultado").html("Registro Exitoso");
                             },

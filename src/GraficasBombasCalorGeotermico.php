@@ -7,7 +7,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
 <html lang="es">
     <head>
-        <title>Gráficas de Sondas de Inspección</title>
+        <title>Gráficas de Bombas de Calor Geotérmico</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
@@ -41,7 +41,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--Header-part-->
         <div>
-            <h3>ManagementGT</h3>
+            <h3><a href="index.php">ManagementGT</a></h3>
         </div>
         <!--close-Header-part-->
 
@@ -61,22 +61,22 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <div class="style-sidebar" id="sidebar">
             <ul>
                 <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos CSV</span> </a>
                     <ul>
-                        <li><a href="SubirArchivos.php">Cargar archivo</a></li>				  
+                        <li><a href="SubirArchivosCSV.php">Cargar Archivo</a></li>				  
                     </ul>
                 </li>
 
-                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
+                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de Datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasSondasInspeccion.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombasCalorGeotermico.php">Gráficas de Bombas de Calor Geotérmico</a></li>
                         <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
                     </ul>
                 </li>
-                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios Geográficos</span> </a>
                     <ul>
-                        <li><a href="RegistrarSitios.php">Registrar Sitios</a></li>
+                        <li><a href="RegistrarSitiosGeograficos.php">Registrar Sitios</a></li>
                         <li><a href="#">Editar Sitios</a></li>
                     </ul>
                 </li>
@@ -86,7 +86,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
 
         <!--main-container-part-->
         <div class="style-sidebar" id="content">
-            <h1 class="title-style">Gráficas de Sondas de Inspección</h1>
+            <h1 class="title-style">Gráficas de Bombas de Calor Geotérmico</h1>
             <div class="container-fluid">                        
                 <hr>
                 <div class="row-fluid">
@@ -97,27 +97,18 @@ require ("../assets/fusioncharts/fusioncharts.php");
                             </div>
                             <div class="widget-content">
                                 <div>
-
-                                    <div class="control-group">
-                                        <label class="control-label">Seleccionar Tipo de Gráfica</label>
-                                        <div class="controls">
-                                            <select id="tipoGrafica" onchange="selectTipoGrafica()">
-                                                <option value="TT">Temperatura-Tiempo</option>
-                                                <option value="TP">Temperatura-Profundidad</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <!--Select para Nombre de las sondas-->
                                     <div class="control-group">
                                         <label class="control-label">Seleccionar Sitio Geográfico</label>
                                         <div class="controls">
-                                            <?php
-                                            $connect = new DBConnection();
-                                            $traerColl = $connect->ConectarBD();
+                                            <?php                                           
+
+                                            $connection = new DBConnection();
+                                            $traerColl = $connection->ConectarBD();
                                             $collection = $traerColl->SitiosGeograficos;
                                             $result = $collection->find();
-
-                                            // como se llama el atributo ?
+                                            
                                             ?>                 
                                             <select id="sitio" onchange="selectSitioGeografico()">
                                                 <option value=0>Selecciona el Sitio</option>
@@ -129,28 +120,60 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                             </select>
                                         </div>
                                     </div>
-
+                                    
+                                    <!--Mostrar primer y ultimo registro de la coleccion-->
                                     <div class="control-group">
-                                        <label class="control-label">Intervalo</label>
-                                        <div class="controls">
-                                            <label>
-                                                <input type="radio" name="intervalo" value="15min" checked id="rd1" /> 
-                                                15 Minutos</label>
-                                            <label>
-                                                <input type="radio" name="intervalo" value="30min" id="rd2" />
-                                                30 Minutos</label>
-                                            <label>
-                                                <input type="radio" name="intervalo" value="1dia" id="rd3"/>
-                                                1 Día</label>
+                                        <label class="control-label">Primer dato almacenado</label>
+                                        <div class="controls">                                                           
+                                            <?php
+                                                $connect = new DBConnection();
+                                                $traerColl = $connect->ConectarBD();
+                                                $collection = $traerColl->Registros_Bombas_Calor_Geotermico;                                   
+                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1]);
+                                            ?>  
+                                            <label> 
+                                                <?php 
+                                                foreach($result as $doc){
+                                                    $fecha = $doc['TIMESTAMP']->toDateTime();
+                                                    $format = $fecha->format('d-m-Y\ - H:i:s');
+                                                    echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
+                                                }
+                                                ?>
+                                            </label>                                               
+                                        </div>
+                                        
+                                         <label class="control-label">Último dato almacenado</label>
+                                        <div class="controls">                                                           
+                                            <?php                                
+                                                $result = $collection->find([],['sort' => ['_id' => -1],'limit' => 1]);
+                                            ?>  
+                                            <label> 
+                                                <?php 
+                                                foreach($result as $doc){
+                                                    $fecha = $doc['TIMESTAMP']->toDateTime();
+                                                    $format = $fecha->format('d-m-Y\ - H:i:s');
+                                                    echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
+                                                }
+                                                ?>
+                                            </label>                                               
                                         </div>
                                     </div>
-
-                                    <!--                                    <div class="control-group">
-                                                                            <label class="control-label">Intervalo (Minutos)</label>
-                                                                            <div class="controls">
-                                                                                <input type="text" id="intervalo" placeholder="Ej. 15, 30, 45, etc" />
-                                                                            </div>
-                                                                        </div>-->
+                                    
+                                    <div class="control-group">
+                                        <label class="control-label">Intervalo (Minutos)</label>
+                                        <div class="controls">
+<!--                                            <label>
+                                                <input type="radio" name="intervalo" value="2min" checked id="rd1" /> 
+                                                2 Minutos</label>
+                                            <label>
+                                                <input type="radio" name="intervalo" value="4min" id="rd2" />
+                                                4 Minutos</label>
+                                            <label>
+                                                <input type="radio" name="intervalo" value="1dia" id="rd3"/>
+                                                1 Día</label>-->
+                                            <label><input onkeypress="return soloNumeros(event)" type="text" id="intervalo" name="intervalo" placeholder="Ej. 2, 4, 6, 10" /></label>    
+                                        </div>
+                                    </div>
 
                                     <div class="control-group">
                                         <label class="control-label">Periodo</label>
@@ -180,11 +203,11 @@ require ("../assets/fusioncharts/fusioncharts.php");
                     <div class="span12">
                         <div class="widget-box">
                             <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                                <h5>Gráfica Temperatura-Tiempo</h5>
+                                <h5>Gráfica Generada</h5>
                             </div>
                             <div class="widget-content">
 
-                                <div id="chart-container">Grafica aqui</div> <!--Div de la grafica-->
+                                <div id="chart-container"></div> <!--Div de la grafica-->
                             </div>
                         </div>                                                                                    
                     </div>
@@ -243,98 +266,94 @@ require ("../assets/fusioncharts/fusioncharts.php");
         <script type="text/javascript" src="../assets/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
         <script src="../assets/lib/advanced-form-components.js"></script>
         <!--Date-Time picker FIN-->
-
+        
+        <!--Alertify js-->
+        <script src="../assets/alertifyjs/alertify.js"></script>
+        
         <script type="text/javascript">
-                                            // This function is called from the pop-up menus to transfer to
-                                            // a different page. Ignore if the value returned is a null string:
-                                            function goPage(newURL) {
+	  // This function is called from the pop-up menus to transfer to
+	  // a different page. Ignore if the value returned is a null string:
+	  function goPage (newURL) {
 
-                                                // if url is empty, skip the menu dividers and reset the menu selection to default
-                                                if (newURL != "") {
+	  // if url is empty, skip the menu dividers and reset the menu selection to default
+		  if (newURL != "") {
 
-                                                    // if url is "-", it is this page -- reset the menu:
-                                                    if (newURL == "-") {
-                                                        resetMenu();
-                                                    }
-                                                    // else, send page to designated URL
-                                                    else {
-                                                        document.location.href = newURL;
-                                                    }
-                                                }
-                                            }
+		  // if url is "-", it is this page -- reset the menu:
+		  if (newURL == "-" ) {
+			  resetMenu();
+			  }
+			  // else, send page to designated URL
+		  else {
+			document.location.href = newURL;
+			  }
+		  }
+	  }
 
-                                            // resets the menu selection upon entry to this page:
-                                            function resetMenu() {
-                                                document.gomenu.selector.selectedIndex = 2;
-                                            }
-//Select
-                                            var tip_graf;
-
-                                            function selectTipoGrafica() {
-                                                tip_graf = document.getElementById("tipoGrafica").value;
-                                                if (tip_graf === "TP") {
-
-                                                    document.getElementById("rd1").disabled = true;
-                                                    document.getElementById("rd2").disabled = true;
-                                                    document.getElementById("rd3").checked = true;
-                                                } else {
-
-                                                    document.getElementById("rd1").disabled = false;
-                                                    document.getElementById("rd2").disabled = false;
-                                                }
-
-
-                                            }
-
-                                            var idSitio = 0;
-                                            function selectSitioGeografico() {
-                                                idSitio = document.getElementById("sitio").value;
-                                            }
-                                            //AJAX grafica
-                                            function graficaAJAX() {
-                                                if (idSitio === 0) {
-                                                    alert("Seleccione un sitio porfavor");
-                                                    // Recuerdas como se usa?
-                                                } else {
-                                                    var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
-                                                    //Obtener Datos del Formulario
-                                                    f_ini = document.getElementById('inicio').value;
-                                                    f_fin = document.getElementById('fin').value;
-                                                    tip_graf = document.getElementById("tipoGrafica").value;
-                                                    intervalo = document.getElementsByName("intervalo");
-
-
-                                                    for (x = 0; x < intervalo.length; x++) {
-                                                        if ($(intervalo[x]).is(':checked')) {
-                                                            valor_intervalo = intervalo[x].value;
-                                                        }
-                                                    }
-
-
-                                                    if (tip_graf === "TT") {
-                                                        url = "charts.php";
-                                                    } else {
-                                                        url = "TempProf.php";
-                                                    }
-
-                                                    $.ajax({
-                                                        async: true,
-                                                        cache: false,
-                                                        dataType: "html",
-                                                        type: 'POST',
-                                                        url: url,
-                                                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
-                                                        success: function (response) {
-                                                            $("#chart-container").html(response);
-                                                        },
-                                                        beforeSend: function () {
-                                                            $("#chart-container").html("Procesando...");
-                                                        },
-                                                        error: function (objXMLHttpRequest) {}
-                                                    });
-                                                }
-                                            }
-
+	// resets the menu selection upon entry to this page:
+	function resetMenu() {
+	   document.gomenu.selector.selectedIndex = 2;
+	}                                
+	</script>
+               
+        <script type="text/javascript">
+            //Select Sitio Geografico
+            var idSitio = 0;
+                        
+            function selectSitioGeografico(){
+                idSitio = document.getElementById("sitio").value;
+            }
+            
+            //AJAX grafica
+            function graficaAJAX(){
+                var f_ini, f_fin, inter = 0;
+                f_ini = document.getElementById('inicio').value;
+                f_fin = document.getElementById('fin').value;
+                inter = document.getElementById("intervalo").value;
+                
+                //Validar sitio seleccionado
+                if(idSitio === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Seleccione un sitio porfavor');
+                }                          
+                
+                //Validar intervalo vacio o menor a 2
+                if (inter.length === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Seleccione un intervalo porfavor');
+                }else if(inter < 2){
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Ingrese un número mayor o igual que 2');
+                }                                
+                
+                //Validar fecha inicio o fin vacias
+                if(f_ini.length === 0 || f_fin.length === 0){                    
+                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                        'Llene el campo de fecha de inicio o fecha final');
+                }
+               
+                else{
+                    
+                    //Obtener url del script
+                    var url;                                       
+                    url = "genGrafBCG.php";
+                    
+                    $.ajax({
+                        async: true,
+                        cache: false,
+                        dataType: "html",
+                        type: 'POST',
+                        url: url,
+                        data: "inter="+inter+"&ini="+f_ini+"&fin="+f_fin+"&sitio="+idSitio,
+                        success: function(response){
+                            $("#chart-container").html(response);
+                        },
+                        beforeSend: function(){
+                            $("#chart-contanier").html("Procesando...");
+                        },
+                        error: function(objXMLHttpResponse){}
+                    });
+                }
+            }            
         </script>
     </body>
 </html>

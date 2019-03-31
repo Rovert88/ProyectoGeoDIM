@@ -40,7 +40,7 @@ require '../classes/ConexionDB.php';
 
         <!--Header-part-->
         <div>
-            <h3>ManagementGT</h3>
+            <h3><a href="index.php">ManagementGT</a></h3>
         </div>
         <!--close-Header-part-->
 
@@ -60,22 +60,22 @@ require '../classes/ConexionDB.php';
         <div class="style-sidebar" id="sidebar">
             <ul>
                 <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos CSV</span> </a>
                     <ul>
-                        <li><a href="SubirArchivos.php">Cargar archivo</a></li>				  
+                        <li><a href="SubirArchivosCSV.php">Cargar Archivo</a></li>				  
                     </ul>
                 </li>
 
-                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de datos</span></a>
+                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de Datos</span></a>
                     <ul>
-                        <li><a href="GraficasSondas.php">Gráficas de Sondas de Inspección</a></li>
-                        <li><a href="GraficasBombas.php">Gráficas de Bombas de Calor Geotérmico</a></li>
+                        <li><a href="GraficasSondasInspeccion.php">Gráficas de Sondas de Inspección</a></li>
+                        <li><a href="GraficasBombasCalorGeotermico.php">Gráficas de Bombas de Calor Geotérmico</a></li>
                         <li><a href="GraficasBateriaCR800.php">Gráficas de Batería de CR800</a></li>
                     </ul>
                 </li>
-                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios</span> </a>
+                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios Geográficos</span> </a>
                     <ul>
-                        <li><a href="RegistrarSitios.php">Registrar Sitios</a></li>
+                        <li><a href="RegistrarSitiosGeograficos.php">Registrar Sitios</a></li>
                         <li><a href="#">Editar Sitios</a></li>
                     </ul>
                 </li>
@@ -120,6 +120,44 @@ require '../classes/ConexionDB.php';
                                         </div>
                                     </div>
                                     
+                                    <!--Mostrar primer y ultimo registro de la coleccion-->
+                                    <div class="control-group">
+                                        <label class="control-label">Primer dato almacenado</label>
+                                        <div class="controls">                                                           
+                                            <?php
+                                                $connect = new DBConnection();
+                                                $traerColl = $connect->ConectarBD();
+                                                $collection = $traerColl->Registros_Bateria_CR800;                                   
+                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1]);
+                                            ?>  
+                                            <label> 
+                                                <?php 
+                                                foreach($result as $doc){
+                                                    $fecha = $doc['TIMESTAMP']->toDateTime();
+                                                    $format = $fecha->format('d-m-Y\ - H:i:s');
+                                                    echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
+                                                }
+                                                ?>
+                                            </label>                                               
+                                        </div>
+                                        
+                                         <label class="control-label">Último dato almacenado</label>
+                                        <div class="controls">                                                           
+                                            <?php                                
+                                                $result = $collection->find([],['sort' => ['_id' => -1],'limit' => 1]);
+                                            ?>  
+                                            <label> 
+                                                <?php 
+                                                foreach($result as $doc){
+                                                    $fecha = $doc['TIMESTAMP']->toDateTime();
+                                                    $format = $fecha->format('d-m-Y\ - H:i:s');
+                                                    echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
+                                                }
+                                                ?>
+                                            </label>                                               
+                                        </div>
+                                    </div>
+                                    
                                     <div class="control-group">
                                         <label class="control-label">Intervalo</label>
                                         <div class="controls">
@@ -160,11 +198,11 @@ require '../classes/ConexionDB.php';
                     <div class="span12">
                         <div class="widget-box">
                             <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
-                                <h5>Gráfica Voltaje-Tiempo</h5>
+                                <h5>Gráfica Generada</h5>
                             </div>
                             <div class="widget-content">
 
-                                <div id="chart-container">Grafica aqui</div> <!--Div de la grafica-->
+                                <div id="chart-container"></div> <!--Div de la grafica-->
                             </div>
                         </div>                                                                                    
                     </div>

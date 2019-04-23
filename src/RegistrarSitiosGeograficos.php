@@ -742,9 +742,6 @@
                                 alertify.error("Registro fallido");
                             }
                         });
-
-
-
                     }
                 }
             }

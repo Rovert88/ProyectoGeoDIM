@@ -135,7 +135,7 @@ require '../classes/ConexionDB.php';
                                                 $connect = new DBConnection();
                                                 $traerColl = $connect->ConectarBD();
                                                 $collection = $traerColl->Registros_Sondas_Inspeccion;                                   
-                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1]);
+                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1, 'skip' => 1]);
                                             ?>  
                                             <label> 
                                                 <?php 

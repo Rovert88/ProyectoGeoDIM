@@ -129,7 +129,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                                 $connect = new DBConnection();
                                                 $traerColl = $connect->ConectarBD();
                                                 $collection = $traerColl->Registros_Bombas_Calor_Geotermico;                                   
-                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1]);
+                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1, 'skip' => 1]);
                                             ?>  
                                             <label> 
                                                 <?php 

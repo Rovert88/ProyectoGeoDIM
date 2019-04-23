@@ -1,8 +1,10 @@
 <?php
 
+require 'ListLigDatos.php';
+
 class GeneralOp {
 
-    private $datos = array();       
+    private $datos = array();           
     
     public function ordenaFechai($fecha) {
 
@@ -34,7 +36,7 @@ class GeneralOp {
     //Metodos de consulta para Sondas de Inspeccion
     
     //Consulta cada 30 min
-    public function consulta30min($idsitio, $f_ini, $f_fin, $operaciones) {
+    public function consulta30min($idsitio, $f_ini, $f_fin, $operaciones) {                      
         $fecha = array();        
         $rango = array("\$and"=>array(array( "TIMESTAMP" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NOMBRE_SITIO' => $idsitio)));
         $result = $operaciones->findAll($rango);
@@ -87,130 +89,143 @@ class GeneralOp {
      *      */
     //Consulta cada dia
     public function consulta1dia($idsitio, $f_ini, $f_fin, $operaciones) {
-
+               
         $rango = array("\$and"=>array(array( "TIMESTAMP" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NOMBRE_SITIO' => $idsitio)));
         $result = $operaciones->findAll($rango); 
-        $resultado= array();
-        $prom = 0;
-        $cont = 0;
-        $T0_10cm_Avg=0;
-        $T0_10cm_Max=0;
-        $T0_10cm_Min=0;
-        $T1_1m_Avg=0;
-        $T1_1m_Max=0;
-        $T1_1m_Min=0;
-        $T2_2m_Avg=0;
-        $T2_2m_Max=0;
-        $T2_2m_Min=0;
-        $T3_3m_Avg=0;
-        $T3_3m_Max=0;
-        $T3_3m_Min=0;
-        $T4_4m_Avg=0;
-        $T4_4m_Max=0;
-        $T4_4m_Min=0;
-        $T5_5m_Avg=0;
-        $T5_5m_Max=0;
-        $T5_5m_Min=0;
-        $T6_6m_Avg=0;
-        $T6_6m_Max=0;
-        $T6_6m_Min=0;
-        $T7_7m_Avg=0;
-        $T7_7m_Max=0;
-        $T7_7m_Min=0;
-        $T7_5_7_5m_Avg=0;
-        $T7_5_7_5m_Max=0;
-        $T7_5_7_5m_Min=0;
-        foreach ($result as $dato) {            
-            $prom += $dato["PTemp_C_Avg"];
-            $T0_10cm_Avg+= $dato["T0_10cm_Avg"];
-            $T0_10cm_Max+= $dato["T0_10cm_Max"];
-            $T0_10cm_Min+=$dato{"T0_10cm_Min"};
-            $T1_1m_Avg+=$dato["T1_1m_Avg"];
-            $T1_1m_Max+=$dato["T1_1m_Max"];
-            $T1_1m_Min+=$dato["T1_1m_Min"];
-            $T2_2m_Avg+=$dato["T2_2m_Avg"];
-            $T2_2m_Max+=$dato["T2_2m_Max"];
-            $T2_2m_Min+=$dato["T2_2m_Min"];
-            $T3_3m_Avg+=$dato["T3_3m_Avg"];
-            $T3_3m_Max+=$dato["T3_3m_Max"];
-            $T3_3m_Min+=$dato["T3_3m_Min"];
-            $T4_4m_Avg+=$dato["T4_4m_Avg"];
-            $T4_4m_Max+=$dato["T4_4m_Max"];
-            $T4_4m_Min+=$dato["T4_4m_Min"];
-            $T5_5m_Avg+=$dato["T5_5m_Avg"];
-            $T5_5m_Max+=$dato["T5_5m_Max"];
-            $T5_5m_Min+=$dato["T5_5m_Min"];
-            $T6_6m_Avg+=$dato["T6_6m_Avg"];
-            $T6_6m_Max+=$dato["T6_6m_Max"];
-            $T6_6m_Min+=$dato["T6_6m_Min"];
-            $T7_7m_Avg+=$dato["T7_7m_Avg"];
-            $T7_7m_Max+=$dato["T7_7m_Max"];
-            $T7_7m_Min+=$dato["T7_7m_Min"];
-            $T7_5_7_5m_Avg+=$dato["T7_5_7_5m_Avg"];
-            $T7_5_7_5m_Max+=$dato["T7_5_7_5m_Max"];
-            $T7_5_7_5m_Min+=$dato["T7_5_7_5m_Min"];
-            $cont += 1;                        
+        
+        $resultado = array();
+        foreach($result as $datos){
+            $resultArr = iterator_to_array($datos);
+            array_push($resultado,$resultArr);
         }
-        $prom = $prom/$cont;
-        $T0_10cm_Avg = $T0_10cm_Avg/$cont;
-        $T0_10cm_Max = $T0_10cm_Max/$cont;
-        $T0_10cm_Min = $T0_10cm_Min /$cont;
-        $T1_1m_Avg = $T1_1m_Avg /$cont;
-        $T1_1m_Max = $T1_1m_Max /$cont;
-        $T1_1m_Min = $T1_1m_Min /$cont;
-        $T2_2m_Avg = $T2_2m_Avg /$cont;
-        $T2_2m_Max = $T2_2m_Max /$cont;
-        $T2_2m_Min = $T2_2m_Min /$cont;
-        $T3_3m_Avg = $T3_3m_Avg /$cont;
-        $T3_3m_Max = $T3_3m_Max /$cont;
-        $T3_3m_Min = $T3_3m_Min /$cont;
-        $T4_4m_Avg = $T4_4m_Avg /$cont;
-        $T4_4m_Max = $T4_4m_Max /$cont;
-        $T4_4m_Min = $T4_4m_Min /$cont;
-        $T5_5m_Avg = $T5_5m_Avg /$cont;
-        $T5_5m_Max = $T5_5m_Max /$cont;
-        $T5_5m_Min = $T5_5m_Min /$cont;
-        $T6_6m_Avg = $T6_6m_Avg /$cont;
-        $T6_6m_Max = $T6_6m_Max /$cont;
-        $T6_6m_Min = $T6_6m_Min /$cont;
-        $T7_7m_Avg = $T7_7m_Avg /$cont;
-        $T7_7m_Max = $T7_7m_Max /$cont;
-        $T7_7m_Min = $T7_7m_Min /$cont;
-        $T7_5_7_5m_Avg = $T7_5_7_5m_Avg /$cont;
-        $T7_5_7_5m_Max = $T7_5_7_5m_Max /$cont;
-        $T7_5_7_5m_Min = $T7_5_7_5m_Min /$cont;
-      array_push($resultado,[
-                    "PTemp_C_Avg"=>$prom,
-                    "T0_10cm_Avg"=>$T0_10cm_Avg,
-                    "T0_10cm_Max"=>$T0_10cm_Max,
-                    "T0_10cm_Min"=>$T0_10cm_Min,
-                    "T1_1m_Avg"=> $T1_1m_Avg,
-                    "T1_1m_Max"=>$T1_1m_Max,
-                    "T1_1m_Min"=>$T1_1m_Min,
-                    "T2_2m_Avg"=>$T2_2m_Avg,
-                    "T2_2m_Max"=>$T2_2m_Max,
-                    "T2_2m_Min"=> $T2_2m_Min,
-                    "T3_3m_Avg"=>$T3_3m_Avg,
-                    "T3_3m_Max"=>$T3_3m_Max,
-                    "T3_3m_Min"=>$T3_3m_Min,
-                    "T4_4m_Avg"=>$T4_4m_Avg,
-                    "T4_4m_Max"=>$T4_4m_Max,
-                    "T4_4m_Min"=>$T4_4m_Min,
-                    "T5_5m_Avg"=>$T5_5m_Avg,
-                    "T5_5m_Max"=>$T5_5m_Max,
-                    "T5_5m_Min"=>$T5_5m_Min,
-                    "T6_6m_Avg"=>$T6_6m_Avg,
-                    "T6_6m_Max"=>$T6_6m_Max,
-                    "T6_6m_Min"=>$T6_6m_Min,
-                    "T7_7m_Avg"=>$T7_7m_Avg,
-                    "T7_7m_Max"=>$T7_7m_Max,
-                    "T7_7m_Min"=>$T7_7m_Min,
-                    "T7_5_7_5m_Avg"=>$T7_5_7_5m_Avg,
-                    "T7_5_7_5m_Max"=>$T7_5_7_5m_Max,
-                    "T7_5_7_5m_Min"=>$T7_5_7_5m_Min,                    
-                    ]);
-      
         return $resultado;
+//        $resultado= array();
+//        $prom = 0;
+//        $cont = 0;
+//        $T0_10cm_Avg=0;
+//        $T0_10cm_Max=0;
+//        $T0_10cm_Min=0;
+//        $T1_1m_Avg=0;
+//        $T1_1m_Max=0;
+//        $T1_1m_Min=0;
+//        $T2_2m_Avg=0;
+//        $T2_2m_Max=0;
+//        $T2_2m_Min=0;
+//        $T3_3m_Avg=0;
+//        $T3_3m_Max=0;
+//        $T3_3m_Min=0;
+//        $T4_4m_Avg=0;
+//        $T4_4m_Max=0;
+//        $T4_4m_Min=0;
+//        $T5_5m_Avg=0;
+//        $T5_5m_Max=0;
+//        $T5_5m_Min=0;
+//        $T6_6m_Avg=0;
+//        $T6_6m_Max=0;
+//        $T6_6m_Min=0;
+//        $T7_7m_Avg=0;
+//        $T7_7m_Max=0;
+//        $T7_7m_Min=0;
+//        $T7_5_7_5m_Avg=0;
+//        $T7_5_7_5m_Max=0;
+//        $T7_5_7_5m_Min=0;
+        
+//        foreach ($result as $dato) {  
+//            
+//            
+//                    
+//            $prom += $dato["PTemp_C_Avg"];
+//            $T0_10cm_Avg+= $dato["T0_10cm_Avg"];
+//            $T0_10cm_Max+= $dato["T0_10cm_Max"];
+//            $T0_10cm_Min+=$dato{"T0_10cm_Min"};
+//            $T1_1m_Avg+=$dato["T1_1m_Avg"];
+//            $T1_1m_Max+=$dato["T1_1m_Max"];
+//            $T1_1m_Min+=$dato["T1_1m_Min"];
+//            $T2_2m_Avg+=$dato["T2_2m_Avg"];
+//            $T2_2m_Max+=$dato["T2_2m_Max"];
+//            $T2_2m_Min+=$dato["T2_2m_Min"];
+//            $T3_3m_Avg+=$dato["T3_3m_Avg"];
+//            $T3_3m_Max+=$dato["T3_3m_Max"];
+//            $T3_3m_Min+=$dato["T3_3m_Min"];
+//            $T4_4m_Avg+=$dato["T4_4m_Avg"];
+//            $T4_4m_Max+=$dato["T4_4m_Max"];
+//            $T4_4m_Min+=$dato["T4_4m_Min"];
+//            $T5_5m_Avg+=$dato["T5_5m_Avg"];
+//            $T5_5m_Max+=$dato["T5_5m_Max"];
+//            $T5_5m_Min+=$dato["T5_5m_Min"];
+//            $T6_6m_Avg+=$dato["T6_6m_Avg"];
+//            $T6_6m_Max+=$dato["T6_6m_Max"];
+//            $T6_6m_Min+=$dato["T6_6m_Min"];
+//            $T7_7m_Avg+=$dato["T7_7m_Avg"];
+//            $T7_7m_Max+=$dato["T7_7m_Max"];
+//            $T7_7m_Min+=$dato["T7_7m_Min"];
+//            $T7_5_7_5m_Avg+=$dato["T7_5_7_5m_Avg"];
+//            $T7_5_7_5m_Max+=$dato["T7_5_7_5m_Max"];
+//            $T7_5_7_5m_Min+=$dato["T7_5_7_5m_Min"];
+//            $cont += 1;                        
+//        }
+//        $prom = $prom/$cont;
+//        $T0_10cm_Avg = $T0_10cm_Avg/$cont;
+//        $T0_10cm_Max = $T0_10cm_Max/$cont;
+//        $T0_10cm_Min = $T0_10cm_Min /$cont;
+//        $T1_1m_Avg = $T1_1m_Avg /$cont;
+//        $T1_1m_Max = $T1_1m_Max /$cont;
+//        $T1_1m_Min = $T1_1m_Min /$cont;
+//        $T2_2m_Avg = $T2_2m_Avg /$cont;
+//        $T2_2m_Max = $T2_2m_Max /$cont;
+//        $T2_2m_Min = $T2_2m_Min /$cont;
+//        $T3_3m_Avg = $T3_3m_Avg /$cont;
+//        $T3_3m_Max = $T3_3m_Max /$cont;
+//        $T3_3m_Min = $T3_3m_Min /$cont;
+//        $T4_4m_Avg = $T4_4m_Avg /$cont;
+//        $T4_4m_Max = $T4_4m_Max /$cont;
+//        $T4_4m_Min = $T4_4m_Min /$cont;
+//        $T5_5m_Avg = $T5_5m_Avg /$cont;
+//        $T5_5m_Max = $T5_5m_Max /$cont;
+//        $T5_5m_Min = $T5_5m_Min /$cont;
+//        $T6_6m_Avg = $T6_6m_Avg /$cont;
+//        $T6_6m_Max = $T6_6m_Max /$cont;
+//        $T6_6m_Min = $T6_6m_Min /$cont;
+//        $T7_7m_Avg = $T7_7m_Avg /$cont;
+//        $T7_7m_Max = $T7_7m_Max /$cont;
+//        $T7_7m_Min = $T7_7m_Min /$cont;
+//        $T7_5_7_5m_Avg = $T7_5_7_5m_Avg /$cont;
+//        $T7_5_7_5m_Max = $T7_5_7_5m_Max /$cont;
+//        $T7_5_7_5m_Min = $T7_5_7_5m_Min /$cont;                  
+//                
+//        array_push($resultado,[
+//                    "PTemp_C_Avg"=>$prom,
+//                    "T0_10cm_Avg"=>$T0_10cm_Avg,
+//                    "T0_10cm_Max"=>$T0_10cm_Max,
+//                    "T0_10cm_Min"=>$T0_10cm_Min,
+//                    "T1_1m_Avg"=> $T1_1m_Avg,
+//                    "T1_1m_Max"=>$T1_1m_Max,
+//                    "T1_1m_Min"=>$T1_1m_Min,
+//                    "T2_2m_Avg"=>$T2_2m_Avg,
+//                    "T2_2m_Max"=>$T2_2m_Max,
+//                    "T2_2m_Min"=> $T2_2m_Min,
+//                    "T3_3m_Avg"=>$T3_3m_Avg,
+//                    "T3_3m_Max"=>$T3_3m_Max,
+//                    "T3_3m_Min"=>$T3_3m_Min,
+//                    "T4_4m_Avg"=>$T4_4m_Avg,
+//                    "T4_4m_Max"=>$T4_4m_Max,
+//                    "T4_4m_Min"=>$T4_4m_Min,
+//                    "T5_5m_Avg"=>$T5_5m_Avg,
+//                    "T5_5m_Max"=>$T5_5m_Max,
+//                    "T5_5m_Min"=>$T5_5m_Min,
+//                    "T6_6m_Avg"=>$T6_6m_Avg,
+//                    "T6_6m_Max"=>$T6_6m_Max,
+//                    "T6_6m_Min"=>$T6_6m_Min,
+//                    "T7_7m_Avg"=>$T7_7m_Avg,
+//                    "T7_7m_Max"=>$T7_7m_Max,
+//                    "T7_7m_Min"=>$T7_7m_Min,
+//                    "T7_5_7_5m_Avg"=>$T7_5_7_5m_Avg,
+//                    "T7_5_7_5m_Max"=>$T7_5_7_5m_Max,
+//                    "T7_5_7_5m_Min"=>$T7_5_7_5m_Min,                    
+//                    ]);
+        
+        
+        //return $resultado;                
     }        
     
     
@@ -341,5 +356,18 @@ class GeneralOp {
         
         //Se regresa el array con los datos
         return $resultado;
+    }
+    
+    
+    //Metodo obtener columnas de datos
+    public function obtenerColumnas($id, $operaciones){
+        $parametro = "NS".$id; //Definicion de parametro de busqueda
+        $consulta = array('NOMBRE_SITIO' => $parametro); //Definicion de filtro de busqueda en la clave NOMBRE_SITIO
+        $result = $operaciones->findAll($consulta); //Consulta a la BD
+        //$encabezados = iterator_to_array($result); //Creacion de array de encabezado con el resultado de la consulta
+        foreach($result as $encabezados){
+            $enc = get_object_vars($encabezados);
+        }        
+        return $enc; //Retorno del array
     }
 }

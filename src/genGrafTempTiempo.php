@@ -18,38 +18,40 @@ $intervalo = $_POST['inter'];
 $f_ini2 = $f_ini = $_POST['ini'];
 $f_fin2 = $f_fin = $_POST['fin'];
 
+//Consultar encabezados
+$enc = $generalOp->obtenerColumnas($id, $operaciones); //Obtener los encabezados de la BD
 //$cont = 0;
 $datos = array();
 //$arrData = array();
 $categoryArray = array();
-$dataseries1 = array();
-$dataseries2 = array();
-$dataseries3 = array();
-$dataseries4 = array();
-$dataseries5 = array();
-$dataseries6 = array();
-$dataseries7 = array();
-$dataseries8 = array();
-$dataseries9 = array();
-$dataseries10 = array();
-$dataseries11 = array();
-$dataseries12 = array();
-$dataseries13 = array();
-$dataseries14 = array();
-$dataseries15 = array();
-$dataseries16 = array();
-$dataseries17 = array();
-$dataseries18 = array();
-$dataseries19 = array();
-$dataseries20 = array();
-$dataseries21 = array();
-$dataseries22 = array();
-$dataseries23 = array();
-$dataseries24 = array();
-$dataseries25 = array();
-$dataseries26 = array();
-$dataseries27 = array();
-$dataseries28 = array();
+//$dataseries1 = array();
+//$dataseries2 = array();
+//$dataseries3 = array();
+//$dataseries4 = array();
+//$dataseries5 = array();
+//$dataseries6 = array();
+//$dataseries7 = array();
+//$dataseries8 = array();
+//$dataseries9 = array();
+//$dataseries10 = array();
+//$dataseries11 = array();
+//$dataseries12 = array();
+//$dataseries13 = array();
+//$dataseries14 = array();
+//$dataseries15 = array();
+//$dataseries16 = array();
+//$dataseries17 = array();
+//$dataseries18 = array();
+//$dataseries19 = array();
+//$dataseries20 = array();
+//$dataseries21 = array();
+//$dataseries22 = array();
+//$dataseries23 = array();
+//$dataseries24 = array();
+//$dataseries25 = array();
+//$dataseries26 = array();
+//$dataseries27 = array();
+//$dataseries28 = array();
 
 $f_ini = $generalOp->ordenaFechai($f_ini);
 $f_fin = $generalOp->ordenaFechaf($f_fin);
@@ -73,13 +75,67 @@ if ($intervalo == '15min') {
 
         for ($i = $f_ini2; $i <= $fecha; $i = date("m/d/Y", strtotime($i . "+ 1 days"))) {
             $f = $i;
-            $f_ini = $generalOp->ordenaFechai($f);
-            $f_fin = $generalOp->ordenaFechaf($f);
+            $f_ini = $generalOp->ordenaFechai($f_ini2);
+            $f_fin = $generalOp->ordenaFechaf($f_fin2);
             array_push($categoryArray, ["label" => $f_ini]);
             $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones);
-            array_push($datos, $a);
+            //array_push($datos, $a);
         }
 
+//        $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones); //Obtener los datos de la BD
+
+        $arrEncabezados = array(); //Array para contener encabezados (Claves de la matriz)
+        $arrDatos = array(); //Array para contener datos (Valores de la matriz)
+        $matrizDatos = array(); //Array auxiliar para guardar la combinacion del arrEncabezados con ArrDatos
+        $matrizFinal = array(); //Array con todos los arreglos generados y añadidos a matrizDatos
+        //Crear matriz asociativa
+        //Iteracion para obtener los valores de los encabezados de la BD
+        foreach ($enc as $clavesEnc => $valoresEnc) {
+            if (is_array($valoresEnc)) {
+                foreach ($valoresEnc as $claveEncInt => $valorEncInt) {
+                    array_push($arrEncabezados, $valorEncInt); //Insertar en arrEncabezados los valores encontrados en la consulta de los encabezados en la BD
+                }
+                echo "\n";
+            } else {
+                array_push($arrEncabezados, $valoresEnc); //Insertar en arrEncabezados los valores encontrados en la consulta de los encabezados en la BD
+            }
+        }
+
+        //Iteracion obtener los datos de la BD
+        foreach ($a as $datosT) {
+            array_push($arrDatos, $datosT); //Insertar en arrDatos los valores encontrados en la consulta de los datos en la BD
+        }
+
+        //Iteracion para asociar los arreglos arrEncabezados con arrDatos
+        for ($i = 0; $i < sizeof($arrDatos); $i++) {
+            $matrizDatos = array_combine($arrEncabezados, $arrDatos[$i]); //Insertar en matrizDatos 
+            array_push($matrizFinal, $matrizDatos);
+        }
+
+        //Obtiene los valores de cada columna de la matrizFinal
+        $vGraf = array();
+        foreach ($arrEncabezados as $columnas) {
+            $valoresGraf = array(array_column($matrizFinal, $columnas));
+            array_push($vGraf, $valoresGraf);
+        }
+
+        //print_r($vGraf); //Imprime los valores de cada columna de la matrizFinal
+        //print_r($arrEncabezados);
+        //echo json_encode($arrEncabezados);
+        //        echo "<br>"."<br>";
+//        print_r($vGraf); //Imprime los valores de la matriz final
+        //        echo "<br>"."<br>";
+        //        echo count($vGraf);
+
+        $arrValores = array();
+        foreach ($vGraf as $key => $value){
+            foreach ($value as $k => $v){
+                array_push($arrValores, $v);
+            }
+        }
+         
+        
+//-------------------------------------Limite------------------------------------//
         for ($long = 0; $long <= sizeof($datos) - 1; $long++) {
             for ($lo = 0; $lo <= sizeof($datos[$long]) - 1; $lo++) {
 
@@ -570,463 +626,130 @@ if ($intervalo == '15min') {
         <canvas id="line-chart" width="800" height="450"></canvas>
 
     </body>
-</html>
 
 
-<script>
-    new Chart(document.getElementById("line-chart"), {
-        type: 'line',
-        pointRadius: 0,
-        fill: false,
-        lineTension: 0,
-        data: {
-            labels: [
-<?php
-$p = "";
-foreach ($categoryArray as $d) {
-    echo "'" . $d['label'] . "',";
-}
-?>
-            ],
-            datasets: [{
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries1 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "PTemp_C_Avg",
-                    borderColor: "#000000",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries2 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T0_10cm_Avg",
-                    borderColor: "#C40000",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries3 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T0_10cm_Max",
-                    borderColor: "#FF0000",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries4 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T0_10cm_Min",
-                    borderColor: "#FF8585",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries5 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T1_1m_Avg",
-                    borderColor: "#A200FF",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries6 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T1_1m_Max",
-                    borderColor: "#8800D6",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                }, {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries7 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T1_1m_Min",
-                    borderColor: "#D48AFF",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries8 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T2_2m_Avg",
-                    borderColor: "#2B00FF",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries9 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T2_2m_Max",
-                    borderColor: "#1E00B5",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries10 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T2_2m_Min",
-                    borderColor: "#6F52FF",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries11 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T3_3m_Avg",
-                    borderColor: "#008504",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries12 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T3_3m_Max",
-                    borderColor: "#698A6A",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries13 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T3_3m_Min",
-                    borderColor: "#DEB500",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries14 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T4_4m_Avg",
-                    borderColor: "#DEC143",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries15 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T4_4m_Max",
-                    borderColor: "#FFE46B",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries16 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T4_4m_Min",
-                    borderColor: "#735600",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries17 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T5_5m_Avg",
-                    borderColor: "#75632A",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries18 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T5_5m_Max",
-                    borderColor: "#B5983F",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries19 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T5_5m_Min",
-                    borderColor: "#0065B8",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries20 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T6_6m_Avg",
-                    borderColor: "#4181B5",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries21 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T6_6m_Max",
-                    borderColor: "#78A6CC",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries22 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T6_6m_Min",
-                    borderColor: "#DE7600",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries23 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_7m_Avg",
-                    borderColor: "#C9700A",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries24 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_7m_Max",
-                    borderColor: "#EDAA5C",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries25 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_7m_Min",
-                    borderColor: "#427500",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries26 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_5_7_5m_Avg",
-                    borderColor: "#4F7321",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries27 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_5_7_5m_Max",
-                    borderColor: "#789157",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                },
-                {
-                    data: [
-<?php
-$t = "";
-foreach ($dataseries28 as $d) {
-    echo $d['value'] . ",";
-}
-?>
-                    ],
-                    label: "T7_5_7_5m_Min",
-                    borderColor: "#8e5ea2",
-                    pointRadius: 0,
-                    fill: false,
-                    lineTension: 0,
-                }
-            ]
-        },
-        options: {
-            scales: {
-                xAxes: [{display: true,
-                        scaleLabel: {display: true,
-                            labelString: "Periodo de muestra"
-                        }
-                    }],
-                yAxes: [{display: true,
-                        scaleLabel: {display: true,
-                            labelString: "Temperatura °C"
-                        }
-                    }]
-            },
-            title: {
-                display: true,
-                text: 'Comportamiento de temperaturas de la Sonda de Inspeccion'
 
-            }
+    <script type="text/javascript">
+        
+    //------Generar colores aleatorios------
+    function numAleatorio(vMin, vMax) {
+        posibilidades = vMax - vMin;
+        ran = Math.random() * posibilidades;
+        ran = Math.floor(ran);
+        return parseInt(vMin) + ran;
+    }
+
+    function colorAleatorio() {
+        hexadecimal = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+        cadenaColor = "#";
+        for (i = 0; i < 6; i++) {
+            colorArray = numAleatorio(0, hexadecimal.length);
+            cadenaColor += hexadecimal[colorArray];
         }
+        return cadenaColor;
+    }
+    //------Generar colores aleatorios Fin------
+        
+    //Recibir los arreglos de PHP
+    var jEnc = [];
+    var jDatos = [];
+    var jEnc = <?php echo json_encode($arrEncabezados); ?>;
+    var jDatos = <?php echo json_encode($arrValores); ?>;
+
+    //------Generacion de DataSets dinamicos------
+    var arrDataSets = []; //Array que contendra todos los JSON de los DataSets generados
+    var dataSetAux = {}; //Objeto JSON que contendra los valores de los DataSets que se generan
+    var lAux = []; //Array que contendra los valores de los encabezados(jEnc) despues de procesarlos
+    var dAux = []; //Array que contendra los valores de los datos(jDatos) despues de procesarlos
+
+    //Ciclo para saltar los 4 primeros elementos del array de Encabezados y Datos
+    for (var i = 4; i < jEnc.length; i++) {
+        lAux.push(jEnc[i]);
+    }
+    console.log(lAux);
+
+    for (var j = 4; j < jDatos.length; j++) {
+        dAux.push(jDatos[j]);
+    }
+
+    console.log(dAux);
+
+    //Ciclo para generar los DataSets
+    lAux.forEach(function (item, index, array) {
+        dataSetAux = {
+            label: lAux[index],
+            borderColor: colorAleatorio(),
+            pointRadius: 0,
+            pointHitRadius: 20,
+            fill: false,
+            data: dAux[index],
+        }
+        arrDataSets.push(dataSetAux);
     });
+    console.log(arrDataSets);
+    //------Generacion de DataSets dinamicos Fin------
+
+        //Valores de la grafica
+    var grafValores = {
+        labels: [
+            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33
+            
+//            $p = "";
+//            foreach ($categoryArray as $d) {
+//                echo "'" . $d['label'] . "'";
+//            }
+//          
+        ],
+        datasets: arrDataSets,
+    }
+
+    //Configuraciones de la grafica
+    var grafOpciones = {
+        responsive: true,
+        scales: {
+          xAxes: [{
+               display: true,
+               scaleLabel: {
+                   display: true,
+                   labelString: "Periodo de muestra"
+               }
+          }],
+          yAxes: [{
+               display: true,
+               scaleLabel: {
+                   display: true,
+                   labelString: "Temperatura °C"
+               },
+               ticks: {
+                   beingAtZero: true,
+                   min: 0
+               }
+          }]
+        },
+        title: {
+            display: true,
+            text: "Comportamiento de temperaturas de la Sonda de Inspección"
+        },
+        legend: {
+            display: true,
+            position: 'top',
+            labels: {
+                boxWidth: 40,
+                fontColor: 'black'
+            }
+        },
+        tooltips: {
+            enabled: true
+        }
+    }
+
+    var ctx = document.getElementById('line-chart').getContext('2d');
+    var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: grafValores,
+        options: grafOpciones
+    })
+    console.log(lineChart);
+
 </script>
+</html>

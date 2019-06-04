@@ -335,7 +335,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                     
                     //Obtener url del script
                     var url;                                       
-                    url = "genGrafBCG.php";
+                    url = "grafBCG.php"; //Corregir
                     
                     $.ajax({
                         async: true,

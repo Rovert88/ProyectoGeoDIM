@@ -78,19 +78,22 @@ if ($intervalo == '15min') {
             $f_ini = $generalOp->ordenaFechai($f_ini2);
             $f_fin = $generalOp->ordenaFechaf($f_fin2);
             array_push($categoryArray, ["label" => $f_ini]);
-            $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones);
-            //array_push($datos, $a);
+            $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones);            
+            $fechas = $generalOp->consultaFechas($id, $f_ini, $f_fin, $operaciones);
         }
-
-//        $a = $generalOp->consulta1dia($id, $f_ini, $f_fin, $operaciones); //Obtener los datos de la BD
+        
+        //Imprimir fechas
+        print_r($fechas);
 
         $arrEncabezados = array(); //Array para contener encabezados (Claves de la matriz)
         $arrDatos = array(); //Array para contener datos (Valores de la matriz)
         $matrizDatos = array(); //Array auxiliar para guardar la combinacion del arrEncabezados con ArrDatos
         $matrizFinal = array(); //Array con todos los arreglos generados y añadidos a matrizDatos
+        
         //Crear matriz asociativa
         //Iteracion para obtener los valores de los encabezados de la BD
         foreach ($enc as $clavesEnc => $valoresEnc) {
+            //Comprobar si tiene un subnivel
             if (is_array($valoresEnc)) {
                 foreach ($valoresEnc as $claveEncInt => $valorEncInt) {
                     array_push($arrEncabezados, $valorEncInt); //Insertar en arrEncabezados los valores encontrados en la consulta de los encabezados en la BD
@@ -104,8 +107,8 @@ if ($intervalo == '15min') {
         //Iteracion obtener los datos de la BD
         foreach ($a as $datosT) {
             array_push($arrDatos, $datosT); //Insertar en arrDatos los valores encontrados en la consulta de los datos en la BD
-        }
-
+        }             
+        
         //Iteracion para asociar los arreglos arrEncabezados con arrDatos
         for ($i = 0; $i < sizeof($arrDatos); $i++) {
             $matrizDatos = array_combine($arrEncabezados, $arrDatos[$i]); //Insertar en matrizDatos 
@@ -118,14 +121,6 @@ if ($intervalo == '15min') {
             $valoresGraf = array(array_column($matrizFinal, $columnas));
             array_push($vGraf, $valoresGraf);
         }
-
-        //print_r($vGraf); //Imprime los valores de cada columna de la matrizFinal
-        //print_r($arrEncabezados);
-        //echo json_encode($arrEncabezados);
-        //        echo "<br>"."<br>";
-//        print_r($vGraf); //Imprime los valores de la matriz final
-        //        echo "<br>"."<br>";
-        //        echo count($vGraf);
 
         $arrValores = array();
         foreach ($vGraf as $key => $value){
@@ -653,8 +648,12 @@ if ($intervalo == '15min') {
     //Recibir los arreglos de PHP
     var jEnc = [];
     var jDatos = [];
+    var jLabels = [];
     var jEnc = <?php echo json_encode($arrEncabezados); ?>;
     var jDatos = <?php echo json_encode($arrValores); ?>;
+    var jLabels = <?php echo json_encode($fechas); ?>;
+    
+    console.log(jLabels);
 
     //------Generacion de DataSets dinamicos------
     var arrDataSets = []; //Array que contendra todos los JSON de los DataSets generados

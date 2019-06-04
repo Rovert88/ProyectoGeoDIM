@@ -75,7 +75,14 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
             array_push($categoryArray, ["label" => $f_ini]);
             $a = $generalOp->consulta1diaBCG($id, $f_ini, $f_fin, $operaciones);
             array_push($datos, $a);
+            $fechas = $generalOp->consultaFechas($id, $f_ini, $f_fin, $operaciones);
         }
+        
+        $arrFechas = array();
+        foreach($fechas as $f){
+            array_push($arrFechas, $f);
+        }
+        print_r($arrFechas);
 
             //Validaciones de valores
             for($long = 0; $long <= sizeof($datos) - 1; $long++){
@@ -301,9 +308,9 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
     <canvas id="line-chart" width="800" height="450"></canvas>
         
     </body>
-</html>
-
-<script>
+   
+<script type="text/javascript"> 
+   
     new Chart(document.getElementById("line-chart"),{
         type: 'line',
         pointRadius: 0,
@@ -388,7 +395,7 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
                         ?>
                     ],
                     label: "EWT_DegF",
-                    borderColor: "A200FF",
+                    borderColor: "#A200FF",
                     pointRadius: 0,
                     fill: false,
                     linetTension: 0,
@@ -508,4 +515,6 @@ $f_fin = $generalOp->ordenaFechaf($f_fin);
              }             
         }                    
     });
+        
 </script>
+</html>

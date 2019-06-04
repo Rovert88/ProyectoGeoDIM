@@ -1,7 +1,5 @@
 <?php
 
-require 'ListLigDatos.php';
-
 class GeneralOp {
 
     private $datos = array();           
@@ -369,5 +367,34 @@ class GeneralOp {
             $enc = get_object_vars($encabezados);
         }        
         return $enc; //Retorno del array
+    }
+    
+    //Metodo obtener fechas
+    public function consultaFechas($idSitio, $f_ini, $f_fin, $operaciones){               
+        $rango = array("\$and" => array( array( "TIMESTAMP" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))), array('NOMBRE_SITIO' => $idSitio)));
+        $result = $operaciones->findAll($rango);
+        
+        $arrFechas = array();
+        foreach($result as $fechas){
+            $vFecha = $fechas['TIMESTAMP']->toDateTime();
+            $formato = $vFecha->format('d/m/Y\ - H:i:s');
+            array_push($arrFechas, $formato);
+        }
+        return $arrFechas;
+        
+    
+    }
+    
+    //Metodo obtener datos fechas multiples
+    public function consultaFechasMulti($idSitio, $f_ini, $f_fin, $operaciones){
+        $rango = array("\$and"=>array(array( "TIMESTAMP" => array('$gte' => new MongoDB\BSON\UTCDateTime(strtotime($f_ini) * 1000), "\$lte" => new MongoDB\BSON\UTCDateTime(strtotime($f_fin) * 1000))),array('NOMBRE_SITIO' => $idSitio)));
+        $result = $operaciones->findAll($rango);
+        
+        $resultado = array();
+        foreach($result as $datos){
+            $resultArr = iterator_to_array($datos);
+            array_push($resultado,$resultArr);
+        }
+        return $resultado;
     }
 }

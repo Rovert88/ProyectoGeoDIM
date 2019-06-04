@@ -114,7 +114,7 @@ require '../classes/ConexionDB.php';
                                             $connect = new DBConnection();
                                             $traerColl = $connect->ConectarBD();
                                             $collection = $traerColl->SitiosGeograficos;
-                                            $result = $collection->find();                                            
+                                            $result = $collection->find();
                                             ?>                 
                                             <select id="sitio" onchange="selectSitioGeografico()">
                                                 <option value=0>Selecciona el Sitio</option>
@@ -126,20 +126,20 @@ require '../classes/ConexionDB.php';
                                             </select>
                                         </div>
                                     </div>
-                                    
-                                      <!--Mostrar primer y ultimo registro de la coleccion-->
+
+                                    <!--Mostrar primer y ultimo registro de la coleccion-->
                                     <div class="control-group">
                                         <label class="control-label">Primer dato almacenado</label>
                                         <div class="controls">                                                           
                                             <?php
-                                                $connect = new DBConnection();
-                                                $traerColl = $connect->ConectarBD();
-                                                $collection = $traerColl->Registros_Sondas_Inspeccion;                                   
-                                                $result = $collection->find([],['sort' => ['_id' => 1],'limit' => 1, 'skip' => 1]);
+                                            $connect = new DBConnection();
+                                            $traerColl = $connect->ConectarBD();
+                                            $collection = $traerColl->Registros_Sondas_Inspeccion;
+                                            $result = $collection->find([], ['sort' => ['_id' => 1], 'limit' => 1, 'skip' => 1]);
                                             ?>  
                                             <label> 
-                                                <?php 
-                                                foreach($result as $doc){
+                                                <?php
+                                                foreach ($result as $doc) {
                                                     $fecha = $doc['TIMESTAMP']->toDateTime();
                                                     $format = $fecha->format('d-m-Y\ - H:i:s');
                                                     echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
@@ -147,15 +147,15 @@ require '../classes/ConexionDB.php';
                                                 ?>
                                             </label>                                               
                                         </div>
-                                        
-                                         <label class="control-label">Último dato almacenado</label>
+
+                                        <label class="control-label">Último dato almacenado</label>
                                         <div class="controls">                                                           
-                                            <?php                                
-                                                $result = $collection->find([],['sort' => ['_id' => -1],'limit' => 1]);
+                                            <?php
+                                            $result = $collection->find([], ['sort' => ['_id' => -1], 'limit' => 1]);
                                             ?>  
                                             <label> 
-                                                <?php 
-                                                foreach($result as $doc){
+                                                <?php
+                                                foreach ($result as $doc) {
                                                     $fecha = $doc['TIMESTAMP']->toDateTime();
                                                     $format = $fecha->format('d-m-Y\ - H:i:s');
                                                     echo "<label value=" . $doc['_id'] . ">" . $format . "</label>";
@@ -167,28 +167,21 @@ require '../classes/ConexionDB.php';
 
                                     <div class="control-group">
                                         <label class="control-label">Intervalo</label>
-                                        <div class="controls">
+                                        <div class="controls">         
                                             <label>
                                                 <input type="radio" name="intervalo" value="15min" checked id="rd1" /> 
-                                                15 Minutos</label>
-                                            <label>
-                                                <input type="radio" name="intervalo" value="30min" id="rd2" />
-                                                30 Minutos</label>
+                                                Mostrar todos los datos</label>
                                             <label>
                                                 <input type="radio" name="intervalo" value="1dia" id="rd3"/>
                                                 1 Día</label>
+                                            <label>                                            
+                                                Intervalo libre (Multiplos de 15)</label>                                             
+                                            <input type="text" id="intervalo" name="lib" id="lib" placeholder="Ej. 30, 45, 60, etc" />
                                         </div>
                                     </div>
 
-                                    <!--                                    <div class="control-group">
-                                                                            <label class="control-label">Intervalo (Minutos)</label>
-                                                                            <div class="controls">
-                                                                                <input type="text" id="intervalo" placeholder="Ej. 15, 30, 45, etc" />
-                                                                            </div>
-                                                                        </div>-->
-
                                     <div class="control-group">
-                                        <label class="control-label">Periodo</label>
+                                        <label class="control-label">Periodo (Formato MM-DD-AAAA)</label>
                                         <div class="controls">
                                             <div class="input-group input-large" data-date="01/01/2014" data-date-format="dd-mm-yyyy" data-view-mode="years">
                                                 <input type="text" class="form-control dpd1" id="inicio"/>
@@ -236,6 +229,7 @@ require '../classes/ConexionDB.php';
         <!--end-Footer-part-->
 
         <!--js scripts-->
+        <script src="../assets/jquery-3.3.1.js"></script>
         <script src="../assets/js/excanvas.min.js"></script>
         <script src="../assets/js/jquery.min.js"></script>
         <script src="../assets/js/jquery.ui.custom.js"></script>
@@ -279,97 +273,94 @@ require '../classes/ConexionDB.php';
         <script src="../assets/lib/advanced-form-components.js"></script>
         <!--Date-Time picker FIN-->
 
+        <!--Alertify js-->
+        <script src="../assets/alertifyjs/alertify.js"></script>
+
         <script type="text/javascript">
-                                            // This function is called from the pop-up menus to transfer to
-                                            // a different page. Ignore if the value returned is a null string:
-                                            function goPage(newURL) {
+            // This function is called from the pop-up menus to transfer to
+            // a different page. Ignore if the value returned is a null string:
+            function goPage(newURL) {
+                // if url is empty, skip the menu dividers and reset the menu selection to default
+                if (newURL != "") {
+                    // if url is "-", it is this page -- reset the menu:
+                    if (newURL == "-") {
+                        resetMenu();
+                    }
+                    // else, send page to designated URL
+                    else {
+                        document.location.href = newURL;
+                    }
+                }
+            }
+            // resets the menu selection upon entry to this page:
+            function resetMenu() {
+                document.gomenu.selector.selectedIndex = 2;
+            }
+        </script>
+        
+        <script type="text/javascript">            
+            //Select para ver los tipos de graficas
+            $(function () {
+                $('#tipoGrafica').change(function () {
+                    if ($(this).val() === "TP") {
+                        $("#rd1").prop("disabled", true);
+                        $("#rd3").prop("checked", true);
+                        $("input[name=lib]").prop("disabled", true);
+                    } else {
+                        $("#rd1").prop("disabled", false);
+                        $("input[name=lib]").prop("disabled", false);                        
+                    }                                        
+                });
+            });
+            
+            //Select Sitio Geografico
+            var idSitio = 0;
+            function selectSitioGeografico() {
+                idSitio = document.getElementById("sitio").value;
+            }
 
-                                                // if url is empty, skip the menu dividers and reset the menu selection to default
-                                                if (newURL != "") {
+            //AJAX grafica
+            function graficaAJAX() {
+                if (idSitio === 0) {
+                    alertify.alert('Generación de graficas de datos de Sondas de Inspección',
+                            'Seleccione un sitio porfavor');
+                } else {
+                    var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
+                    //Obtener Datos del Formulario
+                    f_ini = document.getElementById('inicio').value;
+                    f_fin = document.getElementById('fin').value;
+                    tip_graf = document.getElementById("tipoGrafica").value;
+                    intervalo = document.getElementsByName("intervalo");
 
-                                                    // if url is "-", it is this page -- reset the menu:
-                                                    if (newURL == "-") {
-                                                        resetMenu();
-                                                    }
-                                                    // else, send page to designated URL
-                                                    else {
-                                                        document.location.href = newURL;
-                                                    }
-                                                }
-                                            }
+                    for (x = 0; x < intervalo.length; x++) {
+                        if ($(intervalo[x]).is(':checked')) {
+                            valor_intervalo = intervalo[x].value;
+                        }
+                    }
 
-                                            // resets the menu selection upon entry to this page:
-                                            function resetMenu() {
-                                                document.gomenu.selector.selectedIndex = 2;
-                                            }
-//Select
-                                            var tip_graf;
+                    if (tip_graf === "TT") {
+                        url = "genGrafTempTiempo.php";
+                    } else {
+                        url = "genGrafTempProf.php";
+                    }
 
-                                            function selectTipoGrafica() {
-                                                tip_graf = document.getElementById("tipoGrafica").value;
-                                                if (tip_graf === "TP") {
-
-                                                    document.getElementById("rd1").disabled = true;
-                                                    document.getElementById("rd2").disabled = true;
-                                                    document.getElementById("rd3").checked = true;
-                                                } else {
-
-                                                    document.getElementById("rd1").disabled = false;
-                                                    document.getElementById("rd2").disabled = false;
-                                                }
-
-
-                                            }
-
-                                            var idSitio = 0;
-                                            function selectSitioGeografico() {
-                                                idSitio = document.getElementById("sitio").value;
-                                            }
-                                            //AJAX grafica
-                                            function graficaAJAX() {
-                                                if (idSitio === 0) {
-                                                    alert("Seleccione un sitio porfavor");
-                                                    // Recuerdas como se usa?
-                                                } else {
-                                                    var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
-                                                    //Obtener Datos del Formulario
-                                                    f_ini = document.getElementById('inicio').value;
-                                                    f_fin = document.getElementById('fin').value;
-                                                    tip_graf = document.getElementById("tipoGrafica").value;
-                                                    intervalo = document.getElementsByName("intervalo");
-
-
-                                                    for (x = 0; x < intervalo.length; x++) {
-                                                        if ($(intervalo[x]).is(':checked')) {
-                                                            valor_intervalo = intervalo[x].value;
-                                                        }
-                                                    }
-
-
-                                                    if (tip_graf === "TT") {
-                                                        url = "genGrafTempTiempo.php";
-                                                    } else {
-                                                        url = "genGrafTempProf.php";
-                                                    }
-
-                                                    $.ajax({
-                                                        async: true,
-                                                        cache: false,
-                                                        dataType: "html",
-                                                        type: 'POST',
-                                                        url: url,
-                                                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
-                                                        success: function (response) {
-                                                            $("#chart-container").html(response);
-                                                        },
-                                                        beforeSend: function () {
-                                                            $("#chart-container").html("Procesando...");
-                                                        },
-                                                        error: function (objXMLHttpRequest) {}
-                                                    });
-                                                }
-                                            }
-
+                    $.ajax({
+                        async: true,
+                        cache: false,
+                        dataType: "html",
+                        type: 'POST',
+                        url: url,
+                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
+                        success: function (response) {
+                            $("#chart-container").html(response);
+                        },
+                        beforeSend: function () {
+                            $("#chart-container").html("Procesando...");
+                        },
+                        error: function (objXMLHttpRequest) {}
+                    });
+                }
+            }
         </script>
     </body>
 </html>

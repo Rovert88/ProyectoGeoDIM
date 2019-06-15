@@ -138,7 +138,7 @@
         foreach($arrEncabezados as $columnas){
             $valoresGraf = array(array_column($matrizFinal, $columnas));
             array_push($collMatriz, $valoresGraf);
-        }
+        }                
         
         //Ciclo para extraer los valores de las columnas en arreglos separados
         $arrValores = array();
@@ -147,7 +147,7 @@
                 array_push($arrValores, $vInt);
             }
         }
-        
+                
         //Eliminar columnas no necesarias
         $valoresColumnas = array();
         for($i = 4; $i < sizeof($arrValores); $i++){
@@ -176,8 +176,8 @@
                 array_push($arrLabel, $label);
             }
             $cont += 1;
-        }
-        
+        }             
+                
     }
     
     if($intervalo == '1dia'){                
@@ -273,7 +273,7 @@
                 array_push($arrLabel, $label);
             }
             $cont += 1;
-        }
+        }                
     }
 ?>
 

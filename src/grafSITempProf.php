@@ -59,96 +59,101 @@
         $fechas = $generalOp->consultaFechas($idSitio, $arrFechasIni[$i], $arrFechasFin[$i], $operaciones);
         $DatosFinal[$i] = $datos;
         $FechasFinal[$i] = $fechas;
-        $EncabezadosFinal[$i] = $arrEncabezados;                
+        $EncabezadosFinal[$i] = $arrEncabezados;
     }            
     
     $arrDatos = array(); //Array para contener datos (Valores de la matriz)
     $matrizDatos = array(); //Array auxiliar para guardar la combinacion del arrEncabezados con ArrDatos
-    $matrizFinal = array(); //Array con todos los arreglos generados y añadidos a matrizDatos       
-    $EncMatriz = array(); //Array auxiliar de encabezados                                  
+    $matrizFinal = array(); //Array con todos los arreglos generados y añadidos a matrizDatos                                  
     
     //Crear matriz asociativa
-        //Ciclo para asociar los arreglos arrEncabezados con arrDatos        
-        foreach($EncabezadosFinal as $ef){            
-            $EncMatriz = $ef;            
-        }
-
-        foreach($DatosFinal as $key => $value){
-            foreach($value as $k => $v){
-                $matrizDatos = array_combine($EncMatriz, $v);
-                array_push($matrizFinal, $matrizDatos);                                
-            }
-        }
+    //Ciclo para asociar los arreglos arrEncabezados con arrDatos        
     
-    echo "DatosFinal: ".count($DatosFinal);
-    echo "<br><br>";
-    foreach ($DatosFinal as $ind => $dat){
-        $total = count($dat);
-        foreach($dat as $index => $data ){
-            $total2 = count($data);
+    foreach($DatosFinal as $clave => $valor){
+        foreach($valor as $c => $v){
+            $matrizFinal[$clave][$c] = array_combine($arrEncabezados, $v);
         }
     }
-    echo "DatosFinal nivel 1: ".$total."<br><br>";    
-    echo "DatosFinal interno nivel 1: ".$total2."<br><br>";
-    echo "Total matrizFinal: ". count($matrizFinal);    
-    echo '<pre>';
-    print_r($matrizFinal);
-//    echo "<br><br>";
     
+    //Ciclo para obtener los valores de cada columna de la matrizFinal
+    $collMatriz = array();    
+    for($i = 0; $i < count($arrEncabezados); $i++){
+        foreach($matrizFinal as $clave => $valor){
+            $valoresGraf[$clave][$i] = array(array_column($valor, $arrEncabezados[$i]));                
+        }
+    }  
 
-//    //Ciclo para obtener los valores de cada columna de la matrizFinal
-//    $collMatriz = array();
-//    foreach($arrEncabezados as $columnas){
-//        $valoresGraf = array(array_column($matrizFinal, $columnas));
-//        array_push($collMatriz, $valoresGraf);
-//    }
-//    
-//    //Ciclo para extraer los valores de las columnas en arreglos separados
-//    $arrValores = array();
-//    foreach($collMatriz as $clave => $valor){
-//        foreach($valor as $cInt => $vInt){
-//            array_push($arrValores, $vInt);            
-//        }
-//    }
-//    
-//    //Ciclo para asociar los arreglos de las columnas con sus respectivos encabezados
-//    $valoresFinal = array();
-//    foreach($arrValores as $val){
-//       $valoresFinal = array_combine($arrEncabezados, $arrValores);       
-//    }
-//    
-//    //Obtener arreglos que solo contengan claves con sub string 'Avg'
-//   $arrAvgs = array();
-//   $arrClaves = array();
-//   foreach($valoresFinal as $clave => $valor){
-//       //Se obtiene la clave y se pasa a mayusculas con "strtoupper"
-//       //Se busca el sub string "AVG" en el string de ka clave con "strpos"
-//       if(strpos(strtoupper($clave), 'AVG')){
-//           $arrAvgs[$clave] = $valor; //Se asignan los valores obtenidos al arreglo "arrAvgs"
-//           array_push($arrClaves, $clave);
-//       }
-//   }
-//       
-//    //Obtener promedios de cada arreglo
-//    $arrPromAvg = array();
-//    foreach($arrAvgs as $clave => $valor){
-//        $sum = array_sum($valor);
-//        $prom = round(array_sum($valor) / count($valor), 2);                
-//        $arrPromAvg[$clave] = $prom;
-//    }
-//        
-//    echo '<pre>';
-//    print_r($arrPromAvg);
-//    echo '<br>'.'<br>';
-//    echo count($arrPromAvg);
-//    
-//    echo '<br>'.'<br>';
-//    echo print_r($arrClaves);
+    //Ciclo para asociar los arreglos de las columnas con sus respectivos encabezados
+    $valoresFinal = array();
+    foreach($valoresGraf as $clave => $valor){
+        $valoresFinal[$clave] = array_combine($arrEncabezados, $valor);       
+    }
+    
+   //Obtener arreglos que solo contengan claves con sub string 'Avg'
+   $arrAvgs = array();
+   $arrClaves = array();
+   foreach($valoresFinal as $clave => $valor){
+       foreach($valor as $c => $v){
+           foreach($v as $cInt => $vInt){
+            //Se obtiene la clave y se pasa a mayusculas con "strtoupper"
+            //Se busca el sub string "AVG" en el string de ka clave con "strpos"
+            if(strpos(strtoupper($c), 'AVG')){
+                $arrAvgs[$clave][$c] = $vInt; //Se asignan los valores obtenidos al arreglo "arrAvgs"
+                $arrClaves[$c] = $c;           
+            }
+        }
+       }
+   }   
+          
+   //Obtener promedios de cada arreglo
+   $arrPromAvg = array();
+   foreach($arrAvgs as $clave => $valor){
+       foreach($valor as $c => $v){
+        $sum = array_sum($v);
+        $prom = round(array_sum($v) / count($v), 2);                
+        $arrPromAvg[$clave][$c] = $prom;
+       }
+    }
+    
+    //Llamada a metodos de eliminacion de clave PTemp_C_Avg
+    $arrPromAvg = eliminaClavesDatos($arrPromAvg, 0); //Se elimina del arreglo de promedios
+    $arrClaves = eliminaClavesEtiquetas($arrClaves, "PTemp_C_Avg"); //Se elimina del arreglo de claves individuales
+
+    //Metodo eliminar clave de arreglo de promedios
+    function eliminaClavesDatos($arrOriginal, $key){
+        $arrAux = array();
+        foreach($arrOriginal as $clave => $valor){            
+            $arrAux[] = $valor;
+            unset($arrAux[$clave][$key]);
+        }
+        return $arrAux;
+    }
+    
+    //Metodo eliminar clave de arreglo de claves
+    function eliminaClavesEtiquetas($arrEtiquetas, $key){
+        unset($arrEtiquetas[$key]);
+        return $arrEtiquetas;
+    }
+    
+    //Convertir arreglo de claves 
+    $arrClavesAVG = array();
+    foreach($arrClaves as $c){
+        array_push($arrClavesAVG, $c);
+    }      
+        
+    echo '<pre>';
+    print_r($arrPromAvg);
+    echo '<br>'.'<br>';
+    echo count($arrPromAvg);
+    
+    echo "Total claves AVG: ".count($arrClavesAVG)."<br>";
+    echo "<pre>";
+    print_r($arrClavesAVG);        
+
 ?>
 
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
+    <head>        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     </head>
     <body>
@@ -156,11 +161,107 @@
     </body>
     
     <script type="text/javascript">
+        //------Generar colores aleatorios------
+        function numAleatorio(vMin, vMax){
+            posibilidades = vMax - vMin;
+            ran = Math.random() * posibilidades;
+            ran = Math.floor(ran);
+            return parseInt(vMin) + ran;
+        }
+        
+        function colorAleatorio(){
+            hexadecimal = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+            cadenaColor = "#";
+            for(i = 0; i < 6; i++){
+                colorArray = numAleatorio(0, hexadecimal.length);
+                cadenaColor += hexadecimal[colorArray];
+            }
+            return cadenaColor;
+        }
+        //------Generar colores aleatorios Fin------
+                       
         //Recibir los arreglos de PHP
         var jEnc = [];
         var jDatos = [];
         var jLabels = [];
+        var jEnc = <?php echo json_encode($arrFechasIni); ?>;
+        var jDatos = <?php echo json_encode($arrPromAvg); ?>;        
+        var jLabels = <?php echo json_encode($arrClavesAVG); ?>;
         
+        //------Generacion de DataSets dinamicos------
+        var arrDataSets = []; //Array que contendra todos los JSON de los DataSets generados
+        var dataSetAux = {}; //Objeto JSON que contendra los valores de los DataSets que se generan
+        var lAux = []; //Array que contendra los valores de las labels (jLabels) de la grafica
+        var dAux = []; //Array que contendra los valores de los datos(jDatos) despues de procesarlos
+        var cadena;        
+                        
+        //Ciclo para generar las Labels
+        for(i=0; i < jLabels.length; i++){
+            cadena = "a "+i+" mts"
+            lAux.push(cadena);
+        }                                 
+        
+        jEnc.forEach(function(item, index, array){
+           dataSetAux = {
+               label: jEnc[index],
+               borderColor: colorAleatorio(),
+               pointRadius: 0,
+               pointHitRadius: 5,
+               fill: false,
+               data: jDatos[index],
+           }
+           arrDataSets.push(dataSetAux);           
+        });
+        //------Generacion de DataSets dinamicos Fin------
+        
+        //Valores de la grafica
+        var grafValores = {
+            labels: lAux,
+            datasets: arrDataSets,
+        }
+        
+        //Configuraciones de la grafica
+        var grafOpciones = {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Temperatura °C"
+                        },                        
+                }],
+                yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Profundidad"
+                        },
+                }]
+            },
+            title: {
+                display: true,
+                text: "Comportamiento de temperaturas de la Sonda de Inspección"
+            },
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    boxWidth: 40,
+                    fontColor: 'black'
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+        
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: grafValores,
+            options: grafOpciones
+        })
         
     </script>
 </html>

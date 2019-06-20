@@ -311,7 +311,7 @@ require '../classes/ConexionDB.php';
                         }
                     }
                     
-                    url = "genGrafBatCR800.php";
+                    url = "grafBatCR800.php";
                     
                     $.ajax({
                         async: true,

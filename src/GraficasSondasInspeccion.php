@@ -6,8 +6,8 @@ require '../classes/ConexionDB.php';
 
 <html lang="es">
     <head>
-        <title>Gráficas de Sondas de Inspección</title>
         <meta charset="UTF-8">
+        <title>Gráficas de Sondas de Inspección</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
@@ -35,10 +35,8 @@ require '../classes/ConexionDB.php';
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
     </head>
-
     <body>
-
-        <!--Header-part-->
+        <!--Header part-->
         <div>
             <h3><a href="index.php">ManagementGT</a></h3>
         </div>
@@ -96,7 +94,8 @@ require '../classes/ConexionDB.php';
                             </div>
                             <div class="widget-content">
                                 <div>
-
+                                    
+                                    <!--Select para tipo de grafica (T-T o T-P)-->
                                     <div class="control-group">
                                         <label class="control-label">Seleccionar Tipo de Gráfica</label>
                                         <div class="controls">
@@ -106,7 +105,7 @@ require '../classes/ConexionDB.php';
                                             </select>
                                         </div>
                                     </div>
-                                    <!--Select para Nombre de las sondas-->
+                                    <!--Select para Nombre de los Sitios Geograficos-->
                                     <div class="control-group">
                                         <label class="control-label">Seleccionar Sitio Geográfico</label>
                                         <div class="controls">
@@ -165,22 +164,27 @@ require '../classes/ConexionDB.php';
                                         </div>
                                     </div>
 
+                                    <!--Seleccion de intervalo de tiempo a mostrar-->
                                     <div class="control-group">
-                                        <label class="control-label">Intervalo</label>
+                                        <label class="control-label">Intervalo de tiempo</label>
                                         <div class="controls">         
                                             <label>
                                                 <input type="radio" name="intervalo" value="15min" checked id="rd1" /> 
-                                                Mostrar todos los datos</label>
+                                                Mostrar todos los datos (Cada 15 minutos)</label>
                                             <label>
-                                                <input type="radio" name="intervalo" value="1dia" id="rd3"/>
+                                                <input type="radio" name="intervalo" value="1dia" id="rd2"/>
                                                 1 Día</label>
                                             <label>                                            
                                                 Intervalo libre (Multiplos de 15)</label>                                             
-                                            <input type="text" id="intervalo" name="lib" id="lib" placeholder="Ej. 30, 45, 60, etc" />
+                                            <input type="text" id="lib" onkeypress="return soloNumeros(event)" placeholder="Ej. 30, 45, 60, etc" disabled />
+                                            <label>
+                                                <input type="checkbox" id="act" onchange="comprobar(this);" />
+                                                Activar intervalo libre
+                                            </label>
                                         </div>
                                     </div>
 
-                                    <div class="control-group">
+                                    <div class="control-group" id="fechas-tt">
                                         <label class="control-label">Periodo (Formato MM-DD-AAAA)</label>
                                         <div class="controls">
                                             <div class="input-group input-large" data-date="01/01/2014" data-date-format="dd-mm-yyyy" data-view-mode="years">
@@ -191,7 +195,20 @@ require '../classes/ConexionDB.php';
                                             <span class="help-block">Seleccionar rango de fechas</span>
                                         </div>
                                     </div>
-
+                                    
+                                    <!--Campos de fechas dinamicos (Grafica Temp-Prof)-->
+                                    <div class="field_wrapper" id="fechas-tp" style="display: none;">
+                                        <label class="control-label">Seleccione las fechas a mostrar (Formato MM-DD-AAAA)</label>
+                                        <div class="controls">
+                                            <div class="input-group input-large" data-date="01/01/2014" data-format="dd-mm-yyyy" data-view-mode="years">
+                                                <input type="text" class="form-control dpd1" id="fecha" name="fechas[]" />
+                                                <button id="agrega-fecha" class="btn btn-primary">Agregar fecha</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    
+                                    <!--Boton generar grafica-->
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success" onclick="graficaAJAX()">Mostrar gráfica</button>
                                     </div>
@@ -223,8 +240,8 @@ require '../classes/ConexionDB.php';
 
         <!--Footer-part-->
         <div class="row-fluid">
-            <div id="footer" class="span12"> 2018 &copy; Instituto Nacional de Electricidad y Energías Limpias <a href="https://www.gob.mx/ineel" target="
-                                                                                                                  "><br />www.gob.mx/ineel</a> </div>
+            <div id="footer" class="span12"> 2018 &copy; Instituto Nacional de Electricidad y Energías Limpias 
+                <a href="https://www.gob.mx/ineel" target=""><br />www.gob.mx/ineel</a> </div>
         </div>
         <!--end-Footer-part-->
 
@@ -297,68 +314,232 @@ require '../classes/ConexionDB.php';
                 document.gomenu.selector.selectedIndex = 2;
             }
         </script>
-        
-        <script type="text/javascript">            
-            //Select para ver los tipos de graficas
-            $(function () {
-                $('#tipoGrafica').change(function () {
-                    if ($(this).val() === "TP") {
-                        $("#rd1").prop("disabled", true);
-                        $("#rd3").prop("checked", true);
-                        $("input[name=lib]").prop("disabled", true);
-                    } else {
-                        $("#rd1").prop("disabled", false);
-                        $("input[name=lib]").prop("disabled", false);                        
-                    }                                        
-                });
-            });
+
+        <script type="text/javascript">
+
+            //Validar que el campo Intervalo libre solo contenga numeros
+            function soloNumeros(e) {
+                key = e.wich || e.keyCode;
+                tecla = String.fromCharCode(key).toLowerCase();
+                numeros = "0123456789";
+                especiales = "p";
+                tecla_especial = false;
+
+                for (var i in especiales) {
+                    if (key == especiales[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+
+                if (key == 8) {
+                    return true;
+                }
+                if (key == 32) {
+                    return true;
+                }
+                if (key == 37) {
+                    return true;
+                }
+                if (key == 38) {
+                    return true;
+                }
+                if (key == 39) {
+                    return true;
+                }
+                if (key == 40) {
+                    return true;
+                }
+                if (key == 36) {
+                    return true;
+                }
+                if (key == 35) {
+                    return true;
+                }
+                if (key == 16) {
+                    return true;
+                }
+                if (key == 46) {
+                    return true;
+                }
+                if (key == 9) {
+                    return true;
+                }
+                
+                if(numeros.indexOf(tecla) == -1 && !tecla_especial){
+                    return false;
+                }
+            }
             
+            //Ejecutar acciones al marcar/desmarcar el checkbox de intervalo libre
+            function comprobar(obj){
+                if(obj.checked){ //Si se marca el checkbox
+                    document.getElementById('rd1').disabled = true;
+                    document.getElementById('rd2').disabled = true
+                    document.getElementById('rd1').checked = false;
+                    document.getElementById('rd2').checked = false;
+                    document.getElementById('lib').disabled = false;
+                }else{ //Si se desmarca el checkbox
+                    document.getElementById('rd1').disabled = false;
+                    document.getElementById('rd2').disabled = false;
+                    document.getElementById('lib').disabled = true;
+                    document.getElementById('lib').value = "";
+                }
+            }                             
+
             //Select Sitio Geografico
             var idSitio = 0;
             function selectSitioGeografico() {
                 idSitio = document.getElementById("sitio").value;
             }
+            
+            //Obtener valor de los radios
+            var radios = document.getElementsByName('intervalo');            
+            //Obtener valor del checkbox
+            var check = document.getElementById('act');
+            
+            //Select tipo grafica
+            function selectTipoGrafica(){
+                
+            tipo_graf = document.getElementById('tipoGrafica').value;
+            fechasTT = document.getElementById('fechas-tt');
+            fechasTP = document.getElementById('fechas-tp');
+                
+                if(tipo_graf === 'TP'){
+                    document.getElementById('rd1').disabled = true;
+                    document.getElementById('rd2').disabled = false;
+                    document.getElementById('rd2').checked = true;
+                    document.getElementById('lib').value = "";
+                    document.getElementById('lib').disabled = true;
+                    document.getElementById('act').disabled = true;
+                    document.getElementById('act').checked = false;
+                    console.log(document.getElementById('rd2').value);
+                    fechasTP.style.display = 'block';
+                    fechasTT.style.display = 'none';
+                }
+                
+                if(tipo_graf === 'TT'){
+                    document.getElementById('rd1').disabled = false;
+                    document.getElementById('rd2').disabled = false;
+                    document.getElementById('lib').value = "";                    
+                    document.getElementById('act').disabled = false;
+                    fechasTP.style.display = 'none';
+                    fechasTT.style.display = 'block';
+                }
+            }
+            
+            //Agregar campos de fechas dinamicos (Graf Temp-Prof)
+            var maxCampos = 100; //Limite de campos que se pueden agregar
+            var agregarBtn = $('#agrega-fecha'); //Selector del boton agregar
+            var wrapper = $('.field_wrapper'); //Selector de la seccion agregada
+            var campoHTML = '<div id="fechas-tp"><div class="input-group input-large" data-date="01/01/2014" data-format="dd-mm-yyyy" data-view-mode="years"><input type="text" class="form-control dpd1" id="fecha" name="fechas[]" /><button id="elimina-fecha" class="btn btn-primary">Eliminar fecha</button></div></div>'; //Codigo HTML del nuevo campo agregado 
+            var contCampos = 1; //Contador de campos existentes
+            
+            //Cuando se da clic sobre el boton agregar campo
+            $(agregarBtn).click(function(){ 
+               if(contCampos < maxCampos){ //Revisa si el contador de campos es menor que el maximo de campos
+                   contCampos++; //Incrementa el contador
+                   $(wrapper).append(campoHTML); //Agrega el nuevo campo de fechas al div con los demas campos
+               }
+               
+               if(contCampos == maxCampos){
+                   alertify.alert("Ha alcanzado el máximo de campos que puede agregar");
+               }
+            });
+            
+            //Cuando se da clic sobre el boton eliminar campo
+            $(wrapper).on('click', "#elimina-fecha", function(e){
+                e.preventDefault();
+                $(this).parent('div').remove(); //Elimina el campo creado
+                contCampos--; //Decrementa el contador
+            });
 
             //AJAX grafica
             function graficaAJAX() {
+                //Validar sitio seleccionado
                 if (idSitio === 0) {
                     alertify.alert('Generación de graficas de datos de Sondas de Inspección',
                             'Seleccione un sitio porfavor');
-                } else {
-                    var f_ini, f_fin, tip_graf, intervalo, url, valor_intervalo;
-                    //Obtener Datos del Formulario
-                    f_ini = document.getElementById('inicio').value;
-                    f_fin = document.getElementById('fin').value;
-                    tip_graf = document.getElementById("tipoGrafica").value;
-                    intervalo = document.getElementsByName("intervalo");
+                } else {                                                                                
+                    
+                        //Obtener Datos del Formulario
+                        var tip_graf, f_ini, f_fin, valor_intervalo, int_lib, f_esp;                    
+                        f_ini = document.getElementById('inicio').value;
+                        f_fin = document.getElementById('fin').value;
+                        tip_graf = document.getElementById("tipoGrafica").value;
+                        int_lib = document.getElementById('lib').value;                        
+                        f_esp = $("input[id='fecha']").map(function(){
+                            return $(this).val();
+                        }).get();
 
-                    for (x = 0; x < intervalo.length; x++) {
-                        if ($(intervalo[x]).is(':checked')) {
-                            valor_intervalo = intervalo[x].value;
+                        //Recuperar el valor de los radio buttons o el campo de texto
+                        if(check.checked == true){
+                            //Valida si el campo intervalo libre esta vacio
+                            if(int_lib == null || int_lib.length == 0){
+                                alertify.alert('Generación de gráficas de datos de Sondas de Inspección',
+                                'Campo vacío, porfavor escriba un intervalo de tiempo válido');
+                            }else{
+                                //Asigna el valor del campo de texto a la variable "valor_intervalo"
+                                var valor_intervalo = document.getElementById('lib').value;
+                            }
+                        }else{
+                            var seleccionado = false; //Variable auxiliar para radio buttons desmarcados
+                            for(i = 0; i < radios.length; i++){
+                                //Valida si hay un radio button marcado
+                                if(radios[i].checked == true){
+                                    seleccionado = true; //Vuelve true a la variable auxiliar
+                                    var valor_intervalo = radios[i].value; //Asigna el valor del radio button marcado a la variable "valor_intervalo"
+                                    break;
+                                }
+                            }                    
                         }
+                        
+                        //Validar fecha inicio o fin vacias
+                        if(f_ini.length === 0 || f_fin.length === 0){                    
+                            alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                            'Llene el campo de fecha de inicio o fecha final');
+                        }
+                    
+                    if(tip_graf === "TT"){                        
+                        //Peticion AJAX para graficas tipo Temp-Tiemp
+                        
+                        $.ajax({
+                            async: true,
+                            cache: false,
+                            dataType: "html",
+                            type: 'POST',
+                            url: "grafSITempTiempo.php",
+                            data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
+                            success: function (response) {
+                                $("#chart-container").html(response);
+                            },
+                            beforeSend: function () {
+                                $("#chart-container").html("Procesando...");
+                            },
+                            error: function (objXMLHttpRequest) {}
+                        });
                     }
-
-                    if (tip_graf === "TT") {
-                        url = "genGrafTempTiempo.php";
-                    } else {
-                        url = "genGrafTempProf.php";
-                    }
-
-                    $.ajax({
-                        async: true,
-                        cache: false,
-                        dataType: "html",
-                        type: 'POST',
-                        url: url,
-                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" + f_fin + "&sitio=" + idSitio,
-                        success: function (response) {
-                            $("#chart-container").html(response);
-                        },
-                        beforeSend: function () {
-                            $("#chart-container").html("Procesando...");
-                        },
-                        error: function (objXMLHttpRequest) {}
-                    });
+                    
+                    if(tip_graf === "TP"){
+                        //Peticion AJAX para graficas tipo Temp-Prof
+                        
+                        $.ajax({
+                           async: true,
+                           cache: false,
+                           dataType: "html",
+                           type: 'POST',
+                           url: "grafSITempProf.php",
+                           data: {fechas: f_esp, inter: valor_intervalo, sitio: idSitio},
+                           success: function (response){
+                               $("#chart-container").html(response);
+                           },
+                           beforeSend: function (){
+                               $("#chart-container").html("Procesando...");
+                           },
+                           error: function (objXMLHttpRequest) {}
+                        });
+                        console.log(f_esp, valor_intervalo, idSitio);
+                    }         
                 }
             }
         </script>

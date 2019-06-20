@@ -116,14 +116,14 @@
     }
     
     //Llamada a metodos de eliminacion de clave PTemp_C_Avg
-    $arrPromAvg = eliminaClavesDatos($arrPromAvg, 0); //Se elimina del arreglo de promedios
+    $arrPromAvg = eliminaClavesDatos($arrPromAvg, "PTemp_C_Avg"); //Se elimina del arreglo de promedios
     $arrClaves = eliminaClavesEtiquetas($arrClaves, "PTemp_C_Avg"); //Se elimina del arreglo de claves individuales
 
     //Metodo eliminar clave de arreglo de promedios
     function eliminaClavesDatos($arrOriginal, $key){
         $arrAux = array();
         foreach($arrOriginal as $clave => $valor){            
-            $arrAux[] = $valor;
+            $arrAux[] = array_values($valor);
             unset($arrAux[$clave][$key]);
         }
         return $arrAux;
@@ -139,17 +139,7 @@
     $arrClavesAVG = array();
     foreach($arrClaves as $c){
         array_push($arrClavesAVG, $c);
-    }      
-        
-    echo '<pre>';
-    print_r($arrPromAvg);
-    echo '<br>'.'<br>';
-    echo count($arrPromAvg);
-    
-    echo "Total claves AVG: ".count($arrClavesAVG)."<br>";
-    echo "<pre>";
-    print_r($arrClavesAVG);        
-
+    }                 
 ?>
 
 <html lang="es">
@@ -228,14 +218,14 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: "Temperatura °C"
+                            labelString: "Profundidad"
                         },                        
                 }],
                 yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: "Profundidad"
+                            labelString: "Temperatura °C"
                         },
                 }]
             },

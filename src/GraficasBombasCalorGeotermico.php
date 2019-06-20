@@ -98,7 +98,7 @@ require ("../assets/fusioncharts/fusioncharts.php");
                             <div class="widget-content">
                                 <div>
                                     
-                                    <!--Select para Nombre de las sondas-->
+                                    <!--Select para Nombre de los Sitios Geograficos-->
                                     <div class="control-group">
                                         <label class="control-label">Seleccionar Sitio Geográfico</label>
                                         <div class="controls">
@@ -159,24 +159,27 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                         </div>
                                     </div>
                                     
+                                    <!--Seleccion de intervalo de tiempo a mostrar-->
                                     <div class="control-group">
-                                        <label class="control-label">Intervalo (Minutos)</label>
+                                        <label class="control-label">Intervalo de tiempo</label>
                                         <div class="controls">
-<!--                                            <label>
+                                            <label>
                                                 <input type="radio" name="intervalo" value="2min" checked id="rd1" /> 
-                                                2 Minutos</label>
+                                                Mostrar todos los datos (Cada 2 minutos)</label>
                                             <label>
-                                                <input type="radio" name="intervalo" value="4min" id="rd2" />
-                                                4 Minutos</label>
+                                                <input type="radio" name="intervalo" value="1dia" id="rd2" />
+                                                1 Día</label>
+                                            <label>Intervalo libre (Multiplos de 2)</label>
+                                            <input type="text" id="lib" onkeypress="return soloNumeros(event)" placeholder="Ej. 4, 6, 10, etc" disabled />
                                             <label>
-                                                <input type="radio" name="intervalo" value="1dia" id="rd3"/>
-                                                1 Día</label>-->
-                                            <label><input onkeypress="return soloNumeros(event)" type="text" id="intervalo" name="intervalo" placeholder="Ej. 2, 4, 6, 10" /></label>    
+                                                <input type="checkbox" id="act" onchange="comprobar(this);" />
+                                                Activar intervalo libre
+                                            </label>    
                                         </div>
                                     </div>
 
                                     <div class="control-group">
-                                        <label class="control-label">Periodo</label>
+                                        <label class="control-label">Periodo (Formato MM-DD-AAAA)</label>
                                         <div class="controls">
                                             <div class="input-group input-large" data-date="01/01/2014" data-date-format="dd-mm-yyyy" data-view-mode="years">
                                                 <input type="text" class="form-control dpd1" id="inicio"/>
@@ -186,7 +189,8 @@ require ("../assets/fusioncharts/fusioncharts.php");
                                             <span class="help-block">Seleccionar rango de fechas</span>
                                         </div>
                                     </div>
-
+                                    
+                                    <!--Boton generar grafica-->
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success" onclick="graficaAJAX()">Mostrar gráfica</button>
                                     </div>
@@ -296,6 +300,77 @@ require ("../assets/fusioncharts/fusioncharts.php");
 	</script>
                
         <script type="text/javascript">
+            
+            //Validar que el campo Intervalo libre solo contenga numeros
+            function soloNumeros(e){
+                key = e.wich || e.keyCode;
+                tecla = String.fromCharCode(key).toLowerCase();
+                numeros = "0123456789";
+                especiales = "p";
+                tecla_especial = false;
+                
+                for(var i in especiales){
+                    if(key == especiales[i]){
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+                
+                if (key == 8) {
+                    return true;
+                }
+                if (key == 32) {
+                    return true;
+                }
+                if (key == 37) {
+                    return true;
+                }
+                if (key == 38) {
+                    return true;
+                }
+                if (key == 39) {
+                    return true;
+                }
+                if (key == 40) {
+                    return true;
+                }
+                if (key == 36) {
+                    return true;
+                }
+                if (key == 35) {
+                    return true;
+                }
+                if (key == 16) {
+                    return true;
+                }
+                if (key == 46) {
+                    return true;
+                }
+                if (key == 9) {
+                    return true;
+                }
+                
+                if(numeros.indexOf(tecla) == -1 && !tecla_especial){
+                    return false;
+                }
+            }
+            
+            //Ejecutar acciones al marcar/desmarcar el checkbox de intervalo libre
+            function comprobar(obj){
+                if(obj.checked){ //Si se marca el checkbox
+                    document.getElementById('rd1').disabled = true;
+                    document.getElementById('rd2').disabled = true;
+                    document.getElementById('rd1').checked = false;
+                    document.getElementById('rd2').checked = false;
+                    document.getElementById('lib').disabled = false;
+                }else{ //Si se desmarca el checkbox
+                    document.getElementById('rd1').disabled = false;
+                    document.getElementById('rd2').disabled = false;
+                    document.getElementById('lib').disabled = true;
+                    document.getElementById('lib').value = "";
+                }
+            }
+            
             //Select Sitio Geografico
             var idSitio = 0;
                         
@@ -303,47 +378,60 @@ require ("../assets/fusioncharts/fusioncharts.php");
                 idSitio = document.getElementById("sitio").value;
             }
             
+            //Obtener valor de los radios
+            var radios = document.getElementsByName('intervalo');
+            //Obtener valor del checkbox
+            var check = document.getElementById('act');
+            
             //AJAX grafica
             function graficaAJAX(){
-                var f_ini, f_fin, inter = 0;
-                f_ini = document.getElementById('inicio').value;
-                f_fin = document.getElementById('fin').value;
-                inter = document.getElementById("intervalo").value;
-                
                 //Validar sitio seleccionado
                 if(idSitio === 0){                    
                     alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
                         'Seleccione un sitio porfavor');
-                }                          
-                
-                //Validar intervalo vacio o menor a 2
-                if (inter.length === 0){                    
-                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
-                        'Seleccione un intervalo porfavor');
-                }else if(inter < 2){
-                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
-                        'Ingrese un número mayor o igual que 2');
-                }                                
-                
-                //Validar fecha inicio o fin vacias
-                if(f_ini.length === 0 || f_fin.length === 0){                    
-                    alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
-                        'Llene el campo de fecha de inicio o fecha final');
-                }
-               
-                else{
+                }else{
                     
-                    //Obtener url del script
-                    var url;                                       
-                    url = "grafBCG.php"; //Corregir
-                    
+                    //Obtener Datos del Formulario
+                    var f_ini, f_fin, valor_intervalo, int_lib;
+                    f_ini = document.getElementById('inicio').value;
+                    f_fin = document.getElementById('fin').value;
+                    int_lib = document.getElementById("lib").value;                                                         
+
+                    //Recuperar el valor de los radio buttons o el campo de texto
+                    if(check.checked == true){
+                        //Valida si el campo intervalo libre esta vacio
+                        if(int_lib == null || int_lib == 0){
+                            alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico',
+                            'Campo vacío, porfavor escriba un intervalo de tiempo válido');
+                        }else{
+                            //Asigna el valor del campo de texto a la variable "valor_intervalo"
+                            var valor_intervalo = document.getElementById('lib').value;
+                        }
+                    }else{
+                        var seleccionado = false; //Variable auxiliar para radio buttons desmarcados
+                        for(i = 0; i < radios.length; i++){
+                            //Valida si hay un radio button marcado
+                            if(radios[i].checked == true){
+                                seleccionado = true; //Vuelve true a la variable auxiliar
+                                var valor_intervalo = radios[i].value;
+                                break; //Asigna el valor del radio button marcado a la variable "valor_intervalo"
+                            }
+                        }
+                    }
+
+                    //Validar fecha inicio o fin vacias
+                    if(f_ini.length === 0 || f_fin.length === 0){                    
+                        alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                            'Llene el campo de fecha de inicio o fecha final');
+                    }
+
                     $.ajax({
                         async: true,
                         cache: false,
                         dataType: "html",
                         type: 'POST',
-                        url: url,
-                        data: "inter="+inter+"&ini="+f_ini+"&fin="+f_fin+"&sitio="+idSitio,
+                        url: "grafBCG.php",
+                        data: "inter=" + valor_intervalo + "&ini=" + f_ini + "&fin=" +f_fin + "&sitio=" + idSitio,
                         success: function(response){
                             $("#chart-container").html(response);
                         },
@@ -351,8 +439,8 @@ require ("../assets/fusioncharts/fusioncharts.php");
                             $("#chart-contanier").html("Procesando...");
                         },
                         error: function(objXMLHttpResponse){}
-                    });
-                }
+                    });                    
+                }                                
             }            
         </script>
     </body>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
+
 <?php
-    //Test para generar greficas de los datos de BCG
+    //Generacion de graficas de datos de Bateria de CR800
 
     require '../classes/ConexionDB.php';
     require '../classes/CRUD.php';
@@ -10,7 +11,7 @@
     //Conexion
     $connect = new DBConnection();
     $traerColl = $connect->ConectarBD();
-    $objData = $traerColl->Registros_Bombas_Calor_Geotermico;
+    $objData = $traerColl->Registros_Bateria_CR800;
     $operaciones = new CRUD($objData);
     $generalOp = new GeneralOp();
 
@@ -19,20 +20,18 @@
     $intervalo = $_POST['inter'];
     $f_ini = $_POST['ini'];
     $f_fin = $_POST['fin'];
-
-    //Valores para intervalo libre    
-    $interMuestreo = 2;
+        
 
     //Formatear fechas
     $f_ini = $generalOp->ordenaFechai($f_ini);
     $f_fin = $generalOp->ordenaFechaf($f_fin);
-    
+
     //Obtener encabezados
     $encabezados = $generalOp->obtenerColumnas($idSitio, $operaciones);
 
     //Elegir intervalos
-    if($intervalo == '2min'){
-        //Obtener datos de la BCG
+    if ($intervalo == '1hr') {
+        //Obtener datos de la BatCR800
         $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
@@ -63,8 +62,8 @@
         
         //Ciclo para asociar los arreglos arrEncabezados con arrDatos
         for($i = 0; $i < sizeof($arrDatos); $i++){
-            $matrizDatos = array_combine($arrEncabezados, $arrDatos[$i]);
-            array_push($matrizFinal, $matrizDatos);
+           $matrizDatos = array_combine($arrEncabezados, $arrDatos[$i]);
+           array_push($matrizFinal, $matrizDatos);
         }
         
         //Ciclo para obtener los valores de cada columna de la matrizFinal
@@ -88,97 +87,14 @@
             array_push($arrProm, $arrValores[$i]);
         }
         
-        //Generar areglo de fechas para etiquetas de grafica
+        //Generar arreglo de fechas para etiquetas de grafica
         $arrLabel = array();
         foreach($fechas as $label){
             array_push($arrLabel, $label);
         }
-    }
-    
-    if($intervalo >= '4'){
-        //Obtener datos de la BCG
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
-        //Obtener las fechas-horas de los registros
-        $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
-        $arrEncabezados = array(); //Array para contener encabezados (Claves de la matriz)
-        $arrDatos = array(); //Array para contener datos (Valores de la matriz)
-        $matrizDatos = array(); //Array auxiliar para guardar la combinacion del arrEncabezados con ArrDatos
-        $matrizFinal = array(); //Array con todos los arreglos generados y añadidos a matrizDatos
-        
-        //Crear matriz asociativa
-        //Ciclo para obtener los valores de los encabezados de la BD
-        foreach($encabezados as $claveEnc => $valoresEnc){
-            //Comprobar si tiene un subnivel
-            if(is_array($valoresEnc)){
-                foreach($valoresEnc as $claveEncInt => $valorEncInt){
-                    array_push($arrEncabezados, $valorEncInt); //Insertar en arrEncabezados los valores encontrados en la consulta de los encabezados en la BD
-                }
-                echo "\n";                
-            }else{
-                array_push($arrEncabezados, $valoresEnc); //Insertar en arrDatos los valores encontrados en la consulta de los datos en la BD
-            }
-        }
-        
-        //Ciclo para obtener los datos de la BD
-        foreach($datos as $datosBD){
-            array_push($arrDatos, $datosBD);
-        }
-        
-        //Ciclo para asociar los arreglos arrEncabezados con arrDatos
-        for($i = 0; $i < sizeof($arrDatos); $i++){
-            $matrizDatos = array_combine($arrEncabezados, $arrDatos[$i]);  
-            array_push($matrizFinal, $matrizDatos); //Insertar en matrizDatos
-        }
-        
-        //Ciclo para obtener los valores de cada columna de la matrizFinal
-        $collMatriz = array();
-        foreach($arrEncabezados as $columnas){
-            $valoresGraf = array(array_column($matrizFinal,$columnas));
-            array_push($collMatriz, $valoresGraf);
-        }
-        
-        //Ciclo para extraer los valores de las columnas en arreglos separados
-        $arrValores = array();
-        foreach($collMatriz as $clave => $valor){
-            foreach($valor as $cInt => $vInt){
-                array_push($arrValores, $vInt);
-            }
-        }
-        
-        //Eliminar columnas no necesarias
-        $valoresColumnas = array();        
-        for($i = 4; $i < sizeof($arrValores); $i++){
-            array_push($valoresColumnas, $arrValores[$i]);
-        }
-        
-        
-        //Calcular tamaño de sub arreglos
-        $tamFragmento = $intervalo/$interMuestreo;
-        
-        //Calcular promedios de arreglos internos
-        $arrProm = array();
-        foreach($valoresColumnas as $datos){
-            $arrFrag = array_chunk($datos, $tamFragmento);
-            foreach($arrFrag as $clave => $valor){
-                $prom = round(array_sum($valor) / count($valor), 2);
-                $arrResult[$clave] = $prom;
-            }
-            array_push($arrProm, $arrResult);
-        }
-        
-        //Acomodar fechas por intervalo
-        $cont = 0; 
-        $arrLabel = array();
-        foreach($fechas as $label){
-            if($cont % floor($tamFragmento) == 0){
-                array_push($arrLabel, $label);
-            }
-            $cont += 1;
-        }
-        
-    }
-    
+    } 
+
     if($intervalo == '1dia'){                
         
         //Validacion fIni = fFin
@@ -251,7 +167,7 @@
         }
         
         //Calcular tamaño de sub arreglos
-        $tamFragmento = 1440/$interMuestreo;
+        $tamFragmento = 1440/60;
         
         //Calcular promedios de arreglos internos
         $arrProm = array();
@@ -274,36 +190,17 @@
             $cont += 1;
         }                
     }
-
 ?>
+
 <html lang="es">
     <head>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     </head>
-    <body>
+    <body>           
         <canvas id="line-chart" width="800" height="450"></canvas>
     </body>
-    
+
     <script type="text/javascript">
-        //------Generar colores aleatorios------
-        function numAleatorio(vMin, vMax){
-            posibilidades = vMax - vMin;
-            ran = Math.random() * posibilidades;
-            ran = Math.floor(ran);
-            return parseInt(vMin) + ran;
-        }
-        
-        function colorAleatorio(){
-            hexadecimal = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
-            cadenaColor = "#";
-            for(i = 0; i < 6; i++){
-                colorArray = numAleatorio(0, hexadecimal.length);
-                cadenaColor += hexadecimal[colorArray];
-            }
-            return cadenaColor;
-        }
-        //------Generar colores aleatorios Fin------
-        
         //Recibir los arreglos de PHP
         var jEnc = [];
         var jDatos = [];
@@ -311,32 +208,33 @@
         var jEnc = <?php echo json_encode($arrEncabezados); ?>;
         var jDatos = <?php echo json_encode($arrProm); ?>;
         var jLabels = <?php echo json_encode($arrLabel); ?>;
-        
+
         //------Generacion de DataSets dinamicos------
         var arrDataSets = []; //Array que contendra todos los JSON de los DataSets generados
         var dataSetAux = {}; //Objeto JSON que contendra los valores de los DataSets que se generan
         var lAux = []; //Array que contendra los valores de los encabezados(jEnc) despues de procesarlos
         var dAux = []; //Array que contendra los valores de los datos(jDatos) despues de procesarlos
         
-        //Ciclo para saltar los 4 primeros elementos de array de Encabezados y Datos
-        for(i=4; i < jEnc.length; i++){
+        //Ciclo para saltar los 4 primeros elementos del array de Encabezados y Datos
+        for(i = 4; i < jEnc.length; i++){
             lAux.push(jEnc[i]);
         }
         
-        for(j=0; j < jDatos.length; j++){
+        for(j = 0; j < jDatos.length; j++){
             dAux.push(jDatos[j]);
         }
         
-        lAux.forEach(function (item, index, array){
-            dataSetAux = {
-                label: lAux[index],
-                borderColor: colorAleatorio(),
-                pointRadius: 0,
-                pointHitRadius: 5,
-                fill: false,
-                data: dAux[index],
-            }
-            arrDataSets.push(dataSetAux);
+        //Ciclo para generar los DataSets
+        lAux.forEach(function(item, index, array){
+           dataSetAux = {
+               label: lAux[index],
+               borderColor: '#000000',
+               pointRadius: 0,
+               pointHitRadius: 20,
+               fill: false,
+               data: dAux[index],
+           }
+           arrDataSets.push(dataSetAux);
         });
         //------Generacion de DataSets dinamicos Fin------
         
@@ -357,17 +255,17 @@
                             labelString: "Periodo de muestra"
                         }
                 }],
-                yAxes: [{
+            yAxes: [{
+                    display: true,
+                    scaleLabel: {
                         display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Temperatura °C"
-                        },
+                        labelString: "Voltaje de la batería del dispositivo CR800"
+                    }
                 }]
             },
             title: {
                 display: true,
-                text: "Comportamiento de las variables de la Bomba de Calor Gotermico"
+                text: "Comportamiento de temperaturas de la Sonda de Inspección"
             },
             legend: {
                 display: true,
@@ -388,6 +286,7 @@
             data: grafValores,
             options: grafOpciones
         })
-        
+
     </script>
 </html>
+

@@ -1,0 +1,31 @@
+.widget-content{
+    font-size: 15px;
+    text-align: justify;               
+    font-family: verdana;
+    color: #000;
+}
+
+#sidebar{
+    color: white;
+    font-size: 15px;
+}
+
+#footer, #footer > a{
+    font-family: verdana;
+    font-size: 15px;
+    color: white;                
+}
+
+#footer > a:hover{
+    color: #28b779;
+}
+
+.title-style{
+    text-align: center;
+    padding-top: 10px;
+}            
+
+h3 > a{
+    margin-left: 10px;
+    color: #D5D5D5;    
+}

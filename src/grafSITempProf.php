@@ -17,8 +17,7 @@
     //Captura de datos del formulario
     $fechasObj = $_POST['fechas'];
     $intervalo = $_POST['inter'];
-    $idSitio = $_POST['sitio'];        
-            
+    $idSitio = $_POST['sitio'];                    
 
     //Formatear fechas
     $arrFechasIni = array();    
@@ -29,8 +28,7 @@
         array_push($arrFechasIni, $f_formato_ini);     //Arreglo con fechas con formato 00:00:00Z         
         array_push($arrFechasFin, $f_formato_fin);     //Arreglo con fechas con formato 23:59:59Z                 
     }
-    
-        
+            
     //Obtener encabezados
     $encabezados = $generalOp->obtenerColumnas($idSitio, $operaciones);
     
@@ -144,7 +142,7 @@
 
 <html lang="es">
     <head>        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
     </head>
     <body>
         <canvas id="line-chart" width="800" height="450"></canvas>
@@ -189,7 +187,19 @@
         for(i=0; i < jLabels.length; i++){
             cadena = "a "+i+" mts"
             lAux.push(cadena);
-        }                                 
+        }
+        
+        //Generar coordenadas de grafica
+        var cAux = []; //Array auxiliar de coordenadas
+        var coordenadas = []; //Array conjuntos de coordenadas
+        
+        for(var a = 0; a < jDatos.length; a++){
+            for(var b = 0; b < lAux.length; b++){
+                cAux.push({x: jDatos[a][b], y: lAux[b]});
+            }
+            coordenadas.push(cAux);
+            cAux = [];
+        }
         
         jEnc.forEach(function(item, index, array){
            dataSetAux = {
@@ -198,7 +208,7 @@
                pointRadius: 0,
                pointHitRadius: 5,
                fill: false,
-               data: jDatos[index],
+               data: coordenadas[index],
            }
            arrDataSets.push(dataSetAux);           
         });
@@ -206,7 +216,7 @@
         
         //Valores de la grafica
         var grafValores = {
-            labels: lAux,
+            yLabels: lAux,
             datasets: arrDataSets,
         }
         
@@ -215,17 +225,21 @@
             responsive: true,
             scales: {
                 xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Profundidad"
-                        },                        
-                }],
-                yAxes: [{
+                        type: 'linear',
+                        position: 'top',
                         display: true,
                         scaleLabel: {
                             display: true,
                             labelString: "Temperatura °C"
+                        },                        
+                }],
+                yAxes: [{
+                        type: 'category',
+                        position: 'left',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Profundidad"
                         },
                 }]
             },
@@ -251,7 +265,6 @@
             type: 'line',
             data: grafValores,
             options: grafOpciones
-        })
-        
+        })        
     </script>
 </html>

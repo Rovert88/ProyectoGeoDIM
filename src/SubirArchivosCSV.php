@@ -17,11 +17,12 @@
         <link rel="stylesheet" href="../assets/css/select2.css" />
         <link rel="stylesheet" href="../assets/css/uniform.css" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../assets/css/style-system.css" />
         <script languaje="javascript" src="../jquery-3.3.1.js"></script>
 
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
+        
+        <link rel="stylesheet" href="../assets/css/system-style.css" />
     </head>
 
     <body>
@@ -32,42 +33,9 @@
         </div>
         <!--close-Header-part-->
 
-
-        <!--top-Header-menu-->
-        <div id="user-nav" class="navbar navbar-inverse">
-            <ul class="nav">
-                <li ><a><i class="icon icon-upload-alt style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
-                <li ><a><i class="icon icon-screenshot style-icons-bar"></i> <span class="text">Registrar Sonda</span></a></li>
-                <li ><a><i class="icon icon-cogs style-icons-bar"></i> <span class="text">Registrar Bomba</span></a></li>
-                <li ><a><i class="icon icon-info-sign style-icons-bar"></i> <span class="text">Ayuda</span></a></li>
-                <li ><a href="login.html"><i class="icon icon-share-alt style-icons-bar"></i> <span class="text">Salir</span></a></li>
-            </ul>
-        </div>
-        <!--close-top-Header-menu-->
-
         <!--sidebar-menu-->
-        <div class="style-sidebar" id="sidebar">
-            <ul>
-                <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos CSV</span> </a>
-                    <ul>
-                        <li><a href="SubirArchivosCSV.php">Cargar Archivo</a></li>				  
-                    </ul>
-                </li>			  
-                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de Datos</span></a>
-                    <ul>
-                        <li><a href="GraficasSondasInspeccion.php">Gráficas de Sondas de Inspección</a></li>
-                        <li><a href="GraficasBombasCalorGeotermico.php">Gráficas de Bombas de Calor Geotérmico</a></li>
-                        <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
-                    </ul>
-                </li>
-                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios Geográficos</span> </a>
-                    <ul>
-                        <li><a href="RegistrarSitiosGeograficos.php">Registrar Sitios</a></li>
-                        <li><a href="#">Editar Sitios</a></li>
-                    </ul>
-                </li>
-            </ul>  
+        <div>
+           <?php include('../assets/templates/sidebar.php'); ?> <!-- Plantilla del menu lateral-->
         </div>
         <!--sidebar-menu-close-->
 
@@ -143,9 +111,8 @@
         <!--end-main-container-part-->
 
         <!--Footer-part-->
-        <div class="row-fluid">
-            <div id="footer" class="span12"> 2018 &copy; Instituto Nacional de Electricidad y Energías Limpias <a href="https://www.gob.mx/ineel" target="
-                                                                                                                  "><br />www.gob.mx/ineel</a> </div>
+        <div>
+            <?php include('../assets/templates/footer.php'); ?> <!-- Plantilla del pie de pagina-->
         </div>
         <!--end-Footer-part-->
 
@@ -185,28 +152,28 @@
         <script src="../assets/alertifyjs/alertify.js"></script>
 
         <script type="text/javascript">
-                                        // This function is called from the pop-up menus to transfer to
-                                        // a different page. Ignore if the value returned is a null string:
-                                        function goPage(newURL) {
+            // This function is called from the pop-up menus to transfer to
+            // a different page. Ignore if the value returned is a null string:
+            function goPage(newURL) {
 
-                                            // if url is empty, skip the menu dividers and reset the menu selection to default
-                                            if (newURL != "") {
+                // if url is empty, skip the menu dividers and reset the menu selection to default
+                if (newURL != "") {
 
-                                                // if url is "-", it is this page -- reset the menu:
-                                                if (newURL == "-") {
-                                                    resetMenu();
-                                                }
-                                                // else, send page to designated URL
-                                                else {
-                                                    document.location.href = newURL;
-                                                }
-                                            }
-                                        }
+                    // if url is "-", it is this page -- reset the menu:
+                    if (newURL == "-") {
+                        resetMenu();
+                    }
+                    // else, send page to designated URL
+                    else {
+                        document.location.href = newURL;
+                    }
+                }
+              }
 
-                                        // resets the menu selection upon entry to this page:
-                                        function resetMenu() {
-                                            document.gomenu.selector.selectedIndex = 2;
-                                        }
+            // resets the menu selection upon entry to this page:
+            function resetMenu() {
+                document.gomenu.selector.selectedIndex = 2;
+            }
         </script>
 
         <script type="text/javascript">

@@ -34,7 +34,7 @@
     //Elegir intervalos
     if($intervalo == '15min'){
         //Obtener datos de la SI
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -99,7 +99,7 @@
     
     if($intervalo >= '30'){
         //Obtener datos de la SI
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas-horas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -196,7 +196,7 @@
                                 
         
         //Obtener datos de la SI
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas-horas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -388,7 +388,6 @@
             type: 'line',
             data: grafValores,
             options: grafOpciones
-        })
-        
+        })        
     </script>   
 </html>

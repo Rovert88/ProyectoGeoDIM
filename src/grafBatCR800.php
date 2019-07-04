@@ -21,7 +21,6 @@
     $f_ini = $_POST['ini'];
     $f_fin = $_POST['fin'];
         
-
     //Formatear fechas
     $f_ini = $generalOp->ordenaFechai($f_ini);
     $f_fin = $generalOp->ordenaFechaf($f_fin);
@@ -32,7 +31,7 @@
     //Elegir intervalos
     if ($intervalo == '1hr') {
         //Obtener datos de la BatCR800
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -111,7 +110,7 @@
                                 
         
         //Obtener datos de la SI
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas-horas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -286,7 +285,6 @@
             data: grafValores,
             options: grafOpciones
         })
-
     </script>
 </html>
 

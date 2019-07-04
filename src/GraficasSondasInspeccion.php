@@ -10,10 +10,8 @@ require '../classes/ConexionDB.php';
         <title>Gráficas de Sondas de Inspección</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--stylesheets-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-        <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.js"></script>
-        <script src="../assets/chartist-zoom-master/dist/chartist-plugin-zoom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>        
 
         <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
@@ -27,13 +25,14 @@ require '../classes/ConexionDB.php';
         <link rel="stylesheet" href="../assets/css/datepicker.css" />
         <link rel="stylesheet" href="../assets/css/uniform.css" />
         <link rel="stylesheet" href="../assets/css/select2.css" />
-        <link rel="stylesheet" href="../assets/css/bootstrap-wysihtml5.css" />
-        <link rel="stylesheet" href="../assets/css/style-system.css" />
+        <link rel="stylesheet" href="../assets/css/bootstrap-wysihtml5.css" />        
         <link rel="stylesheet" href="../assets/css/timepicker.css" />
         <link rel="stylesheet" href="../assets/css/personal-style.css" />
 
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/alertify.css">
         <link rel="stylesheet" type="text/css" href="../assets/alertifyjs/css/themes/default.css">
+        
+        <link rel="stylesheet" href="../assets/css/system-style.css" />
     </head>
     <body>
         <!--Header part-->
@@ -42,42 +41,9 @@ require '../classes/ConexionDB.php';
         </div>
         <!--close-Header-part-->
 
-        <!--top-Header-menu-->
-        <div id="user-nav" class="navbar navbar-inverse">
-            <ul class="nav">
-                <li ><a><i class="icon icon-upload-alt style-icons-bar"></i>  <span class="text">Cargar Archivo</span></a></li>
-                <li ><a><i class="icon icon-screenshot style-icons-bar"></i> <span class="text">Registrar Sonda</span></a></li>
-                <li ><a><i class="icon icon-cogs style-icons-bar"></i> <span class="text">Registrar Bomba</span></a></li>
-                <li ><a><i class="icon icon-info-sign style-icons-bar"></i> <span class="text">Ayuda</span></a></li>
-                <li ><a href="login.html"><i class="icon icon-share-alt style-icons-bar"></i> <span class="text">Salir</span></a></li>
-            </ul>
-        </div>
-        <!--close-top-Header-menu-->
-
         <!--sidebar-menu-->
-        <div class="style-sidebar" id="sidebar">
-            <ul>
-                <li class="active"><a href="index.php"><i class="icon icon-home style-icons-bar"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"> <a href="#"><i class="icon-file style-icons-bar"></i> <span>Archivos CSV</span> </a>
-                    <ul>
-                        <li><a href="SubirArchivosCSV.php">Cargar Archivo</a></li>				  
-                    </ul>
-                </li>
-
-                <li class="submenu"><a href="#"><i class="icon-signal style-icons-bar"></i><span>Gráficas de Datos</span></a>
-                    <ul>
-                        <li><a href="GraficasSondasInspeccion.php">Gráficas de Sondas de Inspección</a></li>
-                        <li><a href="GraficasBombasCalorGeotermico.php">Gráficas de Bombas de Calor Geotérmico</a></li>
-                        <li><a href="GraficasBateriaCR800.php">Gráficas de Bateria de CR800</a></li>
-                    </ul>
-                </li>
-                <li class="submenu"> <a href="#"><i class="icon-globe style-icons-bar"></i> <span>Sitios Geográficos</span> </a>
-                    <ul>
-                        <li><a href="RegistrarSitiosGeograficos.php">Registrar Sitios</a></li>
-                        <li><a href="#">Editar Sitios</a></li>
-                    </ul>
-                </li>
-            </ul>  
+        <div>
+           <?php include('../assets/templates/sidebar.php'); ?> <!-- Plantilla del menu lateral-->
         </div>
         <!--sidebar-menu-close-->
 
@@ -228,7 +194,6 @@ require '../classes/ConexionDB.php';
                                 <h5>Gráfica Generada</h5>
                             </div>
                             <div class="widget-content">
-
                                 <div id="chart-container"></div> <!--Div de la grafica-->
                             </div>
                         </div>                                                                                    
@@ -239,9 +204,8 @@ require '../classes/ConexionDB.php';
         <!--end-main-container-part-->
 
         <!--Footer-part-->
-        <div class="row-fluid">
-            <div id="footer" class="span12"> 2018 &copy; Instituto Nacional de Electricidad y Energías Limpias 
-                <a href="https://www.gob.mx/ineel" target=""><br />www.gob.mx/ineel</a> </div>
+        <div>
+            <?php include('../assets/templates/footer.php'); ?> <!-- Plantilla del pie de pagina-->
         </div>
         <!--end-Footer-part-->
 
@@ -494,10 +458,12 @@ require '../classes/ConexionDB.php';
                             }                    
                         }
                         
-                        //Validar fecha inicio o fin vacias
-                        if(f_ini.length === 0 || f_fin.length === 0){                    
-                            alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
-                            'Llene el campo de fecha de inicio o fecha final');
+                        //Validar fecha inicio o fin vacias (Graficas TT)
+                        if(tipo_graf === 'TT'){
+                            if(f_ini.length === 0 || f_fin.length === 0){                    
+                                alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
+                                'Llene el campo de fecha de inicio o fecha final');
+                            }
                         }
                     
                     if(tip_graf === "TT"){                        

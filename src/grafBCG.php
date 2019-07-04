@@ -33,7 +33,7 @@
     //Elegir intervalos
     if($intervalo == '2min'){
         //Obtener datos de la BCG
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -97,7 +97,7 @@
     
     if($intervalo >= '4'){
         //Obtener datos de la BCG
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas-horas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -151,8 +151,7 @@
         for($i = 4; $i < sizeof($arrValores); $i++){
             array_push($valoresColumnas, $arrValores[$i]);
         }
-        
-        
+                
         //Calcular tamaño de sub arreglos
         $tamFragmento = $intervalo/$interMuestreo;
         
@@ -175,8 +174,7 @@
                 array_push($arrLabel, $label);
             }
             $cont += 1;
-        }
-        
+        }        
     }
     
     if($intervalo == '1dia'){                
@@ -192,10 +190,9 @@
             $f_ini = $f_ini2;
             $f_fin = $f_fin_new;
         }
-                                
-        
+                                        
         //Obtener datos de la SI
-        $datos = $generalOp->consulta1dia($idSitio, $f_ini, $f_fin, $operaciones);
+        $datos = $generalOp->consultarDatos($idSitio, $f_ini, $f_fin, $operaciones);
         //Obtener las fechas-horas de los registros
         $fechas = $generalOp->consultaFechas($idSitio, $f_ini, $f_fin, $operaciones);
         
@@ -387,7 +384,6 @@
             type: 'line',
             data: grafValores,
             options: grafOpciones
-        })
-        
+        })        
     </script>
 </html>

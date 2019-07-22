@@ -458,13 +458,11 @@ require '../classes/ConexionDB.php';
                             }                    
                         }
                         
-                        //Validar fecha inicio o fin vacias (Graficas TT)
-                        if(tipo_graf === 'TT'){
+                        //Validar fecha inicio o fin vacias (Graficas TT)                        
                             if(f_ini.length === 0 || f_fin.length === 0){                    
                                 alertify.alert('Generación de graficas de datos de Bombas de Calor Geotérmico', 
                                 'Llene el campo de fecha de inicio o fecha final');
-                            }
-                        }
+                            }                        
                     
                     if(tip_graf === "TT"){                        
                         //Peticion AJAX para graficas tipo Temp-Tiemp

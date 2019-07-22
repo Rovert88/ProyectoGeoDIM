@@ -16,6 +16,13 @@ class GeneralOp {
         return $fecha[2] . "-" . $fecha[0] . "-" . $fecha[1] . "T23:59:59.000Z";
     }
     
+    //Metodo para dar formato a las fechas de los registros (Carga de archivos CSV)
+    public function insFormatoFecha($fecha) {
+        $fecha = explode('/', $fecha);
+        $time = explode(' ', $fecha[2]);
+        return $time[0] . "-" . $fecha[1] . "-" . $fecha[0] . " " . $time[1] . ":00.000Z";
+    }
+    
     //Consulta de datos de temperaturas (general)
     public function consultarDatos($idsitio, $f_ini, $f_fin, $operaciones) {
                
